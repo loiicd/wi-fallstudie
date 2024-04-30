@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import projekte from './projekte.json'
+import projekte from '../projekte.json'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 const columns: GridColDef<(typeof projekte)[number]>[] = [
   {
@@ -41,14 +42,15 @@ const columns: GridColDef<(typeof projekte)[number]>[] = [
   },
 ]
 
-export default function DataGridDemo() {
-  console.log(projekte)
+export default function ProjectsTable() {
+  const navigate = useNavigate()
 
   return (
     <Box>
       <DataGrid
         rows={projekte}
         columns={columns}
+        onCellClick={(params) => navigate(`/project/${params.row.id}`)}
         pageSizeOptions={[5, 10, 15]}
         initialState={{
           pagination: {

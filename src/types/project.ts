@@ -1,18 +1,24 @@
-export type Project = {
+export type Projekt = {
   id: string
+
   name: string
+  auftraggeber: string
 
-  projectLead: string
-  deputyProjectLead: string
+  kunde: string
 
+  problemstellung: string
+  vision: string
 
-  startDate: Date
-  endDate: Date
+  projektLeiter: string
+  subProjektLeiter: string
 
-  members: {
+  startDatum: Date
+  endDatum: Date
+
+  projektTeam: {
     userId: string
-    firstname: string
-    lastname: string
-    role: string
+    vorname: string
+    nachname: string
+    rolle: string
   }[]
 }

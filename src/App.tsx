@@ -1,20 +1,21 @@
-import Container from "@mui/material/Container"
-import DataGridDemo from "./table"
-import Rating from "@mui/material/Rating"
-import Header from "./components/Header"
-import Typography from "@mui/material/Typography"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import ProjectPage from "./pages/project"
+import DashbordPage from "./pages/dashboard"
+import NotFoundPage from "./pages/404"
+import ProjectsPage from "./pages/projects"
 
 
 const App = () => {
   return (
-    <>
-      <Header />
-      <Container maxWidth="lg" sx={{ paddingY: 4 }}>
-        <Typography variant="h4" sx={{ marginBottom:2 }}>Projektaufträge</Typography>
-        <DataGridDemo />
-        <Rating name="read-only" value={4} readOnly />
-      </Container>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<DashbordPage />} />
+        <Route path='*' element={<DashbordPage />} />
+        <Route path='/projects' element={<ProjectsPage />} />
+        <Route path='/project/:id' element={<ProjectPage />} />
+        <Route path='/notfound' element={<NotFoundPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
