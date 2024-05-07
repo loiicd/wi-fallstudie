@@ -6,18 +6,11 @@ export const getUser = async (): Promise<User[]> => {
   return response.data
 }
 
-// export const postUser = async (user: UserFormData): Promise<void> => {
-//   const response = await axios.post('/api/user', { user: user })
-//   console.log('Post Response', response)
-// }
+export const postUser = async (userFormData: UserFormData): Promise<void> => {
+  const response = await axios.post('/api/user/', userFormData)
+  console.log('Post Response', response)
+}
 
-export const postUser = async (user: UserFormData): Promise<void> => {
-const response = await fetch('/api/user', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ user }),
-})
-console.log('Post Response', response)
+export const deleteUser = async (userId: string): Promise<void> => {
+  await axios.delete('/api/user', { data: userId })
 }

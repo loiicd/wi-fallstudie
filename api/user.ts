@@ -2,37 +2,49 @@ import { VercelRequest, VercelResponse } from '@vercel/node'
 import { sql } from '@vercel/postgres'
 import { v4 as uuidv4 } from 'uuid'
 
-export const GET = async (request: any, response: VercelResponse) => {
-  try {
-    const result = await sql`SELECT id, firstname, lastname, title FROM "user"`
-    console.log(result)
-    return new Response(JSON.stringify(result.rows))
-  } catch (error) {
-    console.error(error)
-    return new Response('Internal Server Error', { status: 500, statusText: 'Internal Server Error'})
+const handler = async (request: VercelRequest, response: VercelResponse) => {
+  switch (request.method) {
+    case 'GET':
+      return await handleGet(response)
+    case 'POST':
+      return await handlePost(request, response)
+    case 'DELETE':
+      return await handleDelete(request, response)
   }
 }
 
-export const POST = async (request: any, response: VercelResponse) => {
+const handleGet = async (response: VercelResponse) => {
+  try {
+    const result = await sql`SELECT id, firstname, lastname, title FROM "user"`
+    return response.send(JSON.stringify(result.rows))
+  } catch (error) {
+    console.error(error)
+    return response.send('Internal Server Error')
+  }
+}
+
+const handlePost = async (request: VercelRequest, response: VercelResponse) => {
   const firstname = request.body.firstname as string
   const lastname = request.body.lastname as string
   const title = request.body.title as string
-  console.log('Body', request.body)
-  console.log('Query', request.query)
-  console.log(request)
   try {
     await sql`INSERT INTO "user" (id, firstname, lastname, title) VALUES (${uuidv4()}, ${firstname}, ${lastname}, ${title})`
-    return new Response('Created', { status: 201, statusText: 'Created'})
+    return response.status(201).send('Created')
   } catch (error) {
     console.error(error)
-    return new Response('Internal Server Error', { status: 500, statusText: 'Internal Server Error'})
+    return response.status(500).send('Internal Server Error')
   }
 }
 
-export const PUT = async () => {
-  return new Response('PUT User')
+const handleDelete = async (request: VercelRequest, response: VercelResponse) => {
+  const userId = request.body as string
+  try {
+    await sql`DELETE FROM "user" WHERE id = ${userId}`
+    return response.status(201).send('Created')
+  } catch (error) {
+    console.error(error)
+    return response.status(500).send('Internal Server Error')
+  }
 }
 
-export const DELETE = async () => {
-  return new Response('DELETE User')
-}
+export default handler

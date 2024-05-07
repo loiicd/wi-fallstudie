@@ -15,6 +15,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -128,6 +129,12 @@ const Header = () => {
               <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary='Projekte' />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('/users')}>
+            <ListItemIcon>
+              <GroupsIcon />
+            </ListItemIcon>
+            <ListItemText primary='Members' />
           </ListItemButton>
           <Divider sx={{ my: 1 }} />
         </List>
