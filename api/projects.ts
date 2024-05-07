@@ -1,5 +1,9 @@
-export function GET(request: Request) {
-  return new Response(JSON.stringify(projects))
+import { VercelRequest, VercelResponse } from '@vercel/node'
+import { sql } from '@vercel/postgres'
+
+export async function GET(request: Request) {
+  const result = await sql`SELECT * FROM project`
+  return new Response(JSON.stringify(result))
 }
 
 export function POST(request: Request) {
