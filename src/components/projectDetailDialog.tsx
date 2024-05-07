@@ -2,9 +2,10 @@ import { DialogContent, Grid, Rating, Typography } from "@mui/material"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
 import { FunctionComponent } from "react"
+import { Project } from "../types/project"
 
 interface ProjectDetailDialogProps {
-  project: any
+  project: Project
   open: boolean,
   handleClose: () => void
 }
@@ -17,11 +18,23 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
       fullWidth={true}
       maxWidth={'md'}
     >
-      <DialogTitle>{project.name}</DialogTitle>
+      <DialogTitle>{project.title}</DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography variant='body1'>{project.projektLeiter}</Typography>
+            <Typography variant='body1'>{project.projectLead.firstname} {project.projectLead.lastname}</Typography>
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant='h5'>Zielbeschreibung</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Rating />
+          </Grid>
+          <Grid item xs={10}>
+            <Typography variant='body1'>{project.targetDescription}</Typography>
           </Grid>
         </Grid>
 
@@ -33,7 +46,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
             <Rating />
           </Grid>
           <Grid item xs={10}>
-            <Typography variant='body1'>{project.vision}</Typography>
+            <Typography variant='body1'>{project.visionDescription}</Typography>
           </Grid>
 
           <Grid item xs={12}>
@@ -43,7 +56,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
             <Rating />
           </Grid>
           <Grid item xs={10}>
-            <Typography variant='body1'>{project.problemstellung}</Typography>
+            <Typography variant='body1'>{project.problemDescription}</Typography>
           </Grid>
 
           <Grid item xs={12}>

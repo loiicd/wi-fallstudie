@@ -8,43 +8,65 @@ import AddIcon from '@mui/icons-material/Add'
 import Stack from '@mui/material/Stack'
 import AddProjectDialog from './addProjectDialog'
 import ProjectDetailDialog from './projectDetailDialog'
+import Chip from '@mui/material/Chip'
+import DraftsIcon from '@mui/icons-material/Drafts'
+import MoveToInboxIcon from '@mui/icons-material/MoveToInbox'
+import VerifiedIcon from '@mui/icons-material/Verified'
+import UpdateIcon from '@mui/icons-material/Update'
+import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
-    field: 'name',
-    headerName: 'Name',
+    field: 'status',
+    headerName: 'Status',
     width: 150,
     editable: false,
+    renderCell: (params) => {
+      switch(params.value) {
+        case 'Entwurf': return (<Chip variant='outlined' icon={<DraftsIcon />} label={params.value} color="default" />)
+        case 'Eingereicht': return (<Chip variant='outlined' icon={<MoveToInboxIcon />} label={params.value} color="default" />)
+        case 'In Prüfung': return (<Chip variant='outlined' icon={<UpdateIcon />} label={params.value} color="warning" />)
+        case 'Angenommen': return (<Chip variant='outlined' icon={<VerifiedIcon />} label={params.value} color="success" />)
+        case 'Abgelehnt': return (<Chip variant='outlined' icon={<DoNotDisturbOnIcon />} label={params.value} color="error" />)
+      }
+    }
   },
   {
-    field: 'auftraggeber',
-    headerName: 'Auftraggeber',
+    field: 'title',
+    headerName: 'Titel',
     width: 150,
     editable: false,
+    type: 'string',
   },
   {
-    field: 'kunde',
-    headerName: 'Kunde',
-    width: 150,
-    editable: false,
-  },
-  {
-    field: 'projektLeiter',
+    field: 'projectLead',
     headerName: 'Projektleiter',
     width: 150,
     editable: false,
+    type: 'string',
+    renderCell: (params) => (params.value.firstname + ' ' + params.value.lastname)
   },
   {
-    field: 'startDatum',
+    field: 'subProjectLead',
+    headerName: 'Stelv. Projektleiter',
+    width: 150,
+    editable: false,
+    type: 'string',
+    renderCell: (params) => (params.value.firstname + ' ' + params.value.lastname)
+  },
+  {
+    field: 'startDate',
     headerName: 'Startdatum',
     width: 150,
     editable: false,
+    type: 'date'
   },
   {
-    field: 'endDatum',
+    field: 'endDate',
     headerName: 'EndDatum',
     width: 150,
     editable: false,
+    type: 'date'
   },
 ]
 
