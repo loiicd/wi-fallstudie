@@ -1,11 +1,11 @@
 import Card from '@mui/material/Card'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import projekte from '../projekte.json'
 import { useNavigate } from 'react-router-dom'
 import { TextField } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { getProjects } from '../services/getProjects'
 
-const columns: GridColDef<(typeof projekte)[number]>[] = [
+const columns: GridColDef<(any)[number]>[] = [
   {
     field: 'name',
     headerName: 'Name',
@@ -51,7 +51,9 @@ export default function ProjectsTable() {
   const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(() => {
-    setProjekte(projekte.filter(projekt => projekt.name.toLowerCase().includes(searchTerm.toLowerCase())))
+    getProjects()
+      .then(data => setProjekte(data))
+    // setProjekte(projekte.filter(projekt => projekt.name.toLowerCase().includes(searchTerm.toLowerCase())))
   }, [searchTerm])
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
