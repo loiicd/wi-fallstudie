@@ -14,6 +14,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -124,7 +125,7 @@ const Header = () => {
           </ListItemButton>
           <ListItemButton onClick={() => navigate('/projects')}>
             <ListItemIcon>
-              <MenuIcon />
+              <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary='Projekte' />
           </ListItemButton>

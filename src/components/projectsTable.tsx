@@ -1,9 +1,13 @@
 import Card from '@mui/material/Card'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { useNavigate } from 'react-router-dom'
-import { TextField } from '@mui/material'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
 import { useEffect, useState } from 'react'
 import { getProjects } from '../services/getProjects'
+import AddIcon from '@mui/icons-material/Add'
+import Stack from '@mui/material/Stack'
+import AddProjectDialog from './addProjectDialog'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -49,11 +53,12 @@ export default function ProjectsTable() {
 
   const [projektes, setProjekte] = useState<any[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
+  const [openDialog, setOpenDialog] = useState<boolean>(false)
 
   useEffect(() => {
     getProjects()
       .then(data => setProjekte(data))
-    // setProjekte(projekte.filter(projekt => projekt.name.toLowerCase().includes(searchTerm.toLowerCase())))
+      .catch(error => alert(error))
   }, [searchTerm])
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,8 +66,12 @@ export default function ProjectsTable() {
   }
 
   return (
+    <>
     <Card>
-      <TextField placeholder='Suche ...' onChange={handleSearch} />
+      <Stack direction='row' spacing={2} justifyContent="flex-end" alignItems="center" sx={{ margin: 2 }}>
+        <TextField placeholder='Suche ...' size='small' onChange={handleSearch} />
+        <Button variant='contained' startIcon={<AddIcon />}>Projekt</Button>
+      </Stack>
       <DataGrid
         rows={projektes}
         columns={columns}
@@ -82,5 +91,7 @@ export default function ProjectsTable() {
         disableColumnResize
       />
     </Card>
+    <AddProjectDialog open={openDialog} handleClose={() => setOpenDialog(false)} />
+    </>
   )
 }

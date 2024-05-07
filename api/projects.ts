@@ -2,9 +2,13 @@ export function GET(request: Request) {
   return new Response(JSON.stringify(projects))
 }
 
+export function POST(request: Request) {
+  return new Response('POST request received')
+}
+
 const projects = [{
   "id": "1",
-  "name": "Projekt Alpha",
+  "name": "Projekt Alpha 2",
   "auftraggeber": "Herr Müller",
   "kunde": "Firma XYZ",
   "problemstellung": "Entwicklung einer neuen Softwarelösung",
