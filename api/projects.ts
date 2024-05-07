@@ -6,7 +6,8 @@ export async function GET(request: Request) {
   return new Response(JSON.stringify(result))
 }
 
-export function POST(request: Request) {
+export async function POST(request: Request) {
+  await sql`INSERT INTO project () VALUES ()`
   return new Response('POST request received')
 }
 

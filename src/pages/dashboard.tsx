@@ -2,15 +2,23 @@ import Card from '@mui/material/Card'
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
 import { LineChart } from '@mui/x-charts/LineChart'
-import { useEffect } from 'react'
-import { getProjects } from '../services/getProjects'
+import { useEffect, useState } from 'react'
+import { User } from '../types/user'
+import { getUser, postUser } from '../services/user'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
 
 const DashboardPage = () => {
+  const [user, setUser] = useState<User[]>([])
 
   useEffect(() => {
-    getProjects()
-      .then(projects => console.log(projects))
+    getUser()
+      .then(data => setUser(data))
   }, [])
+
+  const handleInsertUser = () => {
+    postUser({ firstname: 'Max', lastname: 'Mustermann' })
+  }
 
   return (
     <StandardLayout>
@@ -31,7 +39,10 @@ const DashboardPage = () => {
           </Card>
         </Grid>
         <Grid item xs={6}>
-          <Card></Card>
+          <Card>
+            <Button onClick={handleInsertUser}>Neuer User</Button>
+            {user.map((item) => <Typography variant='body1'>{item.firstname} {item.lastname}</Typography>)}
+          </Card>
         </Grid>
       </Grid>
     </StandardLayout>

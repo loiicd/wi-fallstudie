@@ -14,6 +14,7 @@ import MoveToInboxIcon from '@mui/icons-material/MoveToInbox'
 import VerifiedIcon from '@mui/icons-material/Verified'
 import UpdateIcon from '@mui/icons-material/Update'
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
+import { postUser } from '../services/user'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
