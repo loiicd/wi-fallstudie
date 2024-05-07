@@ -1,6 +1,8 @@
 export type Projekt = {
   id: string
 
+  status: string
+
   name: string
   auftraggeber: string
 
