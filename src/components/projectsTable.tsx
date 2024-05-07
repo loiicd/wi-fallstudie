@@ -1,7 +1,9 @@
-import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import projekte from '../projekte.json'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { TextField } from '@mui/material'
+import { useEffect, useState } from 'react'
 
 const columns: GridColDef<(typeof projekte)[number]>[] = [
   {
@@ -45,10 +47,22 @@ const columns: GridColDef<(typeof projekte)[number]>[] = [
 export default function ProjectsTable() {
   const navigate = useNavigate()
 
+  const [projektes, setProjekte] = useState<any[]>([])
+  const [searchTerm, setSearchTerm] = useState<string>('')
+
+  useEffect(() => {
+    setProjekte(projekte.filter(projekt => projekt.name.toLowerCase().includes(searchTerm.toLowerCase())))
+  }, [searchTerm])
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value)
+  }
+
   return (
-    <Box>
+    <Card>
+      <TextField placeholder='Suche ...' onChange={handleSearch} />
       <DataGrid
-        rows={projekte}
+        rows={projektes}
         columns={columns}
         onCellClick={(params) => navigate(`/project/${params.row.id}`)}
         pageSizeOptions={[5, 10, 15]}
@@ -60,9 +74,11 @@ export default function ProjectsTable() {
           },
         }}
         disableRowSelectionOnClick
-        disableColumnSelector
         disableDensitySelector
+        disableColumnSelector
+        disableColumnMenu
+        disableColumnResize
       />
-    </Box>
+    </Card>
   )
 }

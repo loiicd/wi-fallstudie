@@ -2,6 +2,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import projekte from '../projekte.json'
 import { useEffect } from 'react'
 import StandardLayout from '../layout/StandardLayout'
+import Grid from '@mui/material/Grid'
+import Card from '@mui/material/Card'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -16,6 +18,13 @@ const ProjectPage = () => {
   return (  
     <StandardLayout>
       <h1>{projekt?.name}</h1>
+      <Grid container gap={4}>
+        <Grid item xs={6}>
+          <Card>
+            
+          </Card>
+        </Grid>
+      </Grid>
     </StandardLayout>
   )
 }
