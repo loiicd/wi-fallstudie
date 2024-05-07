@@ -41,12 +41,12 @@ const columns: GridColDef<(any)[number]>[] = [
 ]
 
 export default function DataGridDemo() {
-  console.log(projekte)
+  // console.log(projekte)
 
   return (
     <Box>
       <DataGrid
-        rows={projekte}
+        // rows={projekte}
         columns={columns}
         pageSizeOptions={[5, 10, 15]}
         initialState={{
