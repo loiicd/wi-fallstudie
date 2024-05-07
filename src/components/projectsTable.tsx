@@ -70,7 +70,7 @@ export default function ProjectsTable() {
     <Card>
       <Stack direction='row' spacing={2} justifyContent="flex-end" alignItems="center" sx={{ margin: 2 }}>
         <TextField placeholder='Suche ...' size='small' onChange={handleSearch} />
-        <Button variant='contained' startIcon={<AddIcon />}>Projekt</Button>
+        <Button variant='contained' startIcon={<AddIcon />} onClick={() => setOpenDialog(true)}>Projekt</Button>
       </Stack>
       <DataGrid
         rows={projektes}
