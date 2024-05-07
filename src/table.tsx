@@ -1,8 +1,7 @@
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import projekte from './projekte.json'
 
-const columns: GridColDef<(typeof projekte)[number]>[] = [
+const columns: GridColDef<(any)[number]>[] = [
   {
     field: 'name',
     headerName: 'Name',
