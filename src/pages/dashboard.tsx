@@ -1,11 +1,10 @@
-import Header from "../components/Header"
+import StandardLayout from '../layout/StandardLayout'
 
 const DashboardPage = () => {
   return (
-    <div>
-      <Header />
+    <StandardLayout>
       <h1>Dashboard</h1>
-    </div>
+    </StandardLayout>
   )
 }
 
