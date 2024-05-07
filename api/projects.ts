@@ -1,3 +1,3 @@
-export const projects = async (request: Request) => {
-  return new Response('Hello World')
+export function GET(request: Request) {
+  return new Response(`Hello from ${process.env.VERCEL_REGION}`);
 }
