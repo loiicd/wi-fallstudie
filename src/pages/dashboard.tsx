@@ -2,8 +2,16 @@ import Card from '@mui/material/Card'
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
 import { LineChart } from '@mui/x-charts/LineChart'
+import { useEffect } from 'react'
+import { getProjects } from '../services/getProjects'
 
 const DashboardPage = () => {
+
+  useEffect(() => {
+    getProjects()
+      .then(projects => console.log(projects))
+  }, [])
+
   return (
     <StandardLayout>
       <h1>Dashboard</h1>
