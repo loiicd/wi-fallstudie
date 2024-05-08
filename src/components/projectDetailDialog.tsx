@@ -55,6 +55,21 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
         <Divider sx={{ marginY: 4 }} />
 
         <Grid container spacing={2}>
+          {project.short_description ? 
+            <>
+              <Grid item xs={2} />
+              <Grid item xs={10}>
+                <Typography variant='h6'>Kurzbeschreibung</Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <Rating />
+              </Grid>
+              <Grid item xs={10}>
+                <Typography variant='body1'>{project.short_description}</Typography>
+              </Grid>
+            </>
+          : null} 
+
           {project.target_description ? 
             <>
               <Grid item xs={2} />

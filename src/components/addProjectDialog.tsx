@@ -21,6 +21,7 @@ import { postProject } from '../services/projects'
 import { ProjectFormData, ProjectType } from '../types/project'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -33,6 +34,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const [users, setUsers] = useState<User[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
   const [projectTeam, setProjectTeam] = useState<string[]>([])
+  const [isSavingProject, setIsSavingProject] = useState<boolean>(false)
 
   const handleChangeTab = (event: SyntheticEvent, newTab: string) => {
     setTab(newTab)
@@ -40,9 +42,11 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
 
   const handleSave = () => {
     if (projectFormData.title !== '') {
+      setIsSavingProject(true)
       postProject({ ...projectFormData, team: projectTeam })
         .then(() => handleClose())
         .catch(error => alert(error))
+        .finally(() => setIsSavingProject(false))
     }
   }
 
@@ -264,7 +268,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
         </TabContext>
       <DialogActions>
         <Button variant='outlined' onClick={handleClose}>Abbrechen</Button>
-        <Button variant='contained' onClick={handleSave} autoFocus>Speichern</Button>
+        <LoadingButton variant='contained' onClick={handleSave} autoFocus loading={isSavingProject}>Speichern</LoadingButton>
       </DialogActions>
     </Dialog>
   )
