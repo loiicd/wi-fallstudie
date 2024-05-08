@@ -1,16 +1,12 @@
 import axios from 'axios'
-import { User, UserFormData } from '../types/user'
+import { User } from '../types/user'
 
-export const getUser = async (): Promise<User[]> => {
-  const response = await axios.get('/api/user')
+export const getUser = async (userId: string): Promise<User[]> => {
+  const response = await axios.get(`/api/user/${userId}`)
   return response.data
 }
 
-export const postUser = async (userFormData: UserFormData): Promise<void> => {
-  const response = await axios.post('/api/user/', userFormData)
-  console.log('Post Response', response)
-}
-
-export const deleteUser = async (userId: string): Promise<void> => {
-  await axios.delete('/api/user', { data: userId })
+export const getUsers = async (): Promise<User[]> => {
+  const response = await axios.get('/api/users')
+  return response.data
 }

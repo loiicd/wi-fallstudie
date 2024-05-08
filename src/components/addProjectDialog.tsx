@@ -1,5 +1,5 @@
 
-import { useState, SyntheticEvent } from 'react'
+import { useState, SyntheticEvent, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -14,6 +14,9 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import { User } from '../types/user'
+import { getUsers } from '../services/user'
+import CircularProgress from '@mui/material/CircularProgress'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -22,6 +25,8 @@ interface AddProjectDialogProps {
 
 const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, handleClose }) => {
   const [tab, setTab] = useState<string>('1')
+  const [users, setUsers] = useState<User[]>([])
+  const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
 
   const handleChangeTab = (event: SyntheticEvent, newTab: string) => {
     setTab(newTab)
@@ -32,7 +37,14 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
     handleClose()
   }
 
-  const users = ['User 1', 'User 2', 'User 3', 'User 4']
+  useEffect(() => {
+    setIsLoadingUsers(true)
+    getUsers()
+      .then(data => setUsers(data))
+      .catch(error => alert(error))
+      .finally(() => setIsLoadingUsers(false))
+    console.log(users)
+  }, [])
 
   return (
     <Dialog
@@ -62,10 +74,52 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               <TextField label='Beschreibung' size='small' sx={{ width: '100%'}} multiline rows={4} />
             </Grid>
             <Grid item xs={6}>
-              <Autocomplete options={users} renderInput={(params) => <TextField {...params} label="Projektleiter" size='small' sx={{ width: '100%'}} />} />
+              <Autocomplete 
+                options={users} 
+                getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
+                renderInput={params => 
+                  <TextField 
+                    {...params} 
+                    label="Projektleiter" 
+                    size='small' 
+                    sx={{ width: '100%'}} 
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {isLoadingUsers ? <CircularProgress color="inherit" size={20} /> : null}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                }
+              />
             </Grid>
             <Grid item xs={6}>
-              <Autocomplete options={users} renderInput={(params) => <TextField {...params} label="Stv. Projektleiter" size='small' sx={{ width: '100%'}} />} />
+              <Autocomplete 
+                options={users} 
+                getOptionLabel={option => option.firstname + ' ' + option.lastname}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                loading={isLoadingUsers}
+                renderInput={params => 
+                  <TextField 
+                    {...params} 
+                    label="Stv. Projektleiter" 
+                    size='small' 
+                    sx={{ width: '100%'}} 
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {isLoadingUsers ? <CircularProgress color="inherit" size={20} /> : null}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                } 
+              />
             </Grid>
             <Grid item xs={6}>
               <DateTimePicker label='Startdatum' views={['day', 'month', 'year']} slotProps={{ textField: { size: 'small' } }} sx={{ width: '100%'}} />
@@ -78,7 +132,28 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
         <TabPanel value='2'>
           <Grid container spacing={4} sx={{ paddingY: 2 }}>
             <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
-              <Autocomplete options={users} renderInput={(params) => <TextField {...params} label="Projektteam" size='small' sx={{ width: '100%'}} />} />
+              <Autocomplete 
+                multiple
+                options={users} 
+                getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
+                renderInput={params => 
+                  <TextField 
+                    {...params} 
+                    label="Projektteam" 
+                    size='small' 
+                    sx={{ width: '100%'}} 
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {isLoadingUsers ? <CircularProgress color="inherit" size={20} /> : null}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                }
+              />
             </Grid>
           </Grid>
         </TabPanel>

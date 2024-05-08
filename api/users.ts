@@ -4,14 +4,13 @@ import { sql } from '@vercel/postgres'
 const handler = async (request: VercelRequest, response: VercelResponse) => {
   switch (request.method) {
     case 'GET':
-      return await handleGet(request, response)
+      return await handleGet(response)
   }
 }
 
-const handleGet = async (request: VercelRequest, response: VercelResponse) => {
-  const userId = request.query.id as string
+const handleGet = async (response: VercelResponse) => {
   try {
-    const result = await sql`SELECT id, firstname, lastname, title FROM "user" WHERE id = ${userId}`
+    const result = await sql`SELECT id, firstname, lastname, title FROM "user"`
     return response.send(JSON.stringify(result.rows))
   } catch (error) {
     console.error(error)
