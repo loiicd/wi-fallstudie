@@ -3,7 +3,6 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { useEffect, useState } from 'react'
-import { getProjects } from '../services/projects'
 import AddIcon from '@mui/icons-material/Add'
 import Stack from '@mui/material/Stack'
 import AddProjectDialog from './addProjectDialog'
@@ -15,6 +14,7 @@ import VerifiedIcon from '@mui/icons-material/Verified'
 import UpdateIcon from '@mui/icons-material/Update'
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
 import { Project } from '../types/project'
+import { getProjects } from '../services/projects'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -61,11 +61,16 @@ export default function ProjectsTable() {
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
+  const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(false)
+
+  console.log('Projects', projektes)
 
   useEffect(() => {
+    setIsLoadingProjects(true)
     getProjects()
       .then(data => setProjekte(data))
       .catch(error => alert(error))
+      .finally(() => setIsLoadingProjects(false))
   }, [searchTerm])
 
   const handleCellClick = (project: any) => {
@@ -85,6 +90,8 @@ export default function ProjectsTable() {
           <Button variant='contained' startIcon={<AddIcon />} onClick={() => setOpenAddProjectDialog(true)}>Projekt</Button>
         </Stack>
         <DataGrid
+          loading={isLoadingProjects}
+          sx={{ minHeight: 50}}
           rows={projektes}
           columns={columns}
           onCellClick={(params) => handleCellClick(params.row)}

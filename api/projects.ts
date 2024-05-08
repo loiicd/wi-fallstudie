@@ -10,7 +10,7 @@ const handler = async (request: VercelRequest, response: VercelResponse) => {
 
 const handleGet = async (response: VercelResponse) => {
   try {
-    const result = await sql`SELECT * FROM "user"`
+    const result = await sql`SELECT * FROM "project"`
     return response.status(200).send(JSON.stringify(result.rows))
   } catch (error) {
     console.error(error)

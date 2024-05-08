@@ -56,6 +56,8 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
     })
   }
 
+  console.log(projectFormData)
+
   return (
     <Dialog
       open={open}
@@ -75,7 +77,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
         <TabPanel value='1'>
           <Grid container spacing={4} sx={{ paddingY: 2 }}>
             <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
-              <TextField label='Name' size='small' required sx={{ width: '100%'}} onChange={() => handleChange('title')} />
+              <TextField label='Name' size='small' required sx={{ width: '100%'}} onChange={handleChange('title')} />
             </Grid>
             <Grid item xs={6}>
               <TextField label='Feld 2' size='small' sx={{ width: '100%'}} />
