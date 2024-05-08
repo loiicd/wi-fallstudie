@@ -1,6 +1,7 @@
+import { Dayjs } from 'dayjs'
 import { User } from './user'
 
-type ProjectType = 'Entwurf' | 'Eingereicht' | 'In Prüfung' | 'Angenommen' | 'Abgelehnt'
+export type ProjectType = 'Entwurf' | 'Eingereicht' | 'In Prüfung' | 'Angenommen' | 'Abgelehnt'
 
 type Team = User & { role: string }
 
@@ -8,8 +9,8 @@ export type Project = {
   id: string
   status: ProjectType
   title: string
-  startDate?: Date
-  endDate?: Date
+  start_date?: string
+  end_date?: string
   projectLead?: User
   subProjectLead?: User
   shortDescription?: string
@@ -22,8 +23,8 @@ export type Project = {
 export type ProjectFormData = {
   status: ProjectType
   title: string
-  startDate?: Date
-  endDate?: Date
+  start_date?: Dayjs | null
+  end_date?: Dayjs | null
   projectLead?: string
   subProjectLead?: string
   shortDescription?: string

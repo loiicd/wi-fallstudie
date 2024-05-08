@@ -18,7 +18,9 @@ import { User } from '../types/user'
 import { getUsers } from '../services/user'
 import CircularProgress from '@mui/material/CircularProgress'
 import { postProject } from '../services/projects'
-import { ProjectFormData } from '../types/project'
+import { ProjectFormData, ProjectType } from '../types/project'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -56,7 +58,12 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
     })
   }
 
-  console.log(projectFormData)
+  const handleStatusChange = (event: SelectChangeEvent<string>) => {
+    setProjectFormData({
+      ...projectFormData,
+      status: event.target.value as ProjectType,
+    })
+  }
 
   return (
     <Dialog
@@ -70,22 +77,59 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChangeTab} aria-label="lab API tabs example">
             <Tab label="Allgemein" value='1' />
-            <Tab label="Projektteam" value='2' />
-            <Tab label="Item Three" value='3' />
+            <Tab label="Rollen" value='2' />
+            <Tab label="Beschreibungen" value='3' />
           </TabList>
         </Box>
         <TabPanel value='1'>
           <Grid container spacing={4} sx={{ paddingY: 2 }}>
             <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
-              <TextField label='Name' size='small' required sx={{ width: '100%'}} onChange={handleChange('title')} />
+              <TextField 
+                label='Titel' 
+                size='small' 
+                required 
+                value={projectFormData.title}
+                sx={{ width: '100%'}} 
+                onChange={handleChange('title')} 
+              />
             </Grid>
             <Grid item xs={6}>
-              <TextField label='Feld 2' size='small' sx={{ width: '100%'}} />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField label='Beschreibung' size='small' sx={{ width: '100%'}} multiline rows={4} />
+              <Select 
+                label='Feld 2' 
+                size='small' 
+                value={projectFormData.status}
+                sx={{ width: '100%'}} 
+                onChange={(event: SelectChangeEvent<string>) => handleStatusChange(event)}
+              >
+                <MenuItem value='Entwurf'>Entwurf</MenuItem>
+                <MenuItem value='Eingereicht'>Eingereicht</MenuItem>
+              </Select>
             </Grid>
             <Grid item xs={6}>
+              <DateTimePicker 
+                label='Startdatum' 
+                views={['day', 'month', 'year']} 
+                value={projectFormData.start_date} 
+                slotProps={{ textField: { size: 'small' } }} 
+                sx={{ width: '100%'}} 
+                onChange={(newValue) => setProjectFormData({ ...projectFormData, start_date: newValue })}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <DateTimePicker 
+                label='Enddatum' 
+                views={['day', 'month', 'year']}
+                value={projectFormData.end_date} 
+                slotProps={{ textField: { size: 'small' } }} 
+                sx={{ width: '100%'}} 
+                onChange={(newValue) => setProjectFormData({ ...projectFormData, end_date: newValue })}
+              />
+            </Grid>
+          </Grid>
+        </TabPanel>
+        <TabPanel value='2'>
+          <Grid container spacing={4} sx={{ paddingY: 2 }}>
+          <Grid item xs={6}>
               <Autocomplete 
                 options={users} 
                 getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
@@ -133,16 +177,6 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                 } 
               />
             </Grid>
-            <Grid item xs={6}>
-              <DateTimePicker label='Startdatum' views={['day', 'month', 'year']} slotProps={{ textField: { size: 'small' } }} sx={{ width: '100%'}} />
-            </Grid>
-            <Grid item xs={6}>
-              <DateTimePicker label='Enddatum' views={['day', 'month', 'year']} slotProps={{ textField: { size: 'small' } }} sx={{ width: '100%'}} />
-            </Grid>
-          </Grid>
-        </TabPanel>
-        <TabPanel value='2'>
-          <Grid container spacing={4} sx={{ paddingY: 2 }}>
             <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
               <Autocomplete 
                 multiple
@@ -169,7 +203,54 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
             </Grid>
           </Grid>
         </TabPanel>
-        <TabPanel value='3'>Item Three</TabPanel>
+        <TabPanel value='3'>
+          <Grid container spacing={4} sx={{ paddingY: 2 }}>
+            <Grid item xs={12}>
+              <TextField 
+                label='Kurzbeschreibung' 
+                size='small' 
+                value={projectFormData.shortDescription}
+                sx={{ width: '100%'}} 
+                multiline 
+                rows={4} 
+                onChange={handleChange('shortDescription')} 
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField 
+                label='Ziel' 
+                size='small' 
+                value={projectFormData.targetDescription}
+                sx={{ width: '100%'}} 
+                multiline 
+                rows={4} 
+                onChange={handleChange('targetDescription')} 
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField 
+                label='Vision' 
+                size='small' 
+                value={projectFormData.visionDescription}
+                sx={{ width: '100%'}} 
+                multiline
+                rows={4} 
+                onChange={handleChange('visionDescription')} 
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField 
+                label='Problemstellung' 
+                size='small' 
+                value={projectFormData.problemDescription}
+                sx={{ width: '100%'}} 
+                multiline 
+                rows={4} 
+                onChange={handleChange('problemDescription')} 
+              />
+            </Grid>
+          </Grid>
+        </TabPanel>
         </TabContext>
       <DialogActions>
         <Button variant='outlined' onClick={handleClose}>Abbrechen</Button>

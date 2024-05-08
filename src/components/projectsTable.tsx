@@ -40,18 +40,18 @@ const columns: GridColDef<(any)[number]>[] = [
     type: 'string',
   },
   {
-    field: 'startDate',
+    field: 'start_date',
     headerName: 'Startdatum',
     width: 150,
     editable: false,
-    type: 'date'
+    renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
   },
   {
-    field: 'endDate',
+    field: 'end_date',
     headerName: 'EndDatum',
     width: 150,
     editable: false,
-    type: 'date'
+    renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
   },
 ]
 
@@ -62,8 +62,6 @@ export default function ProjectsTable() {
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
   const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(false)
-
-  console.log('Projects', projektes)
 
   useEffect(() => {
     setIsLoadingProjects(true)
