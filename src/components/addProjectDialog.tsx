@@ -22,6 +22,7 @@ import { ProjectFormData, ProjectType } from '../types/project'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import LoadingButton from '@mui/lab/LoadingButton'
+import dayjs from 'dayjs'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -124,6 +125,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                 value={projectFormData.start_date} 
                 slotProps={{ textField: { size: 'small' } }} 
                 sx={{ width: '100%'}} 
+                minDate={dayjs(Date.now())}
                 onChange={(newValue) => setProjectFormData({ ...projectFormData, start_date: newValue })}
               />
             </Grid>
@@ -134,6 +136,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                 value={projectFormData.end_date} 
                 slotProps={{ textField: { size: 'small' } }} 
                 sx={{ width: '100%'}} 
+                minDate={dayjs(Date.now())}
                 onChange={(newValue) => setProjectFormData({ ...projectFormData, end_date: newValue })}
               />
             </Grid>
