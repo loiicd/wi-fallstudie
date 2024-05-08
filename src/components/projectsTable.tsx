@@ -58,14 +58,14 @@ const columns: GridColDef<(any)[number]>[] = [
     headerName: 'Projektleiter',
     width: 150,
     editable: false,
-    renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.firstname : '',
+    renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.lastname : '',
   },
   {
     field: 'sub_project_lead',
     headerName: 'Stelv. Projektleiter',
     width: 150,
     editable: false,
-    renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.firstname : '',
+    renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.lastname : '',
   },
 ]
 

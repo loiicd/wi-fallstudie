@@ -25,8 +25,8 @@ export type ProjectFormData = {
   title: string
   start_date?: Dayjs | null
   end_date?: Dayjs | null
-  project_lead?: string
-  sub_project_lead?: string
+  project_lead_id?: string
+  sub_project_lead_id?: string
   short_description?: string
   target_description?: string
   vision_description?: string

@@ -136,7 +136,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                 getOptionKey={(option) => option.id}
                 getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
                 loading={isLoadingUsers}
-                onChange={(event, newUser) => newUser ? setProjectFormData({ ...projectFormData, project_lead: newUser.id }) : null}
+                onChange={(event, newUser) => newUser ? setProjectFormData({ ...projectFormData, project_lead_id: newUser.id }) : null}
                 renderInput={params => 
                   <TextField 
                     {...params} 
@@ -162,7 +162,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                 getOptionKey={(option) => option.id}
                 getOptionLabel={option => option.firstname + ' ' + option.lastname}
                 loading={isLoadingUsers}
-                onChange={(event, newUser) => newUser ? setProjectFormData({ ...projectFormData, sub_project_lead: newUser.id }) : null}
+                onChange={(event, newUser) => newUser ? setProjectFormData({ ...projectFormData, sub_project_lead_id: newUser.id }) : null}
                 renderInput={params => 
                   <TextField 
                     {...params} 
