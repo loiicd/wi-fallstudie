@@ -209,44 +209,44 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               <TextField 
                 label='Kurzbeschreibung' 
                 size='small' 
-                value={projectFormData.shortDescription}
+                value={projectFormData.short_description}
                 sx={{ width: '100%'}} 
                 multiline 
                 rows={4} 
-                onChange={handleChange('shortDescription')} 
+                onChange={handleChange('short_description')} 
               />
             </Grid>
             <Grid item xs={12}>
               <TextField 
                 label='Ziel' 
                 size='small' 
-                value={projectFormData.targetDescription}
+                value={projectFormData.target_description}
                 sx={{ width: '100%'}} 
                 multiline 
                 rows={4} 
-                onChange={handleChange('targetDescription')} 
+                onChange={handleChange('target_description')} 
               />
             </Grid>
             <Grid item xs={12}>
               <TextField 
                 label='Vision' 
                 size='small' 
-                value={projectFormData.visionDescription}
+                value={projectFormData.vision_description}
                 sx={{ width: '100%'}} 
                 multiline
                 rows={4} 
-                onChange={handleChange('visionDescription')} 
+                onChange={handleChange('vision_description')} 
               />
             </Grid>
             <Grid item xs={12}>
               <TextField 
                 label='Problemstellung' 
                 size='small' 
-                value={projectFormData.problemDescription}
+                value={projectFormData.problem_description}
                 sx={{ width: '100%'}} 
                 multiline 
                 rows={4} 
-                onChange={handleChange('problemDescription')} 
+                onChange={handleChange('problem_description')} 
               />
             </Grid>
           </Grid>

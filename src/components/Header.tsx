@@ -8,7 +8,6 @@ import MuiDrawer from '@mui/material/Drawer';
 import { useState } from 'react';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
-import Badge from '@mui/material/Badge';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -96,11 +95,6 @@ const Header = () => {
           >
             Dashboard
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MenuIcon />
-            </Badge>
-          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={openDrawer}>

@@ -11,12 +11,12 @@ export type Project = {
   title: string
   start_date?: string
   end_date?: string
-  projectLead?: User
-  subProjectLead?: User
-  shortDescription?: string
-  targetDescription?: string
-  visionDescription?: string
-  problemDescription?: string
+  project_lead?: User
+  sub_project_lead?: User
+  short_description?: string
+  target_description?: string
+  vision_description?: string
+  problem_description?: string
   team: Team[]
 }
 
@@ -25,11 +25,11 @@ export type ProjectFormData = {
   title: string
   start_date?: Dayjs | null
   end_date?: Dayjs | null
-  projectLead?: string
-  subProjectLead?: string
-  shortDescription?: string
-  targetDescription?: string
-  visionDescription?: string
-  problemDescription?: string
+  project_lead?: string
+  sub_project_lead?: string
+  short_description?: string
+  target_description?: string
+  vision_description?: string
+  problem_description?: string
   team: string[]
 }

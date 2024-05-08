@@ -24,11 +24,11 @@ const columns: GridColDef<(any)[number]>[] = [
     editable: false,
     renderCell: (params) => {
       switch(params.value) {
-        case 'Entwurf': return (<Chip variant='outlined' icon={<DraftsIcon />} label={params.value} color="default" />)
-        case 'Eingereicht': return (<Chip variant='outlined' icon={<MoveToInboxIcon />} label={params.value} color="default" />)
-        case 'In Prüfung': return (<Chip variant='outlined' icon={<UpdateIcon />} label={params.value} color="warning" />)
-        case 'Angenommen': return (<Chip variant='outlined' icon={<VerifiedIcon />} label={params.value} color="success" />)
-        case 'Abgelehnt': return (<Chip variant='outlined' icon={<DoNotDisturbOnIcon />} label={params.value} color="error" />)
+        case 'Entwurf': return (<Chip variant='outlined' icon={<DraftsIcon />} label={params.value} color="default" size='small' />)
+        case 'Eingereicht': return (<Chip variant='outlined' icon={<MoveToInboxIcon />} label={params.value} color="default" size='small' />)
+        case 'In Prüfung': return (<Chip variant='outlined' icon={<UpdateIcon />} label={params.value} color="warning" size='small' />)
+        case 'Angenommen': return (<Chip variant='outlined' icon={<VerifiedIcon />} label={params.value} color="success" size='small' />)
+        case 'Abgelehnt': return (<Chip variant='outlined' icon={<DoNotDisturbOnIcon />} label={params.value} color="error" size='small' />)
       }
     }
   },
@@ -52,6 +52,20 @@ const columns: GridColDef<(any)[number]>[] = [
     width: 150,
     editable: false,
     renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
+  },
+  {
+    field: 'project_lead',
+    headerName: 'Projektleiter',
+    width: 150,
+    editable: false,
+    renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.firstname : '',
+  },
+  {
+    field: 'sub_project_lead',
+    headerName: 'Stelv. Projektleiter',
+    width: 150,
+    editable: false,
+    renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.firstname : '',
   },
 ]
 

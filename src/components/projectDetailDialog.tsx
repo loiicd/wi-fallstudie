@@ -22,7 +22,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography variant='body1'>{project.projectLead?.firstname} {project.projectLead?.lastname}</Typography>
+            <Typography variant='body1'>{project.project_lead?.firstname} {project.project_lead?.lastname}</Typography>
           </Grid>
         </Grid>
 
@@ -34,7 +34,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
             <Rating />
           </Grid>
           <Grid item xs={10}>
-            <Typography variant='body1'>{project.targetDescription}</Typography>
+            <Typography variant='body1'>{project.target_description}</Typography>
           </Grid>
         </Grid>
 
@@ -46,7 +46,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
             <Rating />
           </Grid>
           <Grid item xs={10}>
-            <Typography variant='body1'>{project.visionDescription}</Typography>
+            <Typography variant='body1'>{project.vision_description}</Typography>
           </Grid>
 
           <Grid item xs={12}>
@@ -56,7 +56,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
             <Rating />
           </Grid>
           <Grid item xs={10}>
-            <Typography variant='body1'>{project.problemDescription}</Typography>
+            <Typography variant='body1'>{project.problem_description}</Typography>
           </Grid>
 
           <Grid item xs={12}>
