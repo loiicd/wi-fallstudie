@@ -7,12 +7,14 @@ import CssBaseline from "@mui/material/CssBaseline"
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import UsersPage from "./pages/users"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const App = () => {
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <CssBaseline />
+        <SpeedInsights />
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<DashbordPage />} />
