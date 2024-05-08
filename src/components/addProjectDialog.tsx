@@ -35,6 +35,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
   const [projectTeam, setProjectTeam] = useState<string[]>([])
   const [isSavingProject, setIsSavingProject] = useState<boolean>(false)
+  const [titleInputError, setTitleInputError] = useState<boolean>(false)
 
   const handleChangeTab = (event: SyntheticEvent, newTab: string) => {
     setTab(newTab)
@@ -47,6 +48,8 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
         .then(() => handleClose())
         .catch(error => alert(error))
         .finally(() => setIsSavingProject(false))
+    } else {
+      setTitleInputError(true)
     }
   }
 
@@ -92,6 +95,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
           <Grid container spacing={4} sx={{ paddingY: 2 }}>
             <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
               <TextField 
+                error={titleInputError}
                 label='Titel' 
                 size='small' 
                 required 
@@ -99,6 +103,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                 sx={{ width: '100%'}} 
                 onChange={handleChange('title')} 
               />
+              {titleInputError && <p style={{ color: 'red', fontSize: '0.75rem', margin: '0.5rem 0' }}>Bitte geben Sie einen Titel ein</p>}
             </Grid>
             <Grid item xs={6}>
               <Select 
