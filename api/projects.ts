@@ -10,7 +10,19 @@ const handler = async (request: VercelRequest, response: VercelResponse) => {
 
 const handleGet = async (response: VercelResponse) => {
   try {
-    const result = await sql`SELECT * FROM "project"`
+    const result = await sql`
+      SELECT id, status, title, start_date, end_date, project_lead_id, sub_project_lead_id, short_description, target_description, vision_description, problem_description
+      FROM "project"`
+    
+    for (const data of result.rows) {
+      const team = await sql`
+        SELECT id, firstname, lastname, title
+        FROM "user"
+        LEFT JOIN project_user_rel ON "user".id = user_id
+        WHERE project_id = ${data.id}`
+      
+      data.team = team.rows
+    }
     return response.status(200).send(JSON.stringify(result.rows))
   } catch (error) {
     console.error(error)

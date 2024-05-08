@@ -83,7 +83,9 @@ export default function ProjectsTable() {
       .then(data => setProjekte(data))
       .catch(error => alert(error))
       .finally(() => setIsLoadingProjects(false))
-  }, [searchTerm])
+  }, [searchTerm, openAddProjectDialog])
+
+  console.log(projektes)
 
   const handleCellClick = (project: any) => {
     setProject(project)
@@ -114,6 +116,14 @@ export default function ProjectsTable() {
                 pageSize: 10,
               },
             },
+            sorting: {
+              sortModel: [
+                {
+                  field: 'start_date',
+                  sort: 'asc',
+                },
+              ]
+            }
           }}
           disableRowSelectionOnClick
           disableDensitySelector

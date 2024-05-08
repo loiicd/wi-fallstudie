@@ -32,13 +32,14 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const [projectFormData, setProjectFormData] = useState<ProjectFormData>({ title: '', status: 'Entwurf', team: [] })
   const [users, setUsers] = useState<User[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
+  const [projectTeam, setProjectTeam] = useState<string[]>([])
 
   const handleChangeTab = (event: SyntheticEvent, newTab: string) => {
     setTab(newTab)
   }
 
   const handleSave = () => {
-    postProject(projectFormData)
+    postProject({ ...projectFormData, team: projectTeam })
       .then(() => handleClose())
       .catch(error => alert(error))
   }
@@ -132,7 +133,10 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
           <Grid item xs={6}>
               <Autocomplete 
                 options={users} 
+                getOptionKey={(option) => option.id}
                 getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
+                loading={isLoadingUsers}
+                onChange={(event, newUser) => newUser ? setProjectFormData({ ...projectFormData, project_lead: newUser.id }) : null}
                 renderInput={params => 
                   <TextField 
                     {...params} 
@@ -155,9 +159,10 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
             <Grid item xs={6}>
               <Autocomplete 
                 options={users} 
+                getOptionKey={(option) => option.id}
                 getOptionLabel={option => option.firstname + ' ' + option.lastname}
-                isOptionEqualToValue={(option, value) => option.id === value.id}
                 loading={isLoadingUsers}
+                onChange={(event, newUser) => newUser ? setProjectFormData({ ...projectFormData, sub_project_lead: newUser.id }) : null}
                 renderInput={params => 
                   <TextField 
                     {...params} 
@@ -179,9 +184,12 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
             </Grid>
             <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
               <Autocomplete 
+                getOptionKey={(option) => option.id}
                 multiple
                 options={users} 
                 getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
+                loading={isLoadingUsers}
+                onChange={(event, value) => setProjectTeam(value.map((item) => item.id))}
                 renderInput={params => 
                   <TextField 
                     {...params} 
