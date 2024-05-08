@@ -22,7 +22,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography variant='body1'>{project.projectLead.firstname} {project.projectLead.lastname}</Typography>
+            <Typography variant='body1'>{project.projectLead?.firstname} {project.projectLead?.lastname}</Typography>
           </Grid>
         </Grid>
 

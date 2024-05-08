@@ -1,5 +1,5 @@
 
-import { useState, SyntheticEvent, useEffect } from 'react'
+import { useState, SyntheticEvent, useEffect, ChangeEvent } from 'react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -17,6 +17,8 @@ import TabPanel from '@mui/lab/TabPanel';
 import { User } from '../types/user'
 import { getUsers } from '../services/user'
 import CircularProgress from '@mui/material/CircularProgress'
+import { postProject } from '../services/projects'
+import { ProjectFormData } from '../types/project'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -25,6 +27,7 @@ interface AddProjectDialogProps {
 
 const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, handleClose }) => {
   const [tab, setTab] = useState<string>('1')
+  const [projectFormData, setProjectFormData] = useState<ProjectFormData>({ title: '', status: 'Entwurf', team: [] })
   const [users, setUsers] = useState<User[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
 
@@ -33,8 +36,9 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   }
 
   const handleSave = () => {
-    console.log('Save')
-    handleClose()
+    postProject(projectFormData)
+      .then(() => handleClose())
+      .catch(error => alert(error))
   }
 
   useEffect(() => {
@@ -43,8 +47,14 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
       .then(data => setUsers(data))
       .catch(error => alert(error))
       .finally(() => setIsLoadingUsers(false))
-    console.log(users)
   }, [])
+
+  const handleChange = (field: keyof ProjectFormData) => (event: ChangeEvent<HTMLInputElement>) => {
+    setProjectFormData({
+      ...projectFormData,
+      [field]: event.target.value,
+    })
+  }
 
   return (
     <Dialog
@@ -65,7 +75,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
         <TabPanel value='1'>
           <Grid container spacing={4} sx={{ paddingY: 2 }}>
             <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
-              <TextField label='Name' size='small' required sx={{ width: '100%'}} />
+              <TextField label='Name' size='small' required sx={{ width: '100%'}} onChange={() => handleChange('title')} />
             </Grid>
             <Grid item xs={6}>
               <TextField label='Feld 2' size='small' sx={{ width: '100%'}} />

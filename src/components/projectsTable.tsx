@@ -3,7 +3,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { useEffect, useState } from 'react'
-import { getProjects } from '../services/getProjects'
+import { getProjects } from '../services/projects'
 import AddIcon from '@mui/icons-material/Add'
 import Stack from '@mui/material/Stack'
 import AddProjectDialog from './addProjectDialog'
@@ -14,6 +14,7 @@ import MoveToInboxIcon from '@mui/icons-material/MoveToInbox'
 import VerifiedIcon from '@mui/icons-material/Verified'
 import UpdateIcon from '@mui/icons-material/Update'
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
+import { Project } from '../types/project'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -39,22 +40,6 @@ const columns: GridColDef<(any)[number]>[] = [
     type: 'string',
   },
   {
-    field: 'projectLead',
-    headerName: 'Projektleiter',
-    width: 150,
-    editable: false,
-    type: 'string',
-    renderCell: (params) => (params.value.firstname + ' ' + params.value.lastname)
-  },
-  {
-    field: 'subProjectLead',
-    headerName: 'Stelv. Projektleiter',
-    width: 150,
-    editable: false,
-    type: 'string',
-    renderCell: (params) => (params.value.firstname + ' ' + params.value.lastname)
-  },
-  {
     field: 'startDate',
     headerName: 'Startdatum',
     width: 150,
@@ -71,7 +56,7 @@ const columns: GridColDef<(any)[number]>[] = [
 ]
 
 export default function ProjectsTable() {
-  const [projektes, setProjekte] = useState<any[]>([])
+  const [projektes, setProjekte] = useState<Project[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
