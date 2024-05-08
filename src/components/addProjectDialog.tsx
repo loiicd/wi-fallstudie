@@ -39,7 +39,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   }
 
   const handleSave = () => {
-    if (projectFormData.title === '') {
+    if (projectFormData.title !== '') {
       postProject({ ...projectFormData, team: projectTeam })
         .then(() => handleClose())
         .catch(error => alert(error))
