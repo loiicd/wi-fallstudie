@@ -39,9 +39,11 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   }
 
   const handleSave = () => {
-    postProject({ ...projectFormData, team: projectTeam })
-      .then(() => handleClose())
-      .catch(error => alert(error))
+    if (projectFormData.title === '') {
+      postProject({ ...projectFormData, team: projectTeam })
+        .then(() => handleClose())
+        .catch(error => alert(error))
+    }
   }
 
   useEffect(() => {
