@@ -1,4 +1,4 @@
-import { DialogContent, Divider, Grid, Rating, Typography } from "@mui/material"
+import { DialogContent, Divider, Grid, MenuItem, Rating, Select, Typography } from "@mui/material"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
 import { FunctionComponent } from "react"
@@ -116,6 +116,26 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
           : null}
 
           {!project.short_description && !project.target_description && !project.vision_description && !project.problem_description ? <Typography variant='body1'>Keine Beschreibungen verfügbar</Typography> : null}
+        </Grid>
+
+        <Divider sx={{ marginY: 4 }} />
+
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Select 
+              label='Feld 2' 
+              size='small' 
+              value={project.status}
+              sx={{ width: '100%'}} 
+              // onChange={(event: SelectChangeEvent<string>) => handleStatusChange(event)}
+            >
+              <MenuItem value='Entwurf'>Entwurf</MenuItem>
+              <MenuItem value='Eingereicht'>Eingereicht</MenuItem>
+              <MenuItem value='In Prüfung'>In Prüfung</MenuItem>
+              <MenuItem value='Angenommen'>Angenommen</MenuItem>
+              <MenuItem value='Abgelehnt'>Abgelehnt</MenuItem>
+             </Select>
+          </Grid>
         </Grid>
       </DialogContent>
     </Dialog>
