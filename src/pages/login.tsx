@@ -5,9 +5,15 @@ import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 const LoginPage = () => {
   const navigate = useNavigate()
+
+  const login = () => {
+    Cookies.set('user', '123|Max|Muster|admin')
+    navigate('/')
+  }
 
   return (
     <Box
@@ -30,7 +36,7 @@ const LoginPage = () => {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
-          onClick={() => navigate('/')}
+          onClick={login}
         >
           Anmelden mit SSO
         </Button>

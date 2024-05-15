@@ -1,11 +1,10 @@
-import Header from "../components/Header"
+import StandardLayout from "../layout/StandardLayout"
 
 const NotFoundPage = () => {
   return (
-    <div>
-      <Header />
+    <StandardLayout>
       <h1>404 Not Found</h1>
-    </div>
+    </StandardLayout>
   )
 }
 

@@ -2,16 +2,34 @@ import Box from '@mui/material/Box'
 import Header from '../components/Header'
 import Toolbar from '@mui/material/Toolbar'
 import Container from '@mui/material/Container'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { User } from '../types/user'
+import Cookies from 'js-cookie'
 
 interface StandardLayoutProps {
   children: React.ReactNode
 }
 
 const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children }) => {
-  return (
+  const navigate = useNavigate()
+  const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
+
+  useEffect(() => loginProvider)
+
+  const loginProvider = () => {
+    const userCookie = Cookies.get('user')
+    if (!userCookie) {
+      navigate('/login')
+    } else {
+      const [id, firstname, lastname, title, type] = userCookie.split('|')
+      setActiveUser({ id: id, firstname, lastname, title, type: type as ('admin' | 'user')})
+    }
+  }
+  
+  return activeUser ? (
     <Box sx={{ display: 'flex' }}>
-      <Header />
+      <Header activeUser={activeUser} />
       <Box
         component="main"
         sx={{
@@ -30,7 +48,7 @@ const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children }) =>
         </Container>
       </Box>
     </Box>
-  )
+  ) : null
 }
 
 export default StandardLayout

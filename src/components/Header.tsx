@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import MuiDrawer from '@mui/material/Drawer';
-import { useState } from 'react';
+import { FunctionComponent, useState } from 'react';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -15,6 +15,9 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import GroupsIcon from '@mui/icons-material/Groups';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { User } from '../types/user';
+import Avatar from '@mui/material/Avatar';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -66,7 +69,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const Header = () => {
+interface Props {
+  activeUser: User
+}
+
+const Header: FunctionComponent<Props> = ({ activeUser }) => {
   const navigate = useNavigate()
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
 
@@ -95,6 +102,7 @@ const Header = () => {
           >
             Dashboard
           </Typography>
+          <Avatar>{activeUser.firstname[0]}{activeUser.lastname[0]}</Avatar>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={openDrawer}>
@@ -131,6 +139,12 @@ const Header = () => {
             <ListItemText primary='Members' />
           </ListItemButton>
           <Divider sx={{ my: 1 }} />
+          <ListItemButton onClick={() => navigate('/login')} sx={{ alignSelf: 'baseline' }}>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary='Members' />
+          </ListItemButton>
         </List>
       </Drawer>
     </>
