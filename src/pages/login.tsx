@@ -6,14 +6,25 @@ import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import { getUsers } from '../services/user'
 
 const LoginPage = () => {
   const navigate = useNavigate()
 
   const login = () => {
-    Cookies.set('user', '123|Max|Muster|admin')
+    getUsers()
+      .then((data) => {
+        const user = getRandomObjectFromArray(data)
+        Cookies.remove('user')
+        Cookies.set('user', `${user.id}|${user.firstname}|${user.lastname}|${user.type}`)
+      })
     navigate('/')
   }
+
+  function getRandomObjectFromArray<T>(array: T[]): T {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
+}
 
   return (
     <Box

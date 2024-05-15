@@ -18,6 +18,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { User } from '../types/user';
 import Avatar from '@mui/material/Avatar';
+import Cookies from 'js-cookie';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -76,6 +77,11 @@ interface Props {
 const Header: FunctionComponent<Props> = ({ activeUser }) => {
   const navigate = useNavigate()
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+
+  const logout = () => {
+    Cookies.remove('user')
+    navigate('/login')
+  }
 
   return (
     <>
@@ -139,7 +145,7 @@ const Header: FunctionComponent<Props> = ({ activeUser }) => {
             <ListItemText primary='Members' />
           </ListItemButton>
           <Divider sx={{ my: 1 }} />
-          <ListItemButton onClick={() => navigate('/login')} sx={{ alignSelf: 'baseline' }}>
+          <ListItemButton onClick={logout}>
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>

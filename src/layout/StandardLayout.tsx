@@ -22,8 +22,8 @@ const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children }) =>
     if (!userCookie) {
       navigate('/login')
     } else {
-      const [id, firstname, lastname, title, type] = userCookie.split('|')
-      setActiveUser({ id: id, firstname, lastname, title, type: type as ('admin' | 'user')})
+      const [id, firstname, lastname, type] = userCookie.split('|')
+      setActiveUser({ id, firstname, lastname, title: undefined, type: type as ('admin' | 'user')})
     }
   }
   
