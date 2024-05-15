@@ -7,21 +7,33 @@ import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { getUsers } from '../services/user'
+import { useEffect, useState } from 'react'
+import { User } from '../types/user'
 
 const LoginPage = () => {
   const navigate = useNavigate()
 
-  const login = () => {
+  const [user, setUser] = useState<User | undefined>(undefined) 
+  const [loadingUser, setLoadingUser] = useState<boolean>(true)
+
+  useEffect(() => {
+    setLoadingUser(true)
     getUsers()
-      .then((data) => {
-        const user = getRandomObjectFromArray(data)
-        Cookies.set('user', `${user.id}|${user.firstname}|${user.lastname}|${user.type}`)
-        navigate('/dashboard')
+      .then(data => {
+        const zee = getRandomObjectFromArray(data)
+        setUser(zee)
       })
-      .catch((error) => {
-        console.error(error)
-        alert(error)
-      })
+      .catch(error => console.error(error))
+      .finally(() => setLoadingUser(false))
+  }, [])
+
+  const login = async () => {
+    if (user) {
+      Cookies.set('user', `${user.id}|${user.firstname}|${user.lastname}|${user.type}`)
+      navigate('/dashboard')
+    }
+    //   throw new Error('No user found')
+    // }
   }
 
   function getRandomObjectFromArray<T>(array: T[]): T {
@@ -51,6 +63,7 @@ const LoginPage = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
           onClick={login}
+          disabled={loadingUser}
         >
           Anmelden mit SSO
         </Button>
