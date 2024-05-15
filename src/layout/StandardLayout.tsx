@@ -15,19 +15,19 @@ const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children }) =>
   const navigate = useNavigate()
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
 
-  const loginProvider = useCallback(() => {
-    const userCookie = Cookies.get('user')
-    console.log(userCookie)
-    if (!userCookie) {
-      // navigate('/login')
-      console.log('Hello')
-    } else {
-      const [id, firstname, lastname, type] = userCookie.split('|')
-      setActiveUser({ id, firstname, lastname, title: undefined, type: type as ('admin' | 'user')})
-    }
-  }, [navigate])
+  // const loginProvider = useCallback(() => {
+  //   const userCookie = Cookies.get('user')
+  //   console.log(userCookie)
+  //   if (!userCookie) {
+  //     // navigate('/login')
+  //     console.log('Hello')
+  //   } else {
+  //     const [id, firstname, lastname, type] = userCookie.split('|')
+  //     setActiveUser({ id, firstname, lastname, title: undefined, type: type as ('admin' | 'user')})
+  //   }
+  // }, [navigate])
 
-  useEffect(() => loginProvider, [loginProvider])
+  // useEffect(() => loginProvider, [loginProvider])
   
   return activeUser ? (
     <Box sx={{ display: 'flex' }}>

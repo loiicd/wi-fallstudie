@@ -27,7 +27,7 @@ const LoginPage = () => {
   function getRandomObjectFromArray<T>(array: T[]): T {
     const randomIndex = Math.floor(Math.random() * array.length);
     return array[randomIndex];
-}
+  }
 
   return (
     <Box
