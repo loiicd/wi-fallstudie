@@ -14,7 +14,7 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { User } from '../types/user'
+import { ProjectRole, User } from '../types/user'
 import { getUsers } from '../services/user'
 import CircularProgress from '@mui/material/CircularProgress'
 import { postProject } from '../services/projects'
@@ -23,6 +23,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import LoadingButton from '@mui/lab/LoadingButton'
 import dayjs from 'dayjs'
+import Cookies from 'js-cookie'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -30,8 +31,9 @@ interface AddProjectDialogProps {
 }
 
 const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, handleClose }) => {
+  const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
   const [tab, setTab] = useState<string>('1')
-  const [projectFormData, setProjectFormData] = useState<ProjectFormData>({ title: '', status: 'Entwurf', team: [] })
+  const [projectFormData, setProjectFormData] = useState<ProjectFormData>({ title: '', status: 'Entwurf', team: [], created_from: '1'})
   const [users, setUsers] = useState<User[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
   const [projectTeam, setProjectTeam] = useState<string[]>([])
@@ -45,7 +47,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const handleSave = () => {
     if (projectFormData.title !== '') {
       setIsSavingProject(true)
-      postProject({ ...projectFormData, team: projectTeam })
+      postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id })
         .then(() => handleClose())
         .catch(error => alert(error))
         .finally(() => setIsSavingProject(false))
@@ -53,6 +55,14 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
       setTitleInputError(true)
     }
   }
+
+  useEffect(() => {
+    const userCookie = Cookies.get('user')
+    if (userCookie) {
+      const [id, firstname, lastname, type] = userCookie.split('|')
+      setActiveUser({ id, firstname, lastname, title: undefined, type: type as ProjectRole})
+    } 
+  }, [])
 
   useEffect(() => {
     setIsLoadingUsers(true)

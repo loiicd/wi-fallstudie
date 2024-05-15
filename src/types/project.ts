@@ -9,6 +9,8 @@ export type Project = {
   id: string
   status: ProjectType
   title: string
+  created_from: User,
+  created_at: string
   start_date?: string
   end_date?: string
   project_lead?: User
@@ -23,6 +25,7 @@ export type Project = {
 export type ProjectFormData = {
   status: ProjectType
   title: string
+  created_from: string,
   start_date?: Dayjs | null
   end_date?: Dayjs | null
   project_lead_id?: string

@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar'
 import Container from '@mui/material/Container'
 import { FunctionComponent, useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { User } from '../types/user'
+import { ProjectRole, User } from '../types/user'
 import Cookies from 'js-cookie'
 
 interface StandardLayoutProps {
@@ -23,7 +23,7 @@ const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children }) =>
       console.log('Hello')
     } else {
       const [id, firstname, lastname, type] = userCookie.split('|')
-      setActiveUser({ id, firstname, lastname, title: undefined, type: type as ('admin' | 'user')})
+      setActiveUser({ id, firstname, lastname, title: undefined, type: type as ProjectRole})
     }
   }, [navigate])
 
