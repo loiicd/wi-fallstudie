@@ -8,6 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import UsersPage from "./pages/users"
 import { SpeedInsights } from "@vercel/speed-insights/react"
+import LoginPage from "./pages/login"
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
             <Route path='/project/:id' element={<ProjectPage />} />
             <Route path='/users' element={<UsersPage />} />
             <Route path='/notfound' element={<NotFoundPage />} />
+            <Route path='/login' element={<LoginPage />} />
           </Routes>
         </BrowserRouter>
       </LocalizationProvider>
