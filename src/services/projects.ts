@@ -7,7 +7,7 @@ export const getProjects = async (): Promise<Project[]> => {
 }
 
 export const getProjectsById = async (id: string): Promise<Project[]> => {
-  const response = await axios.get(`/api/project/${id}`)
+  const response = await axios.get('/api/project', { params: { id: id } })
   return response.data
 }
 

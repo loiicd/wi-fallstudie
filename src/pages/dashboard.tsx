@@ -1,16 +1,18 @@
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
 import '../alien.css'
-import { Typography } from '@mui/material'
+import { Card, Skeleton, Typography } from '@mui/material'
 import { Project } from '../types/project'
 import { useEffect, useState } from 'react'
 import { getProjectsById } from '../services/projects'
 import Cookies from 'js-cookie'
 import { ProjectRole, User } from '../types/user'
+import CardContent from '@mui/material/CardContent';
 
 const DashboardPage = () => {
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
   const [projects, setProjects] = useState<Project[]>([])
+  const [loadingProjects, setLoadingProjects] = useState<boolean>(false)
 
   useEffect(() => {
     const userCookie = Cookies.get('user')
@@ -22,21 +24,49 @@ const DashboardPage = () => {
 
   useEffect(() => {
     if (activeUser) {
+      setLoadingProjects(true)
       getProjectsById(activeUser.id)
         .then((data) => setProjects(data))
+        .catch((error) => alert(error))
+        .finally(() => setLoadingProjects(false))
     }
-  })
+  }, [activeUser])
 
   return (
     <StandardLayout>
       <h1>Dashboard</h1>
-      <Grid container>
-        <Grid item xs={8}>
-          <Typography variant='h6'>Aktuelle Projektanträge</Typography>
-          {projects.map((project) => (
-            <div>{project.title}</div>
-          ))}
-        </Grid>
+      <Typography variant='h6'>Deine Projektanträge</Typography>
+      <Grid container gap={2} columns={4}>
+        {projects.map((project) => (
+          <Grid item xs={1}>
+            <Card variant='elevation'>
+              <CardContent>
+                <Typography variant='h6' component="div">{project.title}</Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  {/* {project.project_lead?.firstname} {project.project_lead?.lastname} */}
+                  test
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+        {loadingProjects ? 
+          <>
+            <Grid item xs={1}>
+              <Skeleton variant="rectangular" height={108} />
+            </Grid>
+            <Grid item xs={1}>
+              <Skeleton variant="rectangular" height={108} />
+            </Grid>
+            <Grid item xs={1}>
+              <Skeleton variant="rectangular" height={108} />
+            </Grid>
+            <Grid item xs={1}>
+              <Skeleton variant="rectangular" height={108} />
+            </Grid>
+          </>
+          : null
+        }
       </Grid>
 
       {/* <div className="box-canvas">

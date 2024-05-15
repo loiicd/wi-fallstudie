@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { User } from '../types/user'
 
-export const getUser = async (userId: string): Promise<User[]> => {
-  const response = await axios.get(`/api/user/${userId}`)
+export const getUser = async (userId: string): Promise<User> => {
+  const response = await axios.get('/api/user', { params: { id: userId } })
   return response.data
 }
 
