@@ -15,10 +15,13 @@ const LoginPage = () => {
     getUsers()
       .then((data) => {
         const user = getRandomObjectFromArray(data)
-        Cookies.remove('user')
         Cookies.set('user', `${user.id}|${user.firstname}|${user.lastname}|${user.type}`)
+        navigate('/dashboard')
       })
-    navigate('/')
+      .catch((error) => {
+        console.error(error)
+        alert(error)
+      })
   }
 
   function getRandomObjectFromArray<T>(array: T[]): T {

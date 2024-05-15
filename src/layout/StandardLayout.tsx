@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import Header from '../components/Header'
 import Toolbar from '@mui/material/Toolbar'
 import Container from '@mui/material/Container'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { User } from '../types/user'
 import Cookies from 'js-cookie'
@@ -15,17 +15,19 @@ const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children }) =>
   const navigate = useNavigate()
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
 
-  useEffect(() => loginProvider)
-
-  const loginProvider = () => {
+  const loginProvider = useCallback(() => {
     const userCookie = Cookies.get('user')
+    console.log(userCookie)
     if (!userCookie) {
-      navigate('/login')
+      // navigate('/login')
+      console.log('Hello')
     } else {
       const [id, firstname, lastname, type] = userCookie.split('|')
       setActiveUser({ id, firstname, lastname, title: undefined, type: type as ('admin' | 'user')})
     }
-  }
+  }, [navigate])
+
+  useEffect(() => loginProvider, [loginProvider])
   
   return activeUser ? (
     <Box sx={{ display: 'flex' }}>
