@@ -15,6 +15,7 @@ import UpdateIcon from '@mui/icons-material/Update'
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
 import { Project } from '../types/project'
 import { getProjects } from '../services/projects'
+import RoleProvider from './RoleProvider'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -101,7 +102,9 @@ export default function ProjectsTable() {
       <Card>
         <Stack direction='row' spacing={2} justifyContent="flex-end" alignItems="center" sx={{ margin: 2 }}>
           <TextField placeholder='Suche ...' size='small' onChange={handleSearch} />
-          <Button variant='contained' startIcon={<AddIcon />} onClick={() => setOpenAddProjectDialog(true)}>Projekt</Button>
+          <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
+            <Button variant='contained' startIcon={<AddIcon />} onClick={() => setOpenAddProjectDialog(true)}>Projekt</Button>
+          </RoleProvider>
         </Stack>
         <DataGrid
           loading={isLoadingProjects}

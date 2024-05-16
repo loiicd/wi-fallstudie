@@ -138,7 +138,7 @@ const Header: FunctionComponent<Props> = ({ activeUser }) => {
             </ListItemIcon>
             <ListItemText primary='Projekte' />
           </ListItemButton>
-          <ListItemButton onClick={() => navigate('/users')}>
+          <ListItemButton onClick={() => navigate('/users')} disabled={activeUser.type !== 'administrator'}>
             <ListItemIcon>
               <GroupsIcon />
             </ListItemIcon>
