@@ -1,6 +1,5 @@
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
-import '../alien.css'
 import { Card, Skeleton, Typography } from '@mui/material'
 import { Project } from '../types/project'
 import { useEffect, useState } from 'react'
@@ -19,7 +18,7 @@ const DashboardPage = () => {
     const userCookie = Cookies.get('user')
     if (userCookie) {
       const [id, firstname, lastname, type] = userCookie.split('|')
-      setActiveUser({ id, firstname, lastname, title: undefined, type: type as ProjectRole})
+      setActiveUser({ id, firstname, lastname, title: undefined, type: type as ProjectRole })
     } 
   }, [])
 
@@ -36,6 +35,7 @@ const DashboardPage = () => {
   return (
     <StandardLayout>
       <h1>Dashboard</h1>
+
       <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
         <>
           <Typography variant='h6'>Deine Projektanträge</Typography>
@@ -60,6 +60,8 @@ const DashboardPage = () => {
           </Grid>
         </>
       </RoleProvider>
+
+      <Typography variant='h6' sx={{ marginTop: 4 }}>Übersicht</Typography>
     </StandardLayout>
   )
 }
