@@ -8,7 +8,7 @@ import { getProjectsById } from '../services/projects'
 import Cookies from 'js-cookie'
 import { ProjectRole, User } from '../types/user'
 import RoleProvider from '../components/RoleProvider'
-import { MyProjects } from '../components/MyProjects'
+import MyProjects from '../components/myProjects'
 
 const DashboardPage = () => {
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
