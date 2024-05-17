@@ -18,7 +18,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import { ProjectRole, User } from '../types/user'
 import { getUsers } from '../services/user'
 import CircularProgress from '@mui/material/CircularProgress'
-import { postProject, updateProject } from '../services/projects'
+import { postProject } from '../services/projects'
 import { ProjectFormData, ProjectType } from '../types/project'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
@@ -26,17 +26,15 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
 
-
 interface AddProjectDialogProps {
   open: boolean
   handleClose: () => void
-  project?: ProjectFormData
 }
 
-const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, handleClose, project }) => {
+const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, handleClose }) => {
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
   const [tab, setTab] = useState<string>('1')
-  const [projectFormData, setProjectFormData] = useState<ProjectFormData>(project || { title: '', status: 'Entwurf', team: [], created_from: '1'})
+  const [projectFormData, setProjectFormData] = useState<ProjectFormData>({ title: '', status: 'Entwurf', team: [], created_from: '1'})
   const [users, setUsers] = useState<User[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
   const [projectTeam, setProjectTeam] = useState<string[]>([])
@@ -48,13 +46,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   }
 
   const handleSave = () => {
-    if (projectFormData.id) {
-      updateProject(projectFormData.id, projectFormData)
-        .then(() => handleClose())
-        .catch(error => alert(error))
-        .finally(() => setIsSavingProject(false))
-    }
-    else if (projectFormData.title !== '') {
+    if (projectFormData.title !== '') {
       setIsSavingProject(true)
       postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id })
         .then(() => handleClose())
@@ -93,10 +85,6 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
       ...projectFormData,
       status: event.target.value as ProjectType,
     })
-  }
-
-  if (project) {
-    console.log(project)
   }
 
   return (
