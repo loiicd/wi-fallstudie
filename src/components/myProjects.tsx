@@ -1,6 +1,7 @@
 import React from 'react'
 import { Grid, Typography, Card, CardContent, Skeleton } from '@mui/material'
 import { Project } from '../types/project'
+import StatusChip from './statusChip'
 
 interface MyProjectsProps {
   projects: Project[]
@@ -19,7 +20,7 @@ const MyProjects: React.FC<MyProjectsProps> = ({ projects, loadingProjects }) =>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   {project.project_lead?.firstname} {project.project_lead?.lastname}
                 </Typography>
-                <Typography variant='body2'>{project.status}</Typography>
+                <StatusChip value={project.status} />
               </CardContent>
             </Card>
           </Grid>
