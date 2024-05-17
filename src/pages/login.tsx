@@ -55,7 +55,7 @@ const LoginPage = () => {
         {/* <LockOutlinedIcon /> */}
       </Avatar>
       <Typography component="h1" variant="h5">Anmelden</Typography>
-      <Typography component="h1" variant="h6" color='gray'>Supernova Incoming Projects</Typography>
+      <Typography component="h1" variant="h6" color='gray'>Supernova Incoming Project</Typography>
       <Box component="form" noValidate sx={{ mt: 1 }}>
         <Button
           type="submit"
