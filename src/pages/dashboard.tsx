@@ -38,8 +38,17 @@ const DashboardPage = () => {
       <h1>Dashboard</h1>
 
       <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
-        <Typography variant='h6'>Deine Projektanträge</Typography>
-        <MyProjects projects={projects} loadingProjects={loadingProjects} />
+        {projects.length === 0 && !loadingProjects ?
+          <>
+            <Typography variant='inherit'>Hier werden Projektanträge erscheinen, die du angelegt hast.</Typography>
+          </>
+          :
+          <>
+            <Typography variant='h6'>Meine Projektanträge</Typography>
+            <MyProjects projects={projects} loadingProjects={loadingProjects} />
+          </>
+          }
+        
       </RoleProvider>
 
       <Typography variant='h6' sx={{ marginTop: 4 }}>Übersicht</Typography>
