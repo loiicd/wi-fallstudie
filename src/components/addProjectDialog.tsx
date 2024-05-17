@@ -95,7 +95,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
       maxWidth={'md'}
     >
       <DialogTitle>Projekt erstellen</DialogTitle>
-      <DialogContent>
+      <DialogContent dividers>
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={handleChangeTab} aria-label="lab API tabs example">
