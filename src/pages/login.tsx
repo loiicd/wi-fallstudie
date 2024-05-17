@@ -55,7 +55,7 @@ const LoginPage = () => {
         {/* <LockOutlinedIcon /> */}
       </Avatar>
       <Typography component="h1" variant="h5">Anmelden</Typography>
-      <Typography component="h1" variant="h6" color='gray'>Supernova Incoming Project</Typography>
+      <Typography component="h1" variant="h6" color='gray'>Supernova Incoming Projects</Typography>
       <Box component="form" noValidate sx={{ mt: 1 }}>
         <Button
           type="submit"
@@ -70,7 +70,7 @@ const LoginPage = () => {
         <Grid container>
           <Grid item xs>
             <Link href="#" variant="body2">
-              Forgot password?
+              Passwort vergessen?
             </Link>
           </Grid>
           <Grid item>
