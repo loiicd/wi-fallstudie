@@ -19,6 +19,7 @@ const MyProjects: React.FC<MyProjectsProps> = ({ projects, loadingProjects }) =>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   {project.project_lead?.firstname} {project.project_lead?.lastname}
                 </Typography>
+                <Typography variant='body2'>{project.status}</Typography>
               </CardContent>
             </Card>
           </Grid>
