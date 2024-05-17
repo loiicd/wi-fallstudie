@@ -18,6 +18,7 @@ const StatusChip: React.FC<StatusChipProps> = ({ value }) => {
     case 'In Prüfung': return (<Chip variant='outlined' icon={<UpdateIcon />} label={value} color="warning" size='small' />)
     case 'Angenommen': return (<Chip variant='outlined' icon={<VerifiedIcon />} label={value} color="success" size='small' />)
     case 'Abgelehnt': return (<Chip variant='outlined' icon={<DoNotDisturbOnIcon />} label={value} color="error" size='small' />)
+    default: return null
   }
 }
 
