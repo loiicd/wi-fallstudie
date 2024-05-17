@@ -135,7 +135,10 @@ export default function ProjectsTable() {
           disableColumnResize
         />
       </Card>
-      {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} /> : null}
+      {/* 
+      openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} /> : null
+        */}
+      {openProjectDetailDialog && project ? <AddProjectDialog open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} project={project} /> : null}
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
     </>
   )

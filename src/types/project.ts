@@ -23,6 +23,7 @@ export type Project = {
 }
 
 export type ProjectFormData = {
+  id?: string
   status: ProjectType
   title: string
   created_from: string,
