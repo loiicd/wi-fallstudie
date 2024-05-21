@@ -1,6 +1,5 @@
 import Card from '@mui/material/Card'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { useEffect, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
@@ -11,7 +10,8 @@ import { Project } from '../types/project'
 import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
-import { ButtonGroup, Menu, MenuItem } from '@mui/material'
+import { Button, Menu, MenuItem } from '@mui/material'
+import React from 'react'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -63,10 +63,10 @@ const columns: GridColDef<(any)[number]>[] = [
     headerName: 'Actions',
     width: 150,
     editable: false,
-    renderCell: (params) => {
-      const [anchorEl, setAnchorEl] = React.useState(null);
+    renderCell: () => {
+      const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-      const handleClick = (event) => {
+      const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
       };
 
@@ -75,7 +75,7 @@ const columns: GridColDef<(any)[number]>[] = [
       };
 
       return (
-        <div>
+        <>
           <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
             Aktionen
           </Button>
@@ -89,7 +89,7 @@ const columns: GridColDef<(any)[number]>[] = [
             <MenuItem onClick={() => { handleClose(); alert("Edit Pressed"); }}>Edit</MenuItem>
             <MenuItem onClick={() => { handleClose(); alert("Delete Pressed"); }}>Delete</MenuItem>
           </Menu>
-        </div>
+        </>
       );
     }
   },
