@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { Project, ProjectFormData } from '../types/project'
-import axios from 'axios';
 
 export const getProjects = async (): Promise<Project[]> => {
   const response = await axios.get('/api/projects')
