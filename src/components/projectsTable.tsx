@@ -10,8 +10,7 @@ import { Project } from '../types/project'
 import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
-import { Button, Menu, MenuItem } from '@mui/material'
-import React from 'react'
+import { ButtonGroup, Button, Menu, MenuItem } from '@mui/material'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -63,33 +62,12 @@ const columns: GridColDef<(any)[number]>[] = [
     headerName: 'Actions',
     width: 150,
     editable: false,
-    renderCell: () => {
-      const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-      const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-      };
-
-      const handleClose = () => {
-        setAnchorEl(null);
-      };
-
+    renderCell: (params) => {
       return (
-        <>
-          <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-            Aktionen
-          </Button>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={() => { handleClose(); alert("Edit Pressed"); }}>Edit</MenuItem>
-            <MenuItem onClick={() => { handleClose(); alert("Delete Pressed"); }}>Delete</MenuItem>
-          </Menu>
-        </>
+        <ButtonGroup variant="contained" aria-label="Actions">
+          <Button onClick={() => alert(params.value.title + " Edit Pressed")}>Edit</Button>
+          <Button onClick={() => alert("Delete Pressed")}>Delete</Button>
+        </ButtonGroup>
       );
     }
   },
