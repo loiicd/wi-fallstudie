@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import { Project, ProjectFormData } from '../types/project'
+import { Alert } from '@mui/material'
 
 export const getProjects = async (): Promise<Project[]> => {
   const response = await axios.get('/api/projects')
@@ -18,6 +19,6 @@ export const postProject = async (projectFormData: ProjectFormData): Promise<voi
 export const deleteProject = async (id: string): Promise<void> => {
   await axios.delete('/api/project', { params: { id: id }})
   .catch((error: AxiosError) => {
-    throw new Error(error.response?.data as string)
+    console.log(error.response?.data)
   })
 }

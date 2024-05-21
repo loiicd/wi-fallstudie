@@ -77,8 +77,9 @@ function handleDelete(project: Project) {
   console.log('delete project', project)
   deleteProject(project.id)
     .then(() => alert('Projekt wurde gelöscht'))
-    .catch(error => alert(error))
+    .catch(() => alert("Projekt konnte nicht gelöscht werden"))
 } 
+
 export default function ProjectsTable() {
   const [projektes, setProjekte] = useState<Project[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
