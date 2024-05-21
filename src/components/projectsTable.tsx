@@ -65,12 +65,16 @@ const columns: GridColDef<(any)[number]>[] = [
     renderCell: (params) => {
       return (
         <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
-          <Button variant='contained' size='small' onClick={() => console.log('delete', params.row)}>Löschen</Button>
+          <Button variant='contained' size='small' onClick={() => handleDelete(params.row)}>Löschen</Button>
         </RoleProvider>
       )
     }
   }
 ]
+
+function handleDelete(project: Project) {
+  console.log('delete', project)
+} 
 
 export default function ProjectsTable() {
   const [projektes, setProjekte] = useState<Project[]>([])
