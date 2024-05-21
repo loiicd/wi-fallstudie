@@ -65,7 +65,7 @@ const columns: GridColDef<(any)[number]>[] = [
     renderCell: (params) => {
       return (
         <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
-          <Button variant='contained' size='small' onClick={() => console.log('delte', params.row)}>Löschen</Button>
+          <Button variant='contained' size='small' onClick={() => console.log('delete', params.row)}>Löschen</Button>
         </RoleProvider>
       )
     }
@@ -95,7 +95,8 @@ export default function ProjectsTable() {
       setProject(params.row)
       setOpenProjectDetailDialog(true)
     } else {
-      console.log('row clicled', params.row)
+      console.log('row clickled', params.row)
+    }
   }
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
