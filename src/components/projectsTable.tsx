@@ -7,15 +7,10 @@ import AddIcon from '@mui/icons-material/Add'
 import Stack from '@mui/material/Stack'
 import AddProjectDialog from './addProjectDialog'
 import ProjectDetailDialog from './projectDetailDialog'
-import Chip from '@mui/material/Chip'
-import DraftsIcon from '@mui/icons-material/Drafts'
-import MoveToInboxIcon from '@mui/icons-material/MoveToInbox'
-import VerifiedIcon from '@mui/icons-material/Verified'
-import UpdateIcon from '@mui/icons-material/Update'
-import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
 import { Project } from '../types/project'
 import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
+import StatusChip from './statusChip'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -24,13 +19,7 @@ const columns: GridColDef<(any)[number]>[] = [
     width: 150,
     editable: false,
     renderCell: (params) => {
-      switch(params.value) {
-        case 'Entwurf': return (<Chip variant='outlined' icon={<DraftsIcon />} label={params.value} color="default" size='small' />)
-        case 'Eingereicht': return (<Chip variant='outlined' icon={<MoveToInboxIcon />} label={params.value} color="default" size='small' />)
-        case 'In Prüfung': return (<Chip variant='outlined' icon={<UpdateIcon />} label={params.value} color="warning" size='small' />)
-        case 'Angenommen': return (<Chip variant='outlined' icon={<VerifiedIcon />} label={params.value} color="success" size='small' />)
-        case 'Abgelehnt': return (<Chip variant='outlined' icon={<DoNotDisturbOnIcon />} label={params.value} color="error" size='small' />)
-      }
+      return <StatusChip value={params.value} />
     }
   },
   {

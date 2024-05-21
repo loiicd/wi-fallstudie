@@ -1,13 +1,14 @@
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
 import { Card, Skeleton, Typography } from '@mui/material'
+import CardContent from '@mui/material/CardContent';
 import { Project } from '../types/project'
 import { useEffect, useState } from 'react'
 import { getProjectsById } from '../services/projects'
 import Cookies from 'js-cookie'
 import { ProjectRole, User } from '../types/user'
-import CardContent from '@mui/material/CardContent';
 import RoleProvider from '../components/RoleProvider'
+import MyProjects from '../components/myProjects'
 
 const DashboardPage = () => {
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
@@ -37,28 +38,17 @@ const DashboardPage = () => {
       <h1>Dashboard</h1>
 
       <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
-        <>
-          <Typography variant='h6'>Deine Projektanträge</Typography>
-          <Grid container gap={2} columns={4}>
-            {projects.map((project) => (
-              <Grid item xs={1}>
-                <Card variant='elevation'>
-                  <CardContent>
-                    <Typography variant='h6' component="div">{project.title}</Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      {project.project_lead?.firstname} {project.project_lead?.lastname}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-            {loadingProjects ? [1, 2, 3 ,4].map(() => (
-              <Grid item xs={1}>
-                  <Skeleton variant="rectangular" height={108} />
-                </Grid>
-            )) : null}
-          </Grid>
-        </>
+        {projects.length === 0 && !loadingProjects ?
+          <>
+            <Typography variant='inherit'>Hier werden Projektanträge erscheinen, die du angelegt hast.</Typography>
+          </>
+          :
+          <>
+            <Typography variant='h6'>Meine Projektanträge</Typography>
+            <MyProjects projects={projects} loadingProjects={loadingProjects} />
+          </>
+          }
+        
       </RoleProvider>
 
       <Typography variant='h6' sx={{ marginTop: 4 }}>Übersicht</Typography>

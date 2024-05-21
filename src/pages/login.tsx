@@ -67,7 +67,7 @@ const LoginPage = () => {
         >
           Anmelden mit SSO
         </Button>
-        <Grid container>
+        <Grid container spacing={1}>
           <Grid item xs>
             <Link href="#" variant="body2">
               Forgot password?

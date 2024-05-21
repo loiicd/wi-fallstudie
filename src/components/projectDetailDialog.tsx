@@ -19,7 +19,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
       maxWidth={'md'}
     >
       <DialogTitle>Projekt: {project.title}</DialogTitle>
-      <DialogContent>
+      <DialogContent dividers>
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <Typography variant="h6" color='dimgrey'>Projektleiter</Typography>
