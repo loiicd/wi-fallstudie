@@ -8,9 +8,10 @@ import Stack from '@mui/material/Stack'
 import AddProjectDialog from './addProjectDialog'
 import ProjectDetailDialog from './projectDetailDialog'
 import { Project } from '../types/project'
-import { getProjects } from '../services/projects'
+import { getProjects , deleteProject } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
+import { Alert } from '@mui/material'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -73,14 +74,17 @@ const columns: GridColDef<(any)[number]>[] = [
 ]
 
 function handleDelete(project: Project) {
-  console.log('delete', project)
+  console.log('delete project', project)
+  deleteProject(project.id)
+    .then(() => alert('Projekt wurde gelöscht'))
+    .catch(error => alert(error))
 } 
-
 export default function ProjectsTable() {
   const [projektes, setProjekte] = useState<Project[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
+  const [openDeleteProjectDialog, c] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
   const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(false)
 
@@ -99,7 +103,7 @@ export default function ProjectsTable() {
       setProject(params.row)
       setOpenProjectDetailDialog(true)
     } else {
-      console.log('row clickled', params.row)
+      console.log('action clickled', params.row)
     }
   }
 
