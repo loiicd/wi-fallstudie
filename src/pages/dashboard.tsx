@@ -35,7 +35,7 @@ const DashboardPage = () => {
 
   return (
     <StandardLayout>
-      <h1>Dashboard</h1>
+      <h1>Willkommen zurück {activeUser?.firstname} </h1>
 
       <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
         {projects.length === 0 && !loadingProjects ?

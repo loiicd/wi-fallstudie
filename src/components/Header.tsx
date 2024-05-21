@@ -19,6 +19,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { User } from '../types/user';
 import Avatar from '@mui/material/Avatar';
 import Cookies from 'js-cookie';
+import Tooltip from '@mui/material/Tooltip';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -126,31 +127,39 @@ const Header: FunctionComponent<Props> = ({ activeUser }) => {
         </Toolbar>
         <Divider />
         <List component="nav">
-          <ListItemButton onClick={() => navigate('/dashboard')}>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary='Dashboard' />
-          </ListItemButton>
-          <ListItemButton onClick={() => navigate('/projects')}>
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary='Projekte' />
-          </ListItemButton>
-          <ListItemButton onClick={() => navigate('/users')} disabled={activeUser.type !== 'administrator'}>
-            <ListItemIcon>
-              <GroupsIcon />
-            </ListItemIcon>
-            <ListItemText primary='Members' />
-          </ListItemButton>
+          <Tooltip title={!openDrawer ? 'Dashboard' : null} placement="left">
+            <ListItemButton onClick={() => navigate('/dashboard')}>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary='Dashboard' />
+            </ListItemButton>
+          </Tooltip>
+          <Tooltip title={!openDrawer ? 'Projekte' : null} placement="left">
+            <ListItemButton onClick={() => navigate('/projects')}>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary='Projekte' />
+            </ListItemButton>
+          </Tooltip>
+          <Tooltip title={!openDrawer ? 'User' : null} placement="left">
+            <ListItemButton onClick={() => navigate('/users')} disabled={activeUser.type !== 'administrator'}>
+              <ListItemIcon>
+                <GroupsIcon />
+              </ListItemIcon>
+              <ListItemText primary='User' />
+            </ListItemButton>
+          </Tooltip>
           <Divider sx={{ my: 1 }} />
-          <ListItemButton onClick={logout}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary='Members' />
-          </ListItemButton>
+          <Tooltip title={!openDrawer ? 'Abmelden' : null} placement="left">
+            <ListItemButton onClick={logout}>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary='Abmelden' />
+            </ListItemButton>
+          </Tooltip>
         </List>
       </Drawer>
     </>
