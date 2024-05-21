@@ -1,6 +1,6 @@
 import Card from '@mui/material/Card'
-import { ButtonGroup, Button } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { useEffect, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
@@ -8,10 +8,9 @@ import Stack from '@mui/material/Stack'
 import AddProjectDialog from './addProjectDialog'
 import ProjectDetailDialog from './projectDetailDialog'
 import { Project } from '../types/project'
-import { getProjects, deleteProject } from '../services/projects'
+import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
-import { ButtonGroup, Button, Menu, MenuItem } from '@mui/material'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -58,20 +57,6 @@ const columns: GridColDef<(any)[number]>[] = [
     editable: false,
     renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.lastname : '',
   },
-  {
-    field: 'actions',
-    headerName: 'Actions',
-    width: 150,
-    editable: false,
-    renderCell: (params) => {
-      return (
-        <ButtonGroup variant="contained" aria-label="Actions">
-          <Button onClick={() => alert(params.value.title + " Edit Pressed")}>Edit</Button>
-          <Button onClick={() => alert("Delete Pressed")}>Delete</Button>
-        </ButtonGroup>
-      );
-    }
-  },
 ]
 
 export default function ProjectsTable() {
@@ -115,11 +100,7 @@ export default function ProjectsTable() {
           sx={{ minHeight: 50}}
           rows={projektes}
           columns={columns}
-          onCellClick={(params) => {
-            if (params.field !== 'actions') {
-              handleCellClick(params.row);
-            }
-          }}
+          onCellClick={(params) => handleCellClick(params.row)}
           pageSizeOptions={[5, 10, 15]}
           initialState={{
             pagination: {
