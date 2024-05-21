@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Project, ProjectFormData } from '../types/project'
+import axios from 'axios';
 
 export const getProjects = async (): Promise<Project[]> => {
   const response = await axios.get('/api/projects')
@@ -14,7 +15,7 @@ export const getProjectsById = async (id: string): Promise<Project[]> => {
 export const postProject = async (projectFormData: ProjectFormData): Promise<void> => {
   await axios.post('/api/project', projectFormData)
 }
-
 export const deleteProject = async (id: string): Promise<void> => {
-  await axios.delete('/api/project', { params: { id: id } })
+  const response = await axios.delete('/api/project', { params: { id: id } });
+  return response.data;
 }
