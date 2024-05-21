@@ -86,7 +86,7 @@ const columns: GridColDef<(any)[number]>[] = [
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={() => { handleClose(); alert(params.value.title + " Edit Pressed"); }}>Edit</MenuItem>
+            <MenuItem onClick={() => { handleClose(); alert("Edit Pressed"); }}>Edit</MenuItem>
             <MenuItem onClick={() => { handleClose(); alert("Delete Pressed"); }}>Delete</MenuItem>
           </Menu>
         </div>
@@ -136,7 +136,11 @@ export default function ProjectsTable() {
           sx={{ minHeight: 50}}
           rows={projektes}
           columns={columns}
-          onCellClick={(params) => handleCellClick(params.row)}
+          onCellClick={(params) => {
+            if (params.field !== 'actions') {
+              handleCellClick(params.row);
+            }
+          }}
           pageSizeOptions={[5, 10, 15]}
           initialState={{
             pagination: {
