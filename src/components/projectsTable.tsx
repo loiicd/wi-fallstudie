@@ -1,4 +1,5 @@
 import Card from '@mui/material/Card'
+import { ButtonGroup, Button } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import TextField from '@mui/material/TextField'
 import { useEffect, useState } from 'react'
@@ -7,10 +8,9 @@ import Stack from '@mui/material/Stack'
 import AddProjectDialog from './addProjectDialog'
 import ProjectDetailDialog from './projectDetailDialog'
 import { Project } from '../types/project'
-import { getProjects } from '../services/projects'
+import { getProjects, deleteProject } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
-import { ButtonGroup, Button, Menu, MenuItem } from '@mui/material'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -65,13 +65,13 @@ const columns: GridColDef<(any)[number]>[] = [
     renderCell: (params) => {
       return (
         <ButtonGroup variant="contained" aria-label="Actions">
-          <Button onClick={() => alert(params.value.title + " Edit Pressed")}>Edit</Button>
+          <Button onClick={() => alert("Edit Pressed")}>Edit</Button>
           <Button onClick={() => alert("Delete Pressed")}>Delete</Button>
         </ButtonGroup>
       );
     }
   },
-]
+] 
 
 export default function ProjectsTable() {
   const [projektes, setProjekte] = useState<Project[]>([])
