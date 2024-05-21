@@ -11,6 +11,7 @@ import { Project } from '../types/project'
 import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
+import { ButtonGroup } from '@mui/material'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -56,6 +57,20 @@ const columns: GridColDef<(any)[number]>[] = [
     width: 150,
     editable: false,
     renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.lastname : '',
+  },
+  {
+    field: 'actions',
+    headerName: 'Actions',
+    width: 150,
+    editable: false,
+    renderCell: (params) => {
+      return (
+        <ButtonGroup variant="contained" aria-label="Actions">
+          <Button onClick={() => alert(params.value.title + " Edit Pressed")}>Edit</Button>
+          <Button onClick={() => alert("Delete Pressed")}>Delete</Button>
+        </ButtonGroup>
+      );
+    }
   },
 ]
 
