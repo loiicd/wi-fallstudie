@@ -11,6 +11,7 @@ import { Project } from '../types/project'
 import { getProjects, deleteProject } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
+import { ButtonGroup, Button, Menu, MenuItem } from '@mui/material'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -65,13 +66,13 @@ const columns: GridColDef<(any)[number]>[] = [
     renderCell: (params) => {
       return (
         <ButtonGroup variant="contained" aria-label="Actions">
-          <Button onClick={() => alert("Edit Pressed")}>Edit</Button>
+          <Button onClick={() => alert(params.value.title + " Edit Pressed")}>Edit</Button>
           <Button onClick={() => alert("Delete Pressed")}>Delete</Button>
         </ButtonGroup>
       );
     }
   },
-] 
+]
 
 export default function ProjectsTable() {
   const [projektes, setProjekte] = useState<Project[]>([])
