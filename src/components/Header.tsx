@@ -17,9 +17,9 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import GroupsIcon from '@mui/icons-material/Groups';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { User } from '../types/user';
-import Avatar from '@mui/material/Avatar';
 import Cookies from 'js-cookie';
 import Tooltip from '@mui/material/Tooltip';
+import UserDropDown from './userDropDown';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -109,7 +109,7 @@ const Header: FunctionComponent<Props> = ({ activeUser }) => {
           >
             Dashboard
           </Typography>
-          <Avatar>{activeUser.firstname[0]}{activeUser.lastname[0]}</Avatar>
+          <UserDropDown activeUser={activeUser} />
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={openDrawer}>
