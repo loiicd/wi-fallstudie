@@ -90,9 +90,12 @@ export default function ProjectsTable() {
 
   console.log(projektes)
 
-  const handleCellClick = (project: any) => {
-    setProject(project)
-    setOpenProjectDetailDialog(true)
+  const handleCellClick = (params: any) => {
+    if (params.field !== 'actions') {
+      setProject(params.row)
+      setOpenProjectDetailDialog(true)
+    } else {
+      console.log('row clicled', params.row)
   }
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +116,7 @@ export default function ProjectsTable() {
           sx={{ minHeight: 50}}
           rows={projektes}
           columns={columns}
-          onCellClick={(params) => handleCellClick(params.row)}
+          onCellClick={(params) => handleCellClick(params)}
           pageSizeOptions={[5, 10, 15]}
           initialState={{
             pagination: {
