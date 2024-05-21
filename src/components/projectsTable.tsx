@@ -11,7 +11,7 @@ import { Project } from '../types/project'
 import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
-import { ButtonGroup } from '@mui/material'
+import { ButtonGroup, Menu, MenuItem } from '@mui/material'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -64,11 +64,32 @@ const columns: GridColDef<(any)[number]>[] = [
     width: 150,
     editable: false,
     renderCell: (params) => {
+      const [anchorEl, setAnchorEl] = React.useState(null);
+
+      const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+
+      const handleClose = () => {
+        setAnchorEl(null);
+      };
+
       return (
-        <ButtonGroup variant="contained" aria-label="Actions">
-          <Button onClick={() => alert(params.value.title + " Edit Pressed")}>Edit</Button>
-          <Button onClick={() => alert("Delete Pressed")}>Delete</Button>
-        </ButtonGroup>
+        <div>
+          <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+            Aktionen
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={() => { handleClose(); alert(params.value.title + " Edit Pressed"); }}>Edit</MenuItem>
+            <MenuItem onClick={() => { handleClose(); alert("Delete Pressed"); }}>Delete</MenuItem>
+          </Menu>
+        </div>
       );
     }
   },
