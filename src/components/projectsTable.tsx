@@ -85,8 +85,6 @@ export default function ProjectsTable() {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
-  const [project, setProject] = useState<null | any>(null)
-
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
 
   useEffect(() => {
