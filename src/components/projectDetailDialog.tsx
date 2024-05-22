@@ -21,6 +21,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
 
   const handleEditPress = (project: Project) => {
     project.title += ' (EDITED)'
+    console.log("Update: ", project.title as string)
     updateProject(project).then(() => {
       handleClose()
       console.log('Updated')
