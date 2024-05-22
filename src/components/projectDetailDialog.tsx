@@ -1,8 +1,10 @@
-import { DialogContent, Divider, Grid, MenuItem, Rating, Select, Typography } from "@mui/material"
+import { Button, ButtonGroup, DialogContent, Divider, Grid, MenuItem, Rating, Select, Typography } from "@mui/material"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
 import { FunctionComponent } from "react"
 import { Project } from "../types/project"
+import RoleProvider from "./RoleProvider"
+import { updateProject } from "../services/projects"
 
 interface ProjectDetailDialogProps {
   project: Project
@@ -11,6 +13,22 @@ interface ProjectDetailDialogProps {
 }
 
 const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ project, open, handleClose }) => {
+
+  const handleDeletePress = (project: Project) => {
+    handleClose()
+    alert("Löschen: " + project.title as string)
+  }
+
+  const handleEditPress = (project: Project) => {
+    new Promise<void>((resolve) => {
+      project.title += ' (EDITED)'
+      console.log(project.title)
+      updateProject(project)
+      resolve()
+    }).then(() => handleClose())
+    .finally()
+  }
+
   return (
     <Dialog
       open={open}
@@ -18,7 +36,25 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
       fullWidth={true}
       maxWidth={'md'}
     >
-      <DialogTitle>Projekt: {project.title}</DialogTitle>
+      {/**
+       * TODO: Implement Buttons as component to be reusable
+       */}
+      <Grid container spacing={2} alignItems={"center"}>
+        <Grid item xs={8}>
+          <DialogTitle>Projekt: {project.title}</DialogTitle>
+        </Grid>
+        <Grid item xs={4} justifyContent={"flex-end"}>
+          <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
+            <ButtonGroup>
+              <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
+                <Button onClick={() => handleDeletePress(project)}>Löschen</Button>
+              </RoleProvider>
+              <Button onClick={() => handleEditPress(project)}>Bearbeiten</Button>
+            </ButtonGroup>
+          </RoleProvider>
+        </Grid>
+      </Grid>
+
       <DialogContent dividers>
         <Grid container spacing={2}>
           <Grid item xs={3}>

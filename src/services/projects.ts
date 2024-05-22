@@ -14,3 +14,7 @@ export const getProjectsById = async (id: string): Promise<Project[]> => {
 export const postProject = async (projectFormData: ProjectFormData): Promise<void> => {
   await axios.post('/api/project', projectFormData)
 }
+
+export const updateProject = async (project: Project): Promise<void> => {
+  await axios.put('/api/project', project).then(response => console.log(response))
+}
