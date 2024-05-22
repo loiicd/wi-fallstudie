@@ -4,7 +4,7 @@ import DialogTitle from "@mui/material/DialogTitle"
 import { FunctionComponent } from "react"
 import { Project } from "../types/project"
 import RoleProvider from "./RoleProvider"
-import { updateProject } from "../services/projects"
+import { postProject, updateProject } from "../services/projects"
 
 interface ProjectDetailDialogProps {
   project: Project
@@ -20,13 +20,12 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
   }
 
   const handleEditPress = (project: Project) => {
-    new Promise<void>((resolve) => {
-      project.title += ' (EDITED)'
-      console.log(project.title)
-      updateProject(project)
-      resolve()
-    }).then(() => handleClose())
-    .finally()
+    project.title += ' (EDITED)'
+    console.log("Update: ", project.title as string)
+    updateProject(project).then(() => {
+      handleClose()
+      console.log('Updated')
+    })
   }
 
   return (

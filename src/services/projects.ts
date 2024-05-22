@@ -16,5 +16,5 @@ export const postProject = async (projectFormData: ProjectFormData): Promise<voi
 }
 
 export const updateProject = async (project: Project): Promise<void> => {
-  await axios.put('/api/project', project).then(response => console.log(response))
+  await axios.post('/api/project', project)
 }
