@@ -73,7 +73,7 @@ export default function ProjectsTable() {
     getProjects()
       .then(projects => setProjects({ state: 'success', data: projects}))
       .catch(error => setProjects({ state: 'error', message: error}))
-  }, [searchTerm, openAddProjectDialog])
+  }, [searchTerm, openAddProjectDialog, openProjectDetailDialog])
 
   const handleCellClick = (project: any) => {
     setProject(project)
@@ -87,6 +87,7 @@ export default function ProjectsTable() {
   return (
     <>
       <Card>
+        {projects.state === 'loading' ? <Typography >loading</Typography> : null}
         <Stack direction='row' spacing={2} justifyContent="flex-end" alignItems="center" sx={{ margin: 2 }}>
           <TextField placeholder='Suche ...' size='small' onChange={handleSearch} />
           <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
@@ -126,4 +127,8 @@ export default function ProjectsTable() {
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
     </>
   )
+}
+
+function useFocusEffect(arg0: () => void, arg1: (string | boolean)[]) {
+  throw new Error('Function not implemented.')
 }
