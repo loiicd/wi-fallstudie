@@ -4,7 +4,7 @@ import DialogTitle from "@mui/material/DialogTitle"
 import { FunctionComponent } from "react"
 import { Project } from "../types/project"
 import RoleProvider from "./RoleProvider"
-import { updateProject } from "../services/projects"
+import { postProject, updateProject } from "../services/projects"
 
 interface ProjectDetailDialogProps {
   project: Project
