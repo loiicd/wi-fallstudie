@@ -68,7 +68,7 @@ export default function ProjectsTable() {
 
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
 
-  useEffect(() => {
+  useEffect(() => { 
     getProjects()
       .then(projects => setProjects({ state: 'success', data: projects}))
       .catch(error => setProjects({ state: 'error', message: error}))
