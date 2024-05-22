@@ -12,6 +12,7 @@ import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
 import { ApiResponse } from '../types/apiResponse'
+import { Typography } from '@mui/material'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -65,7 +66,6 @@ export default function ProjectsTable() {
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
-
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
 
   useEffect(() => { 
@@ -85,6 +85,7 @@ export default function ProjectsTable() {
 
   return (
     <>
+      {projects.state === 'loading' ? <Typography variant={"inherit"}>Loading</Typography> : null}
       <Card>
         <Stack direction='row' spacing={2} justifyContent="flex-end" alignItems="center" sx={{ margin: 2 }}>
           <TextField placeholder='Suche ...' size='small' onChange={handleSearch} />
