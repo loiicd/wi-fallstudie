@@ -1,6 +1,8 @@
-import { Button, ButtonGroup, DialogContent, Divider, Grid, MenuItem, Rating, Select, Typography } from "@mui/material"
+import { DialogContent, Divider, Grid, MenuItem, Rating, Select, Typography } from "@mui/material"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { FunctionComponent, useState } from "react"
 import { Project } from "../types/project"
 import RoleProvider from "./RoleProvider"
@@ -50,13 +52,11 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
           <DialogTitle>Projekt: {project.title}</DialogTitle>
         </Grid>
         <Grid item xs={4} justifyContent={"flex-end"}>
+          <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
+            <LoadingButton variant='outlined' color="error" startIcon={<DeleteIcon />} onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
+          </RoleProvider>
           <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
-            <ButtonGroup>
-              <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
-                <LoadingButton variant='outlined' onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
-              </RoleProvider>
-                <LoadingButton variant='contained' onClick={() => handleEditPress(project)} autoFocus loading={isUpdatingProject} disabled={isDeletingProject}>Bearbeiten</LoadingButton>
-            </ButtonGroup>
+            <LoadingButton variant='outlined'startIcon={<DeleteIcon />} onClick={() => handleEditPress(project)} autoFocus loading={isUpdatingProject} disabled={isDeletingProject}>Bearbeiten</LoadingButton>
           </RoleProvider>
         </Grid>
       </Grid>
