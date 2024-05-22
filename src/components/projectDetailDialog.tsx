@@ -15,21 +15,22 @@ interface ProjectDetailDialogProps {
 
 const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ project, open, handleClose }) => {
 
-  const [isUpdatingProjects, setIsUpdatingProjects] = useState<boolean>(false)
+  const [isUpdatingProject, setIsUpdatingProject] = useState<boolean>(false)
+  const [isDeletingProject, setIsDeletingProject] = useState<boolean>(false)
 
   const handleDeletePress = (project: Project) => {
-    setIsUpdatingProjects(true)
+    setIsUpdatingProject(true)
     deleteProject(project)
     .then(() => {
-      setIsUpdatingProjects(false)
+      setIsUpdatingProject(false)
       handleClose()
     })
   }
 
   const handleEditPress = (project: Project) => {
-    setIsUpdatingProjects(true)
+    setIsDeletingProject(true)
     updateProject(project).then(() => {
-      setIsUpdatingProjects(false)
+      setIsDeletingProject(false)
       handleClose()
     })
   }
@@ -52,9 +53,9 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
           <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
             <ButtonGroup>
               <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
-                <LoadingButton variant='contained' onClick={() => handleDeletePress(project)} autoFocus loading={isUpdatingProjects}>Löschen</LoadingButton>
+                <LoadingButton variant='outlined' onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
               </RoleProvider>
-                <LoadingButton variant='contained' onClick={() => handleEditPress(project)} autoFocus loading={isUpdatingProjects}>Bearbeiten</LoadingButton>
+                <LoadingButton variant='contained' onClick={() => handleEditPress(project)} autoFocus loading={isUpdatingProject} disabled={isDeletingProject}>Bearbeiten</LoadingButton>
             </ButtonGroup>
           </RoleProvider>
         </Grid>

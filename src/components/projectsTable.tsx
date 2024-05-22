@@ -87,7 +87,6 @@ export default function ProjectsTable() {
   return (
     <>
       <Card>
-        {projects.state === 'loading' ? <Typography >loading</Typography> : null}
         <Stack direction='row' spacing={2} justifyContent="flex-end" alignItems="center" sx={{ margin: 2 }}>
           <TextField placeholder='Suche ...' size='small' onChange={handleSearch} />
           <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
