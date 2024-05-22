@@ -16,5 +16,13 @@ export const postProject = async (projectFormData: ProjectFormData): Promise<voi
 }
 
 export const updateProject = async (project: Project): Promise<void> => {
-  await axios.put('/api/project', project).then(response => console.log(response))
+  await axios.put('/api/project', project, { timeout: 30000 })
+    .then(response => console.log(response))
+    .catch(error => {
+      if (error.code === 'ECONNABORTED') {
+        console.error('Anfrage wurde abgebrochen aufgrund eines Timeouts.');
+      } else {
+        console.error(error);
+      }
+    });
 }
