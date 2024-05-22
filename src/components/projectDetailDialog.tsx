@@ -1,10 +1,11 @@
 import { Button, ButtonGroup, DialogContent, Divider, Grid, MenuItem, Rating, Select, Typography } from "@mui/material"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
-import { FunctionComponent } from "react"
+import { FunctionComponent, useState } from "react"
 import { Project } from "../types/project"
 import RoleProvider from "./RoleProvider"
 import { deleteProject, updateProject } from "../services/projects"
+import { LoadingButton } from "@mui/lab"
 
 interface ProjectDetailDialogProps {
   project: Project
@@ -14,20 +15,22 @@ interface ProjectDetailDialogProps {
 
 const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ project, open, handleClose }) => {
 
+  const [isUpdatingProjects, setIsUpdatingProjects] = useState<boolean>(false)
+
   const handleDeletePress = (project: Project) => {
-    console.log("Update: ", project.title as string)
-    deleteProject(project).then(() => {
+    setIsUpdatingProjects(true)
+    deleteProject(project)
+    .then(() => {
+      setIsUpdatingProjects(false)
       handleClose()
-      console.log('deleted')
     })
   }
 
   const handleEditPress = (project: Project) => {
-    project.title += ' (EDITED)'
-    console.log("Update: ", project.title as string)
+    setIsUpdatingProjects(true)
     updateProject(project).then(() => {
+      setIsUpdatingProjects(false)
       handleClose()
-      console.log('Updated')
     })
   }
 
@@ -49,9 +52,9 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
           <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
             <ButtonGroup>
               <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
-                <Button onClick={() => handleDeletePress(project)}>Löschen</Button>
+                <LoadingButton variant='contained' onClick={() => handleDeletePress(project)} autoFocus loading={isUpdatingProjects}>Löschen</LoadingButton>
               </RoleProvider>
-              <Button onClick={() => handleEditPress(project)}>Bearbeiten</Button>
+                <LoadingButton variant='contained' onClick={() => handleEditPress(project)} autoFocus loading={isUpdatingProjects}>Bearbeiten</LoadingButton>
             </ButtonGroup>
           </RoleProvider>
         </Grid>
