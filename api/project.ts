@@ -8,6 +8,8 @@ const handler = async (request: VercelRequest, response: VercelResponse) => {
       return await handleGet(request, response)
     case 'POST':
       return await handlePost(request, response)
+    case 'DELETE':
+      return await handleDelete(request, response)
   }
 }
 
@@ -47,6 +49,17 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
       console.error(error)
       return response.status(500).send('Internal Server Error')
     }
+  }
+}
+
+const handleDelete = async (request: VercelRequest, response: VercelResponse) => {
+  const id = request.query.id as string
+  try {
+    await sql`DELETE FROM project WHERE id = ${id}`
+    return response.status(200).send('Deleted')
+  } catch (error) {
+    console.error(error)
+    return response.status(500).send('Internal Server Error')
   }
 }
 

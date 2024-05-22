@@ -4,7 +4,7 @@ import DialogTitle from "@mui/material/DialogTitle"
 import { FunctionComponent } from "react"
 import { Project } from "../types/project"
 import RoleProvider from "./RoleProvider"
-import { postProject, updateProject } from "../services/projects"
+import { deleteProject, updateProject } from "../services/projects"
 
 interface ProjectDetailDialogProps {
   project: Project
@@ -15,8 +15,10 @@ interface ProjectDetailDialogProps {
 const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ project, open, handleClose }) => {
 
   const handleDeletePress = (project: Project) => {
-    handleClose()
-    alert("Löschen: " + project.title as string)
+    deleteProject(project).then(() => {
+      handleClose()
+      console.log('deleted')
+    })
   }
 
   const handleEditPress = (project: Project) => {
