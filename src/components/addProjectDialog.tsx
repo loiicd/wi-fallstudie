@@ -18,8 +18,8 @@ import TabPanel from '@mui/lab/TabPanel'
 import { ProjectRole, User } from '../types/user'
 import { getUsers } from '../services/user'
 import CircularProgress from '@mui/material/CircularProgress'
-import { postProject } from '../services/projects'
-import { ProjectFormData, ProjectType } from '../types/project'
+import { postProject, updateProject } from '../services/projects'
+import { Project, ProjectFormData, ProjectType } from '../types/project'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -29,12 +29,13 @@ import Cookies from 'js-cookie'
 interface AddProjectDialogProps {
   open: boolean
   handleClose: () => void
+  project?: Project
 }
 
-const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, handleClose }) => {
+const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, handleClose, project}) => {
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
   const [tab, setTab] = useState<string>('1')
-  const [projectFormData, setProjectFormData] = useState<ProjectFormData>({ title: '', status: 'Entwurf', team: [], created_from: '1'})
+  const [projectFormData, setProjectFormData] = useState<Project | ProjectFormData>(project ? project : { title: '', status: 'Entwurf', team: [], created_from: '1'})
   const [users, setUsers] = useState<User[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
   const [projectTeam, setProjectTeam] = useState<string[]>([])
@@ -46,9 +47,14 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   }
 
   const handleSave = () => {
-    if (projectFormData.title !== '') {
-      setIsSavingProject(true)
-      postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id })
+    setIsSavingProject(true)
+    if (projectFormData.id) {
+      updateProject(projectFormData as Project)
+        .then(() => handleClose())
+        .catch(error => alert(error))
+        .finally(() => setIsSavingProject(false))
+    } else if (projectFormData.title !== '') {
+      postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
         .then(() => handleClose())
         .catch(error => alert(error))
         .finally(() => setIsSavingProject(false))
@@ -134,22 +140,22 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                 <DateTimePicker 
                   label='Startdatum' 
                   views={['day', 'month', 'year']} 
-                  value={projectFormData.start_date} 
+                  value={dayjs(projectFormData.start_date)}
                   slotProps={{ textField: { size: 'small' } }} 
                   sx={{ width: '100%'}} 
-                  minDate={dayjs(Date.now())}
-                  onChange={(newValue) => setProjectFormData({ ...projectFormData, start_date: newValue })}
+                  minDate={projectFormData.id ? dayjs(Date.now()).subtract(100, 'year') : dayjs(Date.now())}
+                  onChange={(newValue) => setProjectFormData({ ...projectFormData, start_date: newValue?.format() })}
                 />
               </Grid>
               <Grid item xs={6}>
                 <DateTimePicker 
                   label='Enddatum' 
                   views={['day', 'month', 'year']}
-                  value={projectFormData.end_date} 
+                  value={dayjs(projectFormData.end_date)}
                   slotProps={{ textField: { size: 'small' } }} 
                   sx={{ width: '100%'}} 
-                  minDate={dayjs(Date.now())}
-                  onChange={(newValue) => setProjectFormData({ ...projectFormData, end_date: newValue })}
+                  minDate={projectFormData.id ? dayjs(Date.now()).subtract(100, 'year') : dayjs(Date.now())}
+                  onChange={(newValue) => setProjectFormData({ ...projectFormData, end_date: newValue?.format() })}
                 />
               </Grid>
             </Grid>

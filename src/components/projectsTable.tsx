@@ -12,7 +12,6 @@ import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
 import { ApiResponse } from '../types/apiResponse'
-import { Typography } from '@mui/material'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -65,20 +64,25 @@ export default function ProjectsTable() {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
+  const [openEditProjectDialog, setOpenEditProjectDialog] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
 
   useEffect(() => {
-    console.log("useEffect")
     getProjects()
       .then(projects => setProjects({ state: 'success', data: projects}))
       .catch(error => setProjects({ state: 'error', message: error}))
-  }, [searchTerm, openAddProjectDialog, openProjectDetailDialog])
+  }, [searchTerm, openAddProjectDialog, openProjectDetailDialog, openEditProjectDialog])
 
   const handleCellClick = (project: any) => {
     setProject(project)
     setOpenProjectDetailDialog(true)
   }
+
+  const editProject = () => {
+    setOpenProjectDetailDialog(false);
+    setOpenEditProjectDialog(true);
+  };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value)
@@ -122,8 +126,9 @@ export default function ProjectsTable() {
           disableColumnResize
         />
       </Card>
-      {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} /> : null}
+      {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} handleEdit={() => editProject()} /> : null}
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
+      {openEditProjectDialog && project ? <AddProjectDialog open={openEditProjectDialog} handleClose={() => setOpenEditProjectDialog(false)} project={project} /> : null}
     </>
   )
 }

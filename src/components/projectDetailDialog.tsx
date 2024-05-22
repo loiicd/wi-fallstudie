@@ -13,9 +13,10 @@ interface ProjectDetailDialogProps {
   project: Project
   open: boolean,
   handleClose: () => void
+  handleEdit: () => void
 }
 
-const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ project, open, handleClose }) => {
+const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ project, open, handleClose , handleEdit}) => {
 
   const [isUpdatingProject, setIsUpdatingProject] = useState<boolean>(false)
   const [isDeletingProject, setIsDeletingProject] = useState<boolean>(false)
@@ -33,7 +34,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
     setIsDeletingProject(true)
     updateProject(project).then(() => {
       setIsDeletingProject(false)
-      handleClose()
+      handleEdit()
     })
   }
 
