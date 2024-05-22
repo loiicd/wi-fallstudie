@@ -15,7 +15,7 @@ interface ProjectDetailDialogProps {
 const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ project, open, handleClose }) => {
 
   const handleDeletePress = (project: Project) => {
-    console.log("Delete: ", project.title as string)
+    console.log("Update: ", project.title as string)
     deleteProject(project).then(() => {
       handleClose()
       console.log('deleted')

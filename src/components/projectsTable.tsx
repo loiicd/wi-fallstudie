@@ -68,7 +68,8 @@ export default function ProjectsTable() {
   const [project, setProject] = useState<null | any>(null)
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
 
-  useEffect(() => { 
+  useEffect(() => {
+    console.log("useEffect")
     getProjects()
       .then(projects => setProjects({ state: 'success', data: projects}))
       .catch(error => setProjects({ state: 'error', message: error}))
@@ -85,7 +86,6 @@ export default function ProjectsTable() {
 
   return (
     <>
-      {projects.state === 'loading' ? <Typography variant={"inherit"}>Loading</Typography> : null}
       <Card>
         <Stack direction='row' spacing={2} justifyContent="flex-end" alignItems="center" sx={{ margin: 2 }}>
           <TextField placeholder='Suche ...' size='small' onChange={handleSearch} />
@@ -94,7 +94,7 @@ export default function ProjectsTable() {
           </RoleProvider>
         </Stack>
         <DataGrid
-          loading={projects.state === 'loading'}
+          loading={projects.state === 'loading' }
           sx={{ minHeight: 50}}
           rows={projects.state === 'success' ? projects.data : []}
           columns={columns}
