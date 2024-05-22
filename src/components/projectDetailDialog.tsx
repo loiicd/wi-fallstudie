@@ -20,12 +20,10 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
   }
 
   const handleEditPress = (project: Project) => {
-    new Promise<void>(() => {
-      project.title += ' (EDITED)'
-      console.log(project.title)
-      updateProject(project)
-    }).then(() => handleClose())
-    .finally(() => console.log('Edited Success'))
+    updateProject(project).then(() => {
+      handleClose()
+      console.log('Updated')
+    })
   }
 
   return (
