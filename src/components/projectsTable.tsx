@@ -8,10 +8,10 @@ import Stack from '@mui/material/Stack'
 import AddProjectDialog from './addProjectDialog'
 import ProjectDetailDialog from './projectDetailDialog'
 import { Project } from '../types/project'
-import { getProjects , deleteProject } from '../services/projects'
+import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
-import { Alert } from '@mui/material'
+import { ApiResponse } from '../types/apiResponse'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -58,53 +58,25 @@ const columns: GridColDef<(any)[number]>[] = [
     editable: false,
     renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.lastname : '',
   },
-  {
-    field: 'actions',
-    headerName: '',
-    width: 150,
-    editable: false,
-    renderCell: (params) => {
-      return (
-        <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
-          <Button variant='contained' size='small' onClick={() => handleDelete(params.row)}>Löschen</Button>
-        </RoleProvider>
-      )
-    }
-  }
 ]
 
-function handleDelete(project: Project) {
-  console.log('delete project', project)
-  deleteProject(project.id)
-    .then(() => alert('Projekt wurde gelöscht'))
-    .catch(() => alert("Projekt konnte nicht gelöscht werden"))
-} 
-
 export default function ProjectsTable() {
-  const [projektes, setProjekte] = useState<Project[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
-  const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(false)
+
+  const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
 
   useEffect(() => {
-    setIsLoadingProjects(true)
     getProjects()
-      .then(data => setProjekte(data))
-      .catch(error => alert(error))
-      .finally(() => setIsLoadingProjects(false))
+      .then(projects => setProjects({ state: 'success', data: projects}))
+      .catch(error => setProjects({ state: 'error', message: error}))
   }, [searchTerm, openAddProjectDialog])
 
-  console.log(projektes)
-
-  const handleCellClick = (params: any) => {
-    if (params.field !== 'actions') {
-      setProject(params.row)
-      setOpenProjectDetailDialog(true)
-    } else {
-      console.log('action clickled', params.row)
-    }
+  const handleCellClick = (project: any) => {
+    setProject(project)
+    setOpenProjectDetailDialog(true)
   }
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,11 +93,11 @@ export default function ProjectsTable() {
           </RoleProvider>
         </Stack>
         <DataGrid
-          loading={isLoadingProjects}
+          loading={projects.state === 'loading'}
           sx={{ minHeight: 50}}
-          rows={projektes}
+          rows={projects.state === 'success' ? projects.data : []}
           columns={columns}
-          onCellClick={(params) => handleCellClick(params)}
+          onCellClick={(params) => handleCellClick(params.row)}
           pageSizeOptions={[5, 10, 15]}
           initialState={{
             pagination: {

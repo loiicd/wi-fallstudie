@@ -10,11 +10,11 @@ import TextField from '@mui/material/TextField'
 import { FunctionComponent } from 'react'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import Box from '@mui/material/Box'
+import Tab from '@mui/material/Tab'
+import TabContext from '@mui/lab/TabContext'
+import TabList from '@mui/lab/TabList'
+import TabPanel from '@mui/lab/TabPanel'
 import { ProjectRole, User } from '../types/user'
 import { getUsers } from '../services/user'
 import CircularProgress from '@mui/material/CircularProgress'
