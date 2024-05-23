@@ -13,7 +13,6 @@ import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
 import { ApiResponse } from '../types/apiResponse'
 import { useNavigate } from 'react-router-dom'
-import { hover } from '@testing-library/user-event/dist/hover'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -30,7 +29,7 @@ const columns: GridColDef<(any)[number]>[] = [
     headerName: 'Titel',
     width: 150,
     editable: false,
-    type: 'string',
+    type: 'string',   
   },
   {
     field: 'start_date',
@@ -134,7 +133,7 @@ export default function ProjectsTable() {
           slotProps={
             { row: { 
               onMouseEnter: handleRowHovered, 
-              // onMouseLeave: handleRowLeaved
+              onMouseLeave: handleRowLeaved
             } }
           }
           pageSizeOptions={[5, 10, 15]}
