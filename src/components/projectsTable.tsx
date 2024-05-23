@@ -162,7 +162,7 @@ export default function ProjectsTable() {
       {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} handleEdit={() => editProject()} /> : null}
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
       {openEditProjectDialog && project ? <AddProjectDialog open={openEditProjectDialog} handleClose={() => setOpenEditProjectDialog(false)} project={project} /> : null}
-      {hoverProjectDetail ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setHoverProjectDetail(false)} handleEdit={() => editProject()} /> : null}
+      {hoverProjectDetail && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setHoverProjectDetail(false)} handleEdit={() => editProject()} /> : null}
     </>
   )
 }
