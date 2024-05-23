@@ -98,7 +98,7 @@ export default function ProjectsTable() {
           </RoleProvider>
         </Stack>
         <DataGrid
-          loading={projects.state === 'loading' }
+          loading={projects.state === 'loading'}
           sx={{ minHeight: 50}}
           rows={projects.state === 'success' ? projects.data : []}
           columns={columns}
