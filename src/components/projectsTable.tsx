@@ -65,10 +65,9 @@ const columns: GridColDef<(any)[number]>[] = [
 export default function ProjectsTable() {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
+  const [openProjectDetailHover, setOpenProjectDetailHover] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
   const [openEditProjectDialog, setOpenEditProjectDialog] = useState<boolean>(false)
-  const [hoverProjectDetail, setHoverProjectDetail] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
 
@@ -77,11 +76,8 @@ export default function ProjectsTable() {
       .then(projects => setProjects({ state: 'success', data: projects}))
       .catch(error => setProjects({ state: 'error', message: error}))
       console.log('projects state: ' + projects.state)
-  }, [searchTerm, openAddProjectDialog, openProjectDetailDialog, openEditProjectDialog, hoverProjectDetail])
+  }, [searchTerm, openAddProjectDialog, openProjectDetailHover, openEditProjectDialog])
 
-  useEffect(() => {
-
-  }, [hoverProjectDetail])
 
   const handleCellClick = (project: any) => {
     setProject(project)
@@ -89,7 +85,7 @@ export default function ProjectsTable() {
   }
 
   const editProject = () => {
-    setOpenProjectDetailDialog(false);
+    setOpenProjectDetailHover(false);
     setOpenEditProjectDialog(true);
   };
 
@@ -105,7 +101,7 @@ export default function ProjectsTable() {
     if (projects.state === 'success') {
       const foundProject = projects.data.find((project: { id: string | undefined }) => project.id === rowId);
       setProject(foundProject);
-      setHoverProjectDetail(true);
+      setOpenProjectDetailHover(true);
       console.log('found: ' + foundProject?.title);
       console.log('set: ' + project?.title);
     }
@@ -116,7 +112,7 @@ export default function ProjectsTable() {
     document.dispatchEvent(
       new CustomEvent(`row${rowId}HoverChange`, { detail: { hovered: false } })
     )
-    setHoverProjectDetail(false)
+    setOpenProjectDetailHover(false)
     setProject(null)
   }
 
@@ -164,10 +160,12 @@ export default function ProjectsTable() {
           disableColumnResize
         />
       </Card>
-      {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} handleEdit={() => editProject()} /> : null}
+      {openProjectDetailHover && project ? <ProjectDetailDialog project={project} open={openProjectDetailHover} handleClose={() => setOpenProjectDetailHover(false)} handleEdit={() => editProject()} /> : null}
+      {/**  
+      {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailHover(false)} handleEdit={() => editProject()} /> : null}
+      */}
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
       {openEditProjectDialog && project ? <AddProjectDialog open={openEditProjectDialog} handleClose={() => setOpenEditProjectDialog(false)} project={project} /> : null}
-      {hoverProjectDetail && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setHoverProjectDetail(false)} handleEdit={() => editProject()} /> : null}
     </>
   )
 }
