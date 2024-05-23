@@ -13,6 +13,7 @@ import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
 import { ApiResponse } from '../types/apiResponse'
 import { useNavigate } from 'react-router-dom'
+import { Typography } from '@mui/material'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -118,6 +119,9 @@ export default function ProjectsTable() {
   return (
     <>
       <Card>
+      {/* openProjectDetailHover && project ? <ProjectDetailDialog project={project} open={openProjectDetailHover} handleClose={() => setOpenProjectDetailHover(false)} handleEdit={() => editProject()} /> : null */
+      openProjectDetailHover && project ? <Typography>{project.title}</Typography> : <Typography>Titel</Typography>
+      }
         <Stack direction='row' spacing={2} justifyContent="flex-end" alignItems="center" sx={{ margin: 2 }}>
           <TextField placeholder='Suche ...' size='small' onChange={handleSearch} />
           <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
@@ -159,7 +163,6 @@ export default function ProjectsTable() {
           disableColumnResize
         />
       </Card>
-      {openProjectDetailHover && project ? <ProjectDetailDialog project={project} open={openProjectDetailHover} handleClose={() => setOpenProjectDetailHover(false)} handleEdit={() => editProject()} /> : null}
       {/**  
       {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailHover(false)} handleEdit={() => editProject()} /> : null}
       */}

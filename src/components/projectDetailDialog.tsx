@@ -46,7 +46,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
         <Grid item xs={4}>
           <Grid container justifyContent={"flex-end"} alignItems={"center"} spacing={2} sx={{ paddingRight: 1 }}>
             <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
-              <LoadingButton variant='text' color="error" startIcon={<DeleteIcon />} onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
+              <LoadingButton variant='text' color="error" startIcon={<DeleteIcon />} onClick={() => handleDeletePress(project)} loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
             </RoleProvider>
             <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
               <Button variant='outlined'startIcon={<EditOutlinedIcon />} onClick={() => handleEdit()} disabled={isDeletingProject} sx={{ marginLeft: 1 }}>Bearbeiten</Button>
@@ -176,7 +176,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
       </DialogContent>
       <DialogActions>
         <Button variant='outlined' color='primary' startIcon={< CloseIcon />} onClick={handleClose}>Schließen</Button>
-        <Button variant='contained' color='primary' startIcon={< PageviewOutlinedIcon />} onClick={() => navigate('/project/' + project.id)}>Details</Button>
+        <Button variant='contained' color='primary' startIcon={< PageviewOutlinedIcon />} autoFocus onClick={() => navigate('/project/' + project.id)}>Details</Button>
       </DialogActions>
     </Dialog> 
   )
