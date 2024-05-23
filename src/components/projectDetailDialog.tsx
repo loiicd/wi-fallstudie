@@ -24,19 +24,11 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
   const [isDeletingProject, setIsDeletingProject] = useState<boolean>(false)
 
   const handleDeletePress = (project: Project) => {
-    setIsUpdatingProject(true)
+    setIsDeletingProject(true)
     deleteProject(project)
     .then(() => {
       setIsUpdatingProject(false)
       handleClose()
-    })
-  }
-
-  const handleEditPress = (project: Project) => {
-    setIsDeletingProject(true)
-    updateProject(project).then(() => {
-      setIsDeletingProject(false)
-      handleEdit()
     })
   }
 
@@ -52,12 +44,12 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
           <DialogTitle>Projekt: {project.title}</DialogTitle>
         </Grid>
         <Grid item xs={4}>
-          <Grid container justifyContent={"flex-end"} spacing={2}>
+          <Grid container justifyContent={"flex-end"} spacing={2} sx={{ paddingRight: 1 }}>
             <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
-              <LoadingButton variant='text' color="error" startIcon={<DeleteIcon />} onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
+              <LoadingButton variant='text' color="error" startIcon={<DeleteIcon />} onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject} sx={{ marginBottom: 1 }}>Löschen</LoadingButton>
             </RoleProvider>
             <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
-              <Button variant='outlined'startIcon={<EditOutlinedIcon />} onClick={() => handleEditPress(project)} disabled={isDeletingProject}>Bearbeiten</Button>
+              <Button variant='outlined'startIcon={<EditOutlinedIcon />} onClick={() => handleEdit()} disabled={isDeletingProject}>Bearbeiten</Button>
             </RoleProvider>
           </Grid>
         </Grid>
