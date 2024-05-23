@@ -23,11 +23,12 @@ export type Project = {
 }
 
 export type ProjectFormData = {
+  id?: string
   status: ProjectType
   title: string
   created_from: string,
-  start_date?: Dayjs | null
-  end_date?: Dayjs | null
+  start_date?: string | null
+  end_date?: string | null
   project_lead_id?: string
   sub_project_lead_id?: string
   short_description?: string

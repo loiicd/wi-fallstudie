@@ -11,6 +11,7 @@ import { Project } from '../types/project'
 import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
+import { ApiResponse } from '../types/apiResponse'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -60,27 +61,28 @@ const columns: GridColDef<(any)[number]>[] = [
 ]
 
 export default function ProjectsTable() {
-  const [projektes, setProjekte] = useState<Project[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
+  const [openEditProjectDialog, setOpenEditProjectDialog] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
-  const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(false)
+  const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
 
   useEffect(() => {
-    setIsLoadingProjects(true)
     getProjects()
-      .then(data => setProjekte(data))
-      .catch(error => alert(error))
-      .finally(() => setIsLoadingProjects(false))
-  }, [searchTerm, openAddProjectDialog])
-
-  console.log(projektes)
+      .then(projects => setProjects({ state: 'success', data: projects}))
+      .catch(error => setProjects({ state: 'error', message: error}))
+  }, [searchTerm, openAddProjectDialog, openProjectDetailDialog, openEditProjectDialog])
 
   const handleCellClick = (project: any) => {
     setProject(project)
     setOpenProjectDetailDialog(true)
   }
+
+  const editProject = () => {
+    setOpenProjectDetailDialog(false);
+    setOpenEditProjectDialog(true);
+  };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value)
@@ -96,9 +98,9 @@ export default function ProjectsTable() {
           </RoleProvider>
         </Stack>
         <DataGrid
-          loading={isLoadingProjects}
+          loading={projects.state === 'loading' }
           sx={{ minHeight: 50}}
-          rows={projektes}
+          rows={projects.state === 'success' ? projects.data : []}
           columns={columns}
           onCellClick={(params) => handleCellClick(params.row)}
           pageSizeOptions={[5, 10, 15]}
@@ -124,8 +126,13 @@ export default function ProjectsTable() {
           disableColumnResize
         />
       </Card>
-      {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} /> : null}
+      {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} handleEdit={() => editProject()} /> : null}
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
+      {openEditProjectDialog && project ? <AddProjectDialog open={openEditProjectDialog} handleClose={() => setOpenEditProjectDialog(false)} project={project} /> : null}
     </>
   )
+}
+
+function useFocusEffect(arg0: () => void, arg1: (string | boolean)[]) {
+  throw new Error('Function not implemented.')
 }
