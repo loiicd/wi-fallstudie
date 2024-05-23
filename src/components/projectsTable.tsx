@@ -12,6 +12,7 @@ import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
 import { ApiResponse } from '../types/apiResponse'
+import { useNavigate } from 'react-router-dom'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -61,6 +62,7 @@ const columns: GridColDef<(any)[number]>[] = [
 ]
 
 export default function ProjectsTable() {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
@@ -76,7 +78,10 @@ export default function ProjectsTable() {
 
   const handleCellClick = (project: any) => {
     setProject(project)
-    setOpenProjectDetailDialog(true)
+
+    navigate(`/project/${project.id}`)
+
+    // setOpenProjectDetailDialog(true)
   }
 
   const editProject = () => {

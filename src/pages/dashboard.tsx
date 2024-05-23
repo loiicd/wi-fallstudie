@@ -36,26 +36,26 @@ const DashboardPage = () => {
   }, [activeUser])
 
   return (
-    <StandardLayout>
-      <h1>Willkommen zurück {activeUser?.firstname} </h1>
-
+    <StandardLayout 
+      heroTitle={`Willkommen zurück ${activeUser?.firstname}`}
+    >
       <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
         <Typography variant='h6'>Meine Projektanträge</Typography>
         {projects.length === 0 && !loadingProjects ?
-            <Alert 
-              icon={<InfoOutlinedIcon fontSize="inherit" />} 
-              severity="info"  
-              action={
-                <Button color="inherit" size="small" startIcon={<AddIcon fontSize="inherit" />} onClick={() => navigate('/projects')}>
-                  Projekt
-                </Button>
-              }
-              sx={{ mt: 2, width: '50%' }}
-            >
-              Du hast derzeit keine Projektanträge
-            </Alert>
-            : <MyProjects projects={projects} loadingProjects={loadingProjects} />
-          }
+          <Alert 
+            icon={<InfoOutlinedIcon fontSize="inherit" />} 
+            severity="info"  
+            action={
+              <Button color="inherit" size="small" startIcon={<AddIcon fontSize="inherit" />} onClick={() => navigate('/projects')}>
+                Projekt
+              </Button>
+            }
+            sx={{ mt: 2, width: '50%' }}
+          >
+            Du hast derzeit keine Projektanträge
+          </Alert>
+          : <MyProjects projects={projects} loadingProjects={loadingProjects} />
+        }
       </RoleProvider>
 
       <Typography variant='h6' sx={{ marginTop: 4 }}>Übersicht</Typography>
