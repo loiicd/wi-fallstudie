@@ -101,6 +101,7 @@ export default function ProjectsTable() {
       const foundProject = projects.data.find((project: { id: string | undefined }) => project.id === rowId);
       setProject(foundProject);
       setHoverProjectDetail(true);
+      setOpenProjectDetailDialog(true);
       console.log('found: ' + foundProject?.title);
       console.log('set: ' + project?.title);
     }
@@ -133,7 +134,7 @@ export default function ProjectsTable() {
           slotProps={
             { row: { 
               onMouseEnter: handleRowHovered, 
-              onMouseLeave: handleRowLeaved
+              // onMouseLeave: handleRowLeaved
             } }
           }
           pageSizeOptions={[5, 10, 15]}
