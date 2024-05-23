@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import Header from '../components/Header'
 import Toolbar from '@mui/material/Toolbar'
 import Container from '@mui/material/Container'
-import { FunctionComponent, useCallback, useEffect, useState } from 'react'
+import { FunctionComponent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ProjectRole, User } from '../types/user'
 import Cookies from 'js-cookie'
@@ -11,10 +11,11 @@ import PageHero from '../components/pageHero'
 interface StandardLayoutProps {
   children: React.ReactNode
   heroTitle?: string
+  heroActions?: ReactNode
   heroLoading?: boolean
 }
 
-const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children, heroTitle, heroLoading }) => {
+const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children, heroTitle, heroActions, heroLoading }) => {
   const navigate = useNavigate()
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
 
@@ -49,7 +50,7 @@ const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children, hero
       >
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          {heroTitle ? <PageHero title={heroTitle} loading={heroLoading} /> : null}
+          {heroTitle ? <PageHero title={heroTitle} actions={heroActions} loading={heroLoading} /> : null}
           {children}
         </Container>
       </Box>

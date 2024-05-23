@@ -1,13 +1,14 @@
 import { Skeleton, Typography } from '@mui/material'
 import Stack from '@mui/material/Stack'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, ReactNode } from 'react'
 
 interface PageHeroProps {
   title: string
+  actions?: ReactNode
   loading?: boolean
 }
 
-const PageHero: FunctionComponent<PageHeroProps> = ({ title, loading }) => {
+const PageHero: FunctionComponent<PageHeroProps> = ({ title, actions, loading }) => {
   return (
     <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='stretch' sx={{ marginBottom: 4 }}>
       {loading ? 
@@ -16,7 +17,7 @@ const PageHero: FunctionComponent<PageHeroProps> = ({ title, loading }) => {
         </Skeleton> 
         : <Typography variant='h3'>{title}</Typography>
       }
-      <div>Test</div>
+      {actions}
     </Stack>
   )
 }

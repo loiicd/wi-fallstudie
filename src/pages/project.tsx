@@ -12,7 +12,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Avatar, CardContent, ListItemAvatar, ListSubheader, Stack, Typography } from '@mui/material'
+import { Avatar, Button, CardContent, ListItemAvatar, ListSubheader, Stack, Typography } from '@mui/material'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -31,6 +31,12 @@ const ProjectPage = () => {
   return (  
     <StandardLayout 
       heroTitle={project.state === 'success' ? project.data.title : '...'}
+      heroActions={
+        <Stack direction='row' gap={2} alignItems='center'>
+          <Button variant='contained' disabled>Bearbeiten</Button>
+          <Button variant='contained' disabled>Löschen</Button>
+        </Stack>
+      }
       heroLoading={project.state === 'loading'}
     >
       <Stepper sx={{ marginBottom: 4 }}>
