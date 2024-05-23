@@ -9,6 +9,7 @@ import { Project } from "../types/project"
 import RoleProvider from "./RoleProvider"
 import { deleteProject, updateProject } from "../services/projects"
 import { LoadingButton } from "@mui/lab"
+import { useNavigate } from 'react-router-dom'
 
 interface ProjectDetailDialogProps {
   project: Project
@@ -18,30 +19,17 @@ interface ProjectDetailDialogProps {
 }
 
 const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ project, open, handleClose , handleEdit}) => {
-
+  const navigate = useNavigate()
   const [isUpdatingProject, setIsUpdatingProject] = useState<boolean>(false)
   const [isDeletingProject, setIsDeletingProject] = useState<boolean>(false)
 
   const handleDeletePress = (project: Project) => {
-    setIsUpdatingProject(true)
+    setIsDeletingProject(true)
     deleteProject(project)
     .then(() => {
       setIsUpdatingProject(false)
       handleClose()
     })
-  }
-
-  const handleEditPress = (project: Project) => {
-    setIsDeletingProject(true)
-    updateProject(project).then(() => {
-      setIsDeletingProject(false)
-      handleEdit()
-    })
-  }
-
-  const handleDetailPress = () => {
-    handleClose()
-    alert("TODO: Details-Seite öffnen: " + project.title)
   }
 
   return (
@@ -56,12 +44,12 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
           <DialogTitle>Projekt: {project.title}</DialogTitle>
         </Grid>
         <Grid item xs={4}>
-          <Grid container justifyContent={"flex-end"} spacing={2}>
+          <Grid container justifyContent={"flex-end"} alignItems={"center"} spacing={2} sx={{ paddingRight: 1 }}>
             <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
               <LoadingButton variant='text' color="error" startIcon={<DeleteIcon />} onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
             </RoleProvider>
             <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
-              <LoadingButton variant='outlined'startIcon={<EditOutlinedIcon />} onClick={() => handleEditPress(project)} autoFocus loading={isUpdatingProject} disabled={isDeletingProject}>Bearbeiten</LoadingButton>
+              <Button variant='outlined'startIcon={<EditOutlinedIcon />} onClick={() => handleEdit()} disabled={isDeletingProject} sx={{ marginLeft: 1 }}>Bearbeiten</Button>
             </RoleProvider>
           </Grid>
         </Grid>
@@ -188,7 +176,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
       </DialogContent>
       <DialogActions>
         <Button variant='outlined' color='primary' startIcon={< CloseIcon />} onClick={handleClose}>Schließen</Button>
-        <Button variant='contained' color='primary' startIcon={< PageviewOutlinedIcon />} onClick={() => handleDetailPress()}>Details</Button>
+        <Button variant='contained' color='primary' startIcon={< PageviewOutlinedIcon />} onClick={() => navigate('/project/' + project.id)}>Details</Button>
       </DialogActions>
     </Dialog> 
   )
