@@ -1,7 +1,7 @@
-import { Dayjs } from 'dayjs'
 import { User } from './user'
 
-export type ProjectType = 'Entwurf' | 'Eingereicht' | 'In Prüfung' | 'Angenommen' | 'Abgelehnt'
+export const projectTypes = ['Entwurf', 'Eingereicht', 'In Prüfung', 'Angenommen', 'Abgelehnt'] as const
+export type ProjectType = typeof projectTypes[number]
 
 type Team = User & { role: string }
 

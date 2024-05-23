@@ -16,8 +16,25 @@ const handler = async (request: VercelRequest, response: VercelResponse) => {
 const handleGet = async (request: VercelRequest, response: VercelResponse) => {
   const id = request.query.id as string
   try {
-    const projects = await sql`SELECT * FROM project WHERE id = ${id} OR created_from = ${id}`
-    return response.status(200).send(projects.rows)
+    const result = await sql`SELECT * FROM project WHERE id = ${id} OR created_from = ${id}`
+
+    for (const data of result.rows) {
+      const team = await sql`
+        SELECT id, firstname, lastname, title
+        FROM "user"
+        LEFT JOIN project_user_rel ON "user".id = user_id
+        WHERE project_id = ${data.id}`
+      
+      data.team = team.rows
+      if (data.project_lead_id) {
+        data.project_lead = (await sql`SELECT id, firstname, lastname, title FROM "user" WHERE id = ${data.project_lead_id}`).rows[0]
+      }
+      if (data.sub_project_lead_id) {
+        data.sub_project_lead = (await sql`SELECT id, firstname, lastname, title FROM "user" WHERE id = ${data.sub_project_lead_id}`).rows[0]
+      }
+    }
+
+    return response.status(200).send(result.rows)
   } catch (error) {
     console.error(error)
     return response.status(500).send('Internal Server Error')

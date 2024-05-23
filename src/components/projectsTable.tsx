@@ -78,7 +78,6 @@ export default function ProjectsTable() {
 
   const handleCellClick = (project: any) => {
     setProject(project)
-
     navigate(`/project/${project.id}`)
 
     // setOpenProjectDetailDialog(true)
@@ -138,6 +137,6 @@ export default function ProjectsTable() {
   )
 }
 
-function useFocusEffect(arg0: () => void, arg1: (string | boolean)[]) {
-  throw new Error('Function not implemented.')
-}
+// function useFocusEffect(arg0: () => void, arg1: (string | boolean)[]) {
+//   throw new Error('Function not implemented.')
+// }
