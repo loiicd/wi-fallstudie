@@ -11,6 +11,7 @@ import AddIcon from '@mui/icons-material/Add'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { useNavigate } from 'react-router-dom'
 import AddProjectDialog from '../components/addProjectDialog'
+import ProjectDetailDialog from '../components/projectDetailDialog'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
@@ -18,6 +19,7 @@ const DashboardPage = () => {
   const [projects, setProjects] = useState<Project[]>([])
   const [loadingProjects, setLoadingProjects] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
+
 
   useEffect(() => {
     const userCookie = Cookies.get('user')
@@ -37,7 +39,9 @@ const DashboardPage = () => {
     }
   }, [activeUser, openAddProjectDialog])
 
-
+  const handleCardClick = (project: Project) => {
+    alert('TODO: navigate to project detail page (' + project.title + ')')
+  }
 
   return (
     <StandardLayout>
@@ -58,7 +62,7 @@ const DashboardPage = () => {
             >
               Du hast derzeit keine Projektanträge
             </Alert>
-            : <MyProjects projects={projects} loadingProjects={loadingProjects} />
+            : <MyProjects projects={projects} loadingProjects={loadingProjects} cardClick={handleCardClick}/>
           }
       </RoleProvider>
 
