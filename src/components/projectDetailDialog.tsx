@@ -51,20 +51,19 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
       fullWidth={true}
       maxWidth={'md'}
     >
-      {/**
-       * TODO: Implement Buttons as component to be reusable
-       */}
       <Grid container spacing={2} alignItems={"center"}>
         <Grid item xs={8}>
           <DialogTitle>Projekt: {project.title}</DialogTitle>
         </Grid>
-        <Grid item xs={4} justifyContent={"flex-end"} spacing={2}>
-          <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
-            <LoadingButton variant='text' color="error" startIcon={<DeleteIcon />} onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
-          </RoleProvider>
-          <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
-            <LoadingButton variant='outlined'startIcon={<EditOutlinedIcon />} onClick={() => handleEditPress(project)} autoFocus loading={isUpdatingProject} disabled={isDeletingProject}>Bearbeiten</LoadingButton>
-          </RoleProvider>
+        <Grid item xs={4}>
+          <Grid container justifyContent={"flex-end"} spacing={2}>
+            <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
+              <LoadingButton variant='text' color="error" startIcon={<DeleteIcon />} onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
+            </RoleProvider>
+            <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
+              <LoadingButton variant='outlined'startIcon={<EditOutlinedIcon />} onClick={() => handleEditPress(project)} autoFocus loading={isUpdatingProject} disabled={isDeletingProject}>Bearbeiten</LoadingButton>
+            </RoleProvider>
+          </Grid>
         </Grid>
       </Grid>
 
