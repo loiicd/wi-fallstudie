@@ -12,6 +12,7 @@ import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
 import { ApiResponse } from '../types/apiResponse'
+import { useNavigate } from 'react-router-dom'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -61,6 +62,7 @@ const columns: GridColDef<(any)[number]>[] = [
 ]
 
 export default function ProjectsTable() {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
@@ -76,7 +78,9 @@ export default function ProjectsTable() {
 
   const handleCellClick = (project: any) => {
     setProject(project)
-    setOpenProjectDetailDialog(true)
+    navigate(`/project/${project.id}`)
+
+    // setOpenProjectDetailDialog(true)
   }
 
   const editProject = () => {
@@ -98,7 +102,7 @@ export default function ProjectsTable() {
           </RoleProvider>
         </Stack>
         <DataGrid
-          loading={projects.state === 'loading' }
+          loading={projects.state === 'loading'}
           sx={{ minHeight: 50}}
           rows={projects.state === 'success' ? projects.data : []}
           columns={columns}
@@ -133,6 +137,6 @@ export default function ProjectsTable() {
   )
 }
 
-function useFocusEffect(arg0: () => void, arg1: (string | boolean)[]) {
-  throw new Error('Function not implemented.')
-}
+// function useFocusEffect(arg0: () => void, arg1: (string | boolean)[]) {
+//   throw new Error('Function not implemented.')
+// }

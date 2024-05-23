@@ -2,25 +2,27 @@ import Box from '@mui/material/Box'
 import Header from '../components/Header'
 import Toolbar from '@mui/material/Toolbar'
 import Container from '@mui/material/Container'
-import { FunctionComponent, useCallback, useEffect, useState } from 'react'
+import { FunctionComponent, ReactNode, useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ProjectRole, User } from '../types/user'
 import Cookies from 'js-cookie'
+import PageHero from '../components/pageHero'
 
 interface StandardLayoutProps {
   children: React.ReactNode
+  heroTitle?: string
+  heroActions?: ReactNode
+  heroLoading?: boolean
 }
 
-const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children }) => {
+const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children, heroTitle, heroActions, heroLoading }) => {
   const navigate = useNavigate()
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
 
   const loginProvider = useCallback(() => {
     const userCookie = Cookies.get('user')
-    console.log(userCookie)
     if (!userCookie) {
       navigate('/login')
-      console.log('Hello')
     } else {
       const [id, firstname, lastname, type] = userCookie.split('|')
       setActiveUser({ id, firstname, lastname, title: undefined, type: type as ProjectRole})
@@ -48,6 +50,7 @@ const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children }) =>
       >
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          {heroTitle ? <PageHero title={heroTitle} actions={heroActions} loading={heroLoading} /> : null}
           {children}
         </Container>
       </Box>
