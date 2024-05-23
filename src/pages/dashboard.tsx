@@ -10,12 +10,14 @@ import MyProjects from '../components/myProjects'
 import AddIcon from '@mui/icons-material/Add'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { useNavigate } from 'react-router-dom'
+import AddProjectDialog from '../components/addProjectDialog'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
   const [projects, setProjects] = useState<Project[]>([])
   const [loadingProjects, setLoadingProjects] = useState<boolean>(false)
+  const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
 
   useEffect(() => {
     const userCookie = Cookies.get('user')
@@ -33,7 +35,9 @@ const DashboardPage = () => {
         .catch((error) => alert(error))
         .finally(() => setLoadingProjects(false))
     }
-  }, [activeUser])
+  }, [activeUser, openAddProjectDialog])
+
+
 
   return (
     <StandardLayout>
@@ -46,7 +50,7 @@ const DashboardPage = () => {
               icon={<InfoOutlinedIcon fontSize="inherit" />} 
               severity="info"  
               action={
-                <Button color="inherit" size="small" startIcon={<AddIcon fontSize="inherit" />} onClick={() => navigate('/projects')}>
+                <Button color="inherit" size="small" startIcon={<AddIcon fontSize="inherit" />} onClick={() => setOpenAddProjectDialog(true)}>
                   Projekt
                 </Button>
               }
@@ -59,6 +63,7 @@ const DashboardPage = () => {
       </RoleProvider>
 
       <Typography variant='h6' sx={{ marginTop: 4 }}>Übersicht</Typography>
+      {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => navigate('/projects')} /> : null}
     </StandardLayout>
   )
 }
