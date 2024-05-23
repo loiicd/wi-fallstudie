@@ -102,7 +102,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
       fullWidth={true}
       maxWidth={'md'}
     >
-      <DialogTitle>Projekt erstellen</DialogTitle>
+      {projectFormData.id ? <DialogTitle>Bearbeiten: {projectFormData.title}</DialogTitle> : <DialogTitle>Neues Projekt</DialogTitle>}
       <DialogContent dividers>
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
