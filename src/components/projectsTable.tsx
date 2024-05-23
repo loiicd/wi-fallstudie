@@ -92,6 +92,22 @@ export default function ProjectsTable() {
     setSearchTerm(event.target.value)
   }
 
+  const handleRowHovered = (event: React.MouseEvent<HTMLElement>) => {
+    const rowId = event.currentTarget?.dataset?.id
+    document.dispatchEvent(
+      new CustomEvent(`row${rowId}HoverChange`, { detail: { hovered: true } })
+    )
+    console.log('hovered: ' + rowId)
+  }
+
+  const handleRowLeaved = (event: React.MouseEvent<HTMLElement>) => {
+    const rowId = event.currentTarget?.dataset?.id;
+    document.dispatchEvent(
+      new CustomEvent(`row${rowId}HoverChange`, { detail: { hovered: false } })
+    )
+    console.log('leaved: ' + rowId)
+  }
+
   return (
     <>
       <Card>
@@ -107,6 +123,12 @@ export default function ProjectsTable() {
           rows={projects.state === 'success' ? projects.data : []}
           columns={columns}
           onCellClick={(params) => handleCellClick(params.row)}
+          slotProps={
+            { row: { 
+              onMouseEnter: handleRowHovered, 
+              onMouseLeave: handleRowLeaved
+            } }
+          }
           pageSizeOptions={[5, 10, 15]}
           initialState={{
             pagination: {
