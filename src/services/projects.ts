@@ -19,6 +19,6 @@ export const updateProject = async (project: Project): Promise<void> => {
   await axios.post('/api/project', project)
 }
 
-export const deleteProject = async (project: Project): Promise<void> => {
-  await axios.delete('/api/project', { params: { id: project.id } })
+export const deleteProject = async (projectId: string): Promise<void> => {
+  await axios.delete('/api/project', { data: { id: projectId } })
 }

@@ -70,8 +70,9 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
 }
 
 const handleDelete = async (request: VercelRequest, response: VercelResponse) => {
-  const id = request.query.id as string
+  const id = request.body.id as string
   try {
+    await sql`DELETE FROM project_user_rel WHERE project_id = ${id}`
     await sql`DELETE FROM project WHERE id = ${id}`
     return response.status(200).send('Deleted')
   } catch (error) {
