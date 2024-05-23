@@ -14,3 +14,11 @@ export const getProjectsById = async (id: string): Promise<Project[]> => {
 export const postProject = async (projectFormData: ProjectFormData): Promise<void> => {
   await axios.post('/api/project', projectFormData)
 }
+
+export const updateProject = async (project: Project): Promise<void> => {
+  await axios.post('/api/project', project)
+}
+
+export const deleteProject = async (project: Project): Promise<void> => {
+  await axios.delete('/api/project', { params: { id: project.id } })
+}

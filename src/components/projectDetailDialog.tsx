@@ -1,16 +1,49 @@
-import { DialogContent, Divider, Grid, MenuItem, Rating, Select, Typography } from "@mui/material"
+import { Button, DialogActions, DialogContent, Divider, Grid, MenuItem, Rating, Select, Typography } from "@mui/material"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
-import { FunctionComponent } from "react"
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';import CloseIcon from '@mui/icons-material/Close';
+import PageviewOutlinedIcon from '@mui/icons-material/PageviewOutlined';
+import { FunctionComponent, useState } from "react"
 import { Project } from "../types/project"
+import RoleProvider from "./RoleProvider"
+import { deleteProject, updateProject } from "../services/projects"
+import { LoadingButton } from "@mui/lab"
 
 interface ProjectDetailDialogProps {
   project: Project
   open: boolean,
   handleClose: () => void
+  handleEdit: () => void
 }
 
-const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ project, open, handleClose }) => {
+const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ project, open, handleClose , handleEdit}) => {
+
+  const [isUpdatingProject, setIsUpdatingProject] = useState<boolean>(false)
+  const [isDeletingProject, setIsDeletingProject] = useState<boolean>(false)
+
+  const handleDeletePress = (project: Project) => {
+    setIsUpdatingProject(true)
+    deleteProject(project)
+    .then(() => {
+      setIsUpdatingProject(false)
+      handleClose()
+    })
+  }
+
+  const handleEditPress = (project: Project) => {
+    setIsDeletingProject(true)
+    updateProject(project).then(() => {
+      setIsDeletingProject(false)
+      handleEdit()
+    })
+  }
+
+  const handleDetailPress = () => {
+    handleClose()
+    alert("TODO: Details-Seite öffnen: " + project.title)
+  }
+
   return (
     <Dialog
       open={open}
@@ -18,7 +51,22 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
       fullWidth={true}
       maxWidth={'md'}
     >
-      <DialogTitle>Projekt: {project.title}</DialogTitle>
+      <Grid container spacing={2} alignItems={"center"}>
+        <Grid item xs={8}>
+          <DialogTitle>Projekt: {project.title}</DialogTitle>
+        </Grid>
+        <Grid item xs={4}>
+          <Grid container justifyContent={"flex-end"} spacing={2}>
+            <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
+              <LoadingButton variant='text' color="error" startIcon={<DeleteIcon />} onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
+            </RoleProvider>
+            <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
+              <LoadingButton variant='outlined'startIcon={<EditOutlinedIcon />} onClick={() => handleEditPress(project)} autoFocus loading={isUpdatingProject} disabled={isDeletingProject}>Bearbeiten</LoadingButton>
+            </RoleProvider>
+          </Grid>
+        </Grid>
+      </Grid>
+
       <DialogContent dividers>
         <Grid container spacing={2}>
           <Grid item xs={3}>
@@ -138,7 +186,11 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
           </Grid>
         </Grid>
       </DialogContent>
-    </Dialog>
+      <DialogActions>
+        <Button variant='outlined' color='primary' startIcon={< CloseIcon />} onClick={handleClose}>Schließen</Button>
+        <Button variant='contained' color='primary' startIcon={< PageviewOutlinedIcon />} onClick={() => handleDetailPress()}>Details</Button>
+      </DialogActions>
+    </Dialog> 
   )
 }
 
