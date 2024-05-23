@@ -8,6 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import { FunctionComponent } from 'react'
+import CloseIcon from '@mui/icons-material/Close'
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
@@ -294,8 +296,8 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
           </TabContext>
       </DialogContent>
       <DialogActions>
-        <Button variant='outlined' onClick={handleClose}>Abbrechen</Button>
-        <LoadingButton variant='contained' onClick={handleSave} autoFocus loading={isSavingProject}>Speichern</LoadingButton>
+        <Button variant='outlined' startIcon={< CloseIcon />} onClick={handleClose}>Abbrechen</Button>
+        <LoadingButton variant='contained' startIcon={<SaveOutlinedIcon />} onClick={handleSave} autoFocus loading={isSavingProject}>Speichern</LoadingButton>
       </DialogActions>
     </Dialog>
   )
