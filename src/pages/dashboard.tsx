@@ -40,9 +40,9 @@ const DashboardPage = () => {
   }, [activeUser, openAddProjectDialog])
 
   return (
-    <StandardLayout>
-      <h1>Willkommen zurück {activeUser?.firstname} </h1>
-
+    <StandardLayout 
+      heroTitle={`Willkommen zurück ${activeUser?.firstname}`}
+    >
       <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
         <Typography variant='h6'>Meine Projektanträge</Typography>
         {projects.length === 0 && !loadingProjects ?
@@ -59,7 +59,7 @@ const DashboardPage = () => {
               Du hast derzeit keine Projektanträge
             </Alert>
             : <MyProjects projects={projects} loadingProjects={loadingProjects} cardClick={(project) => navigate('/project/' + project.id)}/>
-          }
+        }
       </RoleProvider>
 
       <Typography variant='h6' sx={{ marginTop: 4 }}>Übersicht</Typography>
