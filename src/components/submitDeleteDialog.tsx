@@ -6,6 +6,7 @@ import { FunctionComponent, useState } from 'react'
 import { deleteProject } from '../services/projects'
 import { LoadingButton } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
+import { Button, DialogActions } from '@mui/material'
 
 interface SubmitDeleteDialogProps {
   openDialog: boolean
@@ -32,15 +33,16 @@ const SubmitDeleteDialog: FunctionComponent<SubmitDeleteDialogProps> = ({ openDi
     <Dialog
       open={openDialog}
       onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
+      fullWidth={true}
+      maxWidth='xs'
     >
-      <DialogContent>
-        <Stack direction='row' alignItems='center'>
-          <DialogTitle id="alert-dialog-title">Projektantrag löschen?</DialogTitle>
-          <div><LoadingButton variant='contained' loading={isDeleting} onClick={handleSubmitDelete}>Bestätigen</LoadingButton></div>
-        </Stack>
-      </DialogContent>
+      <Stack justifyContent='center' alignItems='center'>
+        <DialogTitle id="alert-dialog-title">Projektantrag löschen?</DialogTitle>
+        <DialogActions>
+          <Button variant='outlined' onClick={handleClose}>Abbrechen</Button>
+          <LoadingButton variant='contained' loading={isDeleting} onClick={handleSubmitDelete}>Bestätigen</LoadingButton>
+        </DialogActions>
+      </Stack>
     </Dialog>
   )
 }
