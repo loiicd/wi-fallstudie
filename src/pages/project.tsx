@@ -17,6 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import ModeIcon from '@mui/icons-material/Mode'
 import SubmitDeleteDialog from '../components/submitDeleteDialog'
 import AddProjectDialog from '../components/addProjectDialog'
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -43,6 +44,16 @@ const ProjectPage = () => {
       heroTitle={project.state === 'success' ? project.data.title : '...'}
       heroActions={
         <Stack direction='row' gap={2} alignItems='center'>
+          <ButtonGroup variant='contained'>
+            <Tooltip title='Projekt vergleichen'>
+              <Button 
+                disabled={project.state !== 'success'}
+                onClick={() => navigate(`/project/comparison?firstProject=${project.state === 'success' ? project.data.id : null}`)}
+              >
+                <CompareArrowsIcon />
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
           <ButtonGroup variant='outlined' disabled={project.state !== 'success'}>
             <Tooltip title='Bearbeiten'>
               <Button onClick={() => setOpenAddProjectDialog(true)}>
