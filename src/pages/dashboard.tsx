@@ -39,10 +39,6 @@ const DashboardPage = () => {
     }
   }, [activeUser, openAddProjectDialog])
 
-  const handleCardClick = (project: Project) => {
-    alert('TODO: navigate to project detail page (' + project.title + ')')
-  }
-
   return (
     <StandardLayout>
       <h1>Willkommen zurück {activeUser?.firstname} </h1>
@@ -62,12 +58,12 @@ const DashboardPage = () => {
             >
               Du hast derzeit keine Projektanträge
             </Alert>
-            : <MyProjects projects={projects} loadingProjects={loadingProjects} cardClick={handleCardClick}/>
+            : <MyProjects projects={projects} loadingProjects={loadingProjects} cardClick={(project) => navigate('/project/' + project.id)}/>
           }
       </RoleProvider>
 
       <Typography variant='h6' sx={{ marginTop: 4 }}>Übersicht</Typography>
-      {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => navigate('/projects')} /> : null}
+      {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => navigate('/project/')} /> : null}
     </StandardLayout>
   )
 }
