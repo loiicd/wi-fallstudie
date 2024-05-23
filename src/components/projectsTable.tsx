@@ -13,6 +13,7 @@ import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
 import { ApiResponse } from '../types/apiResponse'
 import { useNavigate } from 'react-router-dom'
+import { hover } from '@testing-library/user-event/dist/hover'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -76,7 +77,11 @@ export default function ProjectsTable() {
       .then(projects => setProjects({ state: 'success', data: projects}))
       .catch(error => setProjects({ state: 'error', message: error}))
       console.log('projects state: ' + projects.state)
-  }, [searchTerm, openAddProjectDialog, openProjectDetailDialog, openEditProjectDialog])
+  }, [searchTerm, openAddProjectDialog, openProjectDetailDialog, openEditProjectDialog, hoverProjectDetail])
+
+  useEffect(() => {
+
+  }, [hoverProjectDetail])
 
   const handleCellClick = (project: any) => {
     setProject(project)
@@ -101,7 +106,6 @@ export default function ProjectsTable() {
       const foundProject = projects.data.find((project: { id: string | undefined }) => project.id === rowId);
       setProject(foundProject);
       setHoverProjectDetail(true);
-      setOpenProjectDetailDialog(true);
       console.log('found: ' + foundProject?.title);
       console.log('set: ' + project?.title);
     }
