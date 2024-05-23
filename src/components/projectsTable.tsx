@@ -78,9 +78,9 @@ export default function ProjectsTable() {
 
   const handleCellClick = (project: any) => {
     setProject(project)
-    navigate(`/project/${project.id}`)
+    // navigate(`/project/${project.id}`)
 
-    // setOpenProjectDetailDialog(true)
+    setOpenProjectDetailDialog(true)
   }
 
   const editProject = () => {
