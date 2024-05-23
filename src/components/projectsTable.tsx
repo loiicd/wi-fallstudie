@@ -67,6 +67,7 @@ export default function ProjectsTable() {
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
   const [openEditProjectDialog, setOpenEditProjectDialog] = useState<boolean>(false)
+  const [hoverProjectDetail, setHoverProjectDetail] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
 
@@ -74,13 +75,12 @@ export default function ProjectsTable() {
     getProjects()
       .then(projects => setProjects({ state: 'success', data: projects}))
       .catch(error => setProjects({ state: 'error', message: error}))
+      console.log('projects state: ' + projects.state)
   }, [searchTerm, openAddProjectDialog, openProjectDetailDialog, openEditProjectDialog])
 
   const handleCellClick = (project: any) => {
     setProject(project)
-    // navigate(`/project/${project.id}`)
-
-    setOpenProjectDetailDialog(true)
+    navigate(`/project/${project.id}`)
   }
 
   const editProject = () => {
@@ -97,15 +97,22 @@ export default function ProjectsTable() {
     document.dispatchEvent(
       new CustomEvent(`row${rowId}HoverChange`, { detail: { hovered: true } })
     )
-    console.log('hovered: ' + rowId)
-  }
+    if (projects.state === 'success') {
+      const foundProject = projects.data.find((project: { id: string | undefined }) => project.id === rowId);
+      setProject(foundProject);
+      setHoverProjectDetail(true);
+      console.log('found: ' + foundProject?.title);
+      console.log('set: ' + project?.title);
+    }
+}
 
   const handleRowLeaved = (event: React.MouseEvent<HTMLElement>) => {
     const rowId = event.currentTarget?.dataset?.id;
     document.dispatchEvent(
       new CustomEvent(`row${rowId}HoverChange`, { detail: { hovered: false } })
     )
-    console.log('leaved: ' + rowId)
+    setHoverProjectDetail(false)
+    setProject(null)
   }
 
   return (
@@ -155,6 +162,7 @@ export default function ProjectsTable() {
       {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} handleEdit={() => editProject()} /> : null}
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
       {openEditProjectDialog && project ? <AddProjectDialog open={openEditProjectDialog} handleClose={() => setOpenEditProjectDialog(false)} project={project} /> : null}
+      {hoverProjectDetail ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setHoverProjectDetail(false)} handleEdit={() => editProject()} /> : null}
     </>
   )
 }
