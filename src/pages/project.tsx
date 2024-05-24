@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -12,12 +12,71 @@ import ListItemText from '@mui/material/ListItemText'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Avatar, Button, ButtonGroup, CardContent, ListItemAvatar, ListSubheader, Stack, Tooltip, Typography } from '@mui/material'
+import { Avatar, AvatarGroup, Button, ButtonGroup, CardContent, ListItemAvatar, ListSubheader, Rating, Stack, Tooltip, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ModeIcon from '@mui/icons-material/Mode'
 import SubmitDeleteDialog from '../components/submitDeleteDialog'
 import AddProjectDialog from '../components/addProjectDialog'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
+import { ProjectRole, User } from '../types/user'
+import Cookies from 'js-cookie'
+import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
+import RateProjectDialog from '../components/rateProjectDialog'
+
+interface HeroActionsProps {
+  project: ApiResponse<Project>
+  handleDelete: () => void
+  handleOpenAddProjectDialog: () => void
+  handleOpenRateProjectDialog: () => void
+}
+
+const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelete, handleOpenAddProjectDialog, handleOpenRateProjectDialog }) => {
+  const navigate = useNavigate()
+  const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
+
+  useEffect(() => {
+    const userCookie = Cookies.get('user')
+    if (userCookie) {
+      const [id, firstname, lastname, email, type] = userCookie.split('|')
+      setActiveUser({ id, firstname, lastname, email, title: undefined, type: type as ProjectRole })
+    } 
+  }, [])
+
+  return (
+    <Stack direction='row' gap={2} alignItems='center'>
+      <ButtonGroup variant='contained'>
+        <Tooltip title='Projekt bewerten'>
+          <Button 
+            disabled={project.state !== 'success'} 
+            onClick={handleOpenRateProjectDialog}
+          >
+            <ThumbsUpDownIcon />
+          </Button>
+        </Tooltip>
+        <Tooltip title='Projekt vergleichen'>
+          <Button 
+            disabled={project.state !== 'success'}
+            onClick={() => navigate(`/project/comparison?firstProject=${project.state === 'success' ? project.data.id : null}`)}
+          >
+            <CompareArrowsIcon />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
+      <ButtonGroup variant='contained' disabled={project.state !== 'success' || project.data.created_from !== activeUser?.id}>
+        <Tooltip title='Bearbeiten'>
+          <Button onClick={handleOpenAddProjectDialog}>
+            <ModeIcon />
+          </Button>
+        </Tooltip>
+        <Tooltip title='Löschen'>
+          <Button onClick={handleDelete}>
+            <DeleteIcon />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
+    </Stack>
+  )
+}
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -25,6 +84,7 @@ const ProjectPage = () => {
   const [project, setProject] = useState<ApiResponse<Project>>({ state: 'loading' })
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
+  const [openRateProjectDialog, setOpenRateProjectDialog] = useState<boolean>(false)
 
   useEffect(() => {
     if (id) {
@@ -33,7 +93,8 @@ const ProjectPage = () => {
     } else {
       navigate('/notfound')
     }
-  }, [id, navigate, openAddProjectDialog, openDeleteDialog])
+
+  }, [id, navigate, openRateProjectDialog, openAddProjectDialog])
 
   const handleDelete = () => {
     setOpenDeleteDialog(true)
@@ -42,32 +103,7 @@ const ProjectPage = () => {
   return (  
     <StandardLayout 
       heroTitle={project.state === 'success' ? project.data.title : '...'}
-      heroActions={
-        <Stack direction='row' gap={2} alignItems='center'>
-          <ButtonGroup variant='contained'>
-            <Tooltip title='Projekt vergleichen'>
-              <Button 
-                disabled={project.state !== 'success'}
-                onClick={() => navigate(`/project/comparison?firstProject=${project.state === 'success' ? project.data.id : null}`)}
-              >
-                <CompareArrowsIcon />
-              </Button>
-            </Tooltip>
-          </ButtonGroup>
-          <ButtonGroup variant='outlined' disabled={project.state !== 'success'}>
-            <Tooltip title='Bearbeiten'>
-              <Button onClick={() => setOpenAddProjectDialog(true)}>
-                <ModeIcon />
-              </Button>
-            </Tooltip>
-            <Tooltip title='Löschen'>
-              <Button onClick={handleDelete}>
-                <DeleteIcon />
-              </Button>
-            </Tooltip>
-          </ButtonGroup>
-        </Stack>
-      }
+      heroActions={<HeroActions project={project} handleDelete={handleDelete} handleOpenAddProjectDialog={() => setOpenAddProjectDialog(true)} handleOpenRateProjectDialog={() => setOpenRateProjectDialog(true)} />}
       heroLoading={project.state === 'loading'}
     >
       <Stepper sx={{ marginBottom: 4 }}>
@@ -85,11 +121,24 @@ const ProjectPage = () => {
               <Card>
                 <CardContent>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Allgemein</Typography>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Rollen</Typography>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <Typography variant='h6'>Startdatum</Typography>
+                      <Typography>{project.data.start_date ? new Date(project.data.start_date).toLocaleDateString() : '-'}</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant='h6'>Enddatum</Typography>
+                      <Typography>{project.data.end_date ? new Date(project.data.end_date).toLocaleDateString() : '-'}</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant='h6'>Erstellt von</Typography>
+                      <Typography>{project.data.created_from}</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant='h6'>Erstellt am</Typography>
+                      <Typography>{project.data.created_at ? new Date(project.data.created_at).toLocaleDateString() : '-'}</Typography>
+                    </Grid>
+                  </Grid>
                 </CardContent>
               </Card>
               <Card>
@@ -111,39 +160,56 @@ const ProjectPage = () => {
         </Grid>
         <Grid item lg={3}>
           {project.state === 'success' ? 
-            <Card>
-              <List>
-                <ListSubheader component="div">Projektleiter</ListSubheader>
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>{project.data.project_lead?.firstname[0]}{project.data.project_lead?.lastname[0]}</Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={`${project.data.project_lead?.firstname} ${project.data.project_lead?.lastname}`} secondary={project.data.project_lead?.type} />
-                </ListItem>
-                <ListSubheader component="div">Stellv. Projektleiter</ListSubheader>
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>{project.data.sub_project_lead?.firstname[0]}{project.data.sub_project_lead?.lastname[0]}</Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={`${project.data.sub_project_lead?.firstname} ${project.data.sub_project_lead?.lastname}`} secondary={project.data.sub_project_lead?.type} />
-                </ListItem>
-                <ListSubheader component="div">Projektteam</ListSubheader>
-                {project.data.team.map(teamUser => (
+            <>
+              <Card>
+                <List>
+                  <ListSubheader component="div">Projektleiter</ListSubheader>
                   <ListItem>
                     <ListItemAvatar>
-                      <Avatar>{teamUser.firstname[0]}{teamUser.lastname[0]}</Avatar>
+                      <Avatar>{project.data.project_lead?.firstname[0]}{project.data.project_lead?.lastname[0]}</Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={`${teamUser.firstname} ${teamUser.lastname}`} secondary={teamUser.role} />
+                    <ListItemText primary={`${project.data.project_lead?.firstname} ${project.data.project_lead?.lastname}`} secondary={project.data.project_lead?.email} />
+                  </ListItem>
+                  <ListSubheader component="div">Stellv. Projektleiter</ListSubheader>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>{project.data.sub_project_lead?.firstname[0]}{project.data.sub_project_lead?.lastname[0]}</Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={`${project.data.sub_project_lead?.firstname} ${project.data.sub_project_lead?.lastname}`} secondary={project.data.sub_project_lead?.email} />
+                  </ListItem>
+                  <ListSubheader component="div">Projektteam</ListSubheader>
+                  <ListItem>
+                    <AvatarGroup max={6}>
+                      {project.data.team.map(teamUser => (
+                        <Tooltip title={`${teamUser.firstname} ${teamUser.lastname}`}>
+                          <Avatar>{teamUser.firstname[0]}{teamUser.lastname[0]}</Avatar>
+                        </Tooltip>
+                      ))}
+                    </AvatarGroup>
                   </ListItem> 
-                ))}
-              </List>
-            </Card>
+                </List>
+              </Card>
+              <Card sx={{ marginTop: 2}}>
+                <List>
+                  <ListSubheader component="div">Projekt Berwertungen</ListSubheader>
+                  {project.data.rates.map((rate) => (
+                    <ListItem>
+                      <Stack>
+                        <Typography component="legend">{rate.user.firstname} {rate.user.lastname}</Typography>
+                        <Rating value={rate.rate} readOnly />
+                      </Stack>
+                    </ListItem>
+                  ))}
+                </List>
+              </Card>
+            </>
             : null
           }
         </Grid>
       </Grid>
       {openDeleteDialog && project.state === 'success' ? <SubmitDeleteDialog openDialog={openDeleteDialog} handleClose={() => setOpenDeleteDialog(false)} projectId={project.data.id} /> : null}
       {openAddProjectDialog && project.state === 'success' ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} project={project.data} /> : null}
+      {openRateProjectDialog && project.state === 'success' ? <RateProjectDialog openDialog={openRateProjectDialog} handleClose={() => setOpenRateProjectDialog(false)} projectId={project.data.id} /> : null}
     </StandardLayout>
   )
 }

@@ -32,6 +32,12 @@ const handleGet = async (request: VercelRequest, response: VercelResponse) => {
       if (data.sub_project_lead_id) {
         data.sub_project_lead = (await sql`SELECT * FROM "user" WHERE id = ${data.sub_project_lead_id}`).rows[0]
       }
+
+      data.rates = (await sql`SELECT * FROM project_rate WHERE project_id = ${data.id}`).rows
+
+      await Promise.all(data.rates.map(async (item: any) =>
+        item.user = (await sql`SELECT * FROM "user" WHERE id = ${item.user_id}`).rows[0]
+      ))
     }
 
     return response.status(200).send(result.rows)
@@ -86,6 +92,7 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
 const handleDelete = async (request: VercelRequest, response: VercelResponse) => {
   const id = request.body.id as string
   try {
+    await sql`DELETE FROM project_rate WHERE project_id = ${id}`
     await sql`DELETE FROM project_user_rel WHERE project_id = ${id}`
     await sql`DELETE FROM project WHERE id = ${id}`
     return response.status(200).send('Deleted')

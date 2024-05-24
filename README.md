@@ -47,6 +47,17 @@ CREATE TABLE project_user_rel (
 ```
 
 ```sql
+CREATE TABLE project_rate (
+  project_id text NOT NULL,
+  user_id text NOT NULL,
+  rate integer NOT NULL,
+  PRIMARY KEY (project_id, user_id),
+  FOREIGN KEY (project_id) REFERENCES project (id),
+  FOREIGN KEY (user_id) REFERENCES "user" (id)
+)
+```
+
+```sql
 INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('bc3bff48-e956-4da2-b916-87de9c851017', 'Simon', 'Bühler', 'buehlsim@dhbw-loerrach.de', null, 'administrator');
 INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('d435e3d4-9516-49a0-aeb8-a066507ea51d', 'Moritz', 'Höft', 'hoeftm@dhbw-loerrach.de', null, 'administrator');
 INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('423ee4e0-1002-4b8c-8dd4-8bf950a0e67d', 'Anna-Lehna', 'Grittke', 'grittkea@dhbw-loerrach.de', null, 'administrator');
