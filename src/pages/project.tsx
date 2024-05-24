@@ -12,7 +12,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Avatar, AvatarGroup, Button, ButtonGroup, CardContent, ListItemAvatar, ListSubheader, Stack, Tooltip, Typography } from '@mui/material'
+import { Avatar, AvatarGroup, Button, ButtonGroup, CardContent, ListItemAvatar, ListSubheader, Rating, Stack, Tooltip, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ModeIcon from '@mui/icons-material/Mode'
 import SubmitDeleteDialog from '../components/submitDeleteDialog'
@@ -20,14 +20,17 @@ import AddProjectDialog from '../components/addProjectDialog'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import { ProjectRole, User } from '../types/user'
 import Cookies from 'js-cookie'
+import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
+import RateProjectDialog from '../components/rateProjectDialog'
 
 interface HeroActionsProps {
   project: ApiResponse<Project>
   handleDelete: () => void
   handleOpenAddProjectDialog: () => void
+  handleOpenRateProjectDialog: () => void
 }
 
-const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelete, handleOpenAddProjectDialog }) => {
+const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelete, handleOpenAddProjectDialog, handleOpenRateProjectDialog }) => {
   const navigate = useNavigate()
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
 
@@ -39,12 +42,17 @@ const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelet
     } 
   }, [])
 
-  console.log('Project', project)
-  console.log(activeUser)
-
   return (
     <Stack direction='row' gap={2} alignItems='center'>
       <ButtonGroup variant='contained'>
+        <Tooltip title='Projekt bewerten'>
+          <Button 
+            disabled={project.state !== 'success'} 
+            onClick={handleOpenRateProjectDialog}
+          >
+            <ThumbsUpDownIcon />
+          </Button>
+        </Tooltip>
         <Tooltip title='Projekt vergleichen'>
           <Button 
             disabled={project.state !== 'success'}
@@ -76,6 +84,7 @@ const ProjectPage = () => {
   const [project, setProject] = useState<ApiResponse<Project>>({ state: 'loading' })
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
+  const [openRateProjectDialog, setOpenRateProjectDialog] = useState<boolean>(false)
 
   useEffect(() => {
     if (id) {
@@ -84,7 +93,7 @@ const ProjectPage = () => {
     } else {
       navigate('/notfound')
     }
-  }, [id, navigate])
+  }, [id, navigate, openRateProjectDialog, openAddProjectDialog])
 
   const handleDelete = () => {
     setOpenDeleteDialog(true)
@@ -93,7 +102,7 @@ const ProjectPage = () => {
   return (  
     <StandardLayout 
       heroTitle={project.state === 'success' ? project.data.title : '...'}
-      heroActions={<HeroActions project={project} handleDelete={handleDelete} handleOpenAddProjectDialog={() => setOpenAddProjectDialog(true)} />}
+      heroActions={<HeroActions project={project} handleDelete={handleDelete} handleOpenAddProjectDialog={() => setOpenAddProjectDialog(true)} handleOpenRateProjectDialog={() => setOpenRateProjectDialog(true)} />}
       heroLoading={project.state === 'loading'}
     >
       <Stepper sx={{ marginBottom: 4 }}>
@@ -150,40 +159,56 @@ const ProjectPage = () => {
         </Grid>
         <Grid item lg={3}>
           {project.state === 'success' ? 
-            <Card>
-              <List>
-                <ListSubheader component="div">Projektleiter</ListSubheader>
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>{project.data.project_lead?.firstname[0]}{project.data.project_lead?.lastname[0]}</Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={`${project.data.project_lead?.firstname} ${project.data.project_lead?.lastname}`} secondary={project.data.project_lead?.email} />
-                </ListItem>
-                <ListSubheader component="div">Stellv. Projektleiter</ListSubheader>
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>{project.data.sub_project_lead?.firstname[0]}{project.data.sub_project_lead?.lastname[0]}</Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={`${project.data.sub_project_lead?.firstname} ${project.data.sub_project_lead?.lastname}`} secondary={project.data.sub_project_lead?.email} />
-                </ListItem>
-                <ListSubheader component="div">Projektteam</ListSubheader>
-                <ListItem>
-                  <AvatarGroup max={6}>
-                    {project.data.team.map(teamUser => (
-                      <Tooltip title={`${teamUser.firstname} ${teamUser.lastname}`}>
-                        <Avatar>{teamUser.firstname[0]}{teamUser.lastname[0]}</Avatar>
-                      </Tooltip>
-                    ))}
-                  </AvatarGroup>
-                </ListItem> 
-              </List>
-            </Card>
+            <>
+              <Card>
+                <List>
+                  <ListSubheader component="div">Projektleiter</ListSubheader>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>{project.data.project_lead?.firstname[0]}{project.data.project_lead?.lastname[0]}</Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={`${project.data.project_lead?.firstname} ${project.data.project_lead?.lastname}`} secondary={project.data.project_lead?.email} />
+                  </ListItem>
+                  <ListSubheader component="div">Stellv. Projektleiter</ListSubheader>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>{project.data.sub_project_lead?.firstname[0]}{project.data.sub_project_lead?.lastname[0]}</Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={`${project.data.sub_project_lead?.firstname} ${project.data.sub_project_lead?.lastname}`} secondary={project.data.sub_project_lead?.email} />
+                  </ListItem>
+                  <ListSubheader component="div">Projektteam</ListSubheader>
+                  <ListItem>
+                    <AvatarGroup max={6}>
+                      {project.data.team.map(teamUser => (
+                        <Tooltip title={`${teamUser.firstname} ${teamUser.lastname}`}>
+                          <Avatar>{teamUser.firstname[0]}{teamUser.lastname[0]}</Avatar>
+                        </Tooltip>
+                      ))}
+                    </AvatarGroup>
+                  </ListItem> 
+                </List>
+              </Card>
+              <Card sx={{ marginTop: 2}}>
+                <List>
+                  <ListSubheader component="div">Projekt Berwertungen</ListSubheader>
+                  {project.data.rates.map((rate) => (
+                    <ListItem>
+                      <Stack>
+                        <Typography component="legend">{rate.user.firstname} {rate.user.lastname}</Typography>
+                        <Rating value={rate.rate} readOnly />
+                      </Stack>
+                    </ListItem>
+                  ))}
+                </List>
+              </Card>
+            </>
             : null
           }
         </Grid>
       </Grid>
       {openDeleteDialog && project.state === 'success' ? <SubmitDeleteDialog openDialog={openDeleteDialog} handleClose={() => setOpenDeleteDialog(false)} projectId={project.data.id} /> : null}
       {openAddProjectDialog && project.state === 'success' ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} project={project.data} /> : null}
+      {openRateProjectDialog && project.state === 'success' ? <RateProjectDialog openDialog={openRateProjectDialog} handleClose={() => setOpenRateProjectDialog(false)} projectId={project.data.id} /> : null}
     </StandardLayout>
   )
 }
