@@ -268,24 +268,9 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                     }
                     getOptionLabel={(option) => option && typeof option !== 'string' ? option.firstname + ' ' + option.lastname : ''}
                     loading={isLoadingUsers}
-                    onChange={(event, value) => {
-                      if (value && Array.isArray(value) && value.length > 0) {
-                        if (typeof value[0] === 'string') {
-                          // Behandeln Sie den Fall, dass das Team ein Array von Strings ist
-                          setProjectTeam(value.map((item) => item && item.id ? item.id : ""))
-                        } else {
-                          // Behandeln Sie den Fall, dass das Team ein Array von Team-Objekten ist
-                          setProjectFormData({
-                            ...projectFormData,
-                            team: value as Team[]
-                          });
-                        }
-                      } else {
-                        setProjectFormData({
-                          ...projectFormData,
-                          team: []
-                        });
-                      }
+                    onChange={(event, value) => {setProjectFormData({...projectFormData,
+                      team: value as Team[]
+                    });
                     }}
                     renderInput={params => 
                       <TextField 
