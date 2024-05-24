@@ -224,6 +224,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                   getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
                   loading={isLoadingUsers}
                   onChange={(event, value) => setProjectTeam(value.map((item) => item.id))}
+                  disableCloseOnSelect
                   renderInput={params => 
                     <TextField 
                       {...params} 

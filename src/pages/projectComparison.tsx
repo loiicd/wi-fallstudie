@@ -11,6 +11,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
+import { Box, CircularProgress } from '@mui/material'
 
 const ProjectComparisonPage = () => {
   const [urlParams, setUrlParams] = useSearchParams()
@@ -52,6 +53,7 @@ const ProjectComparisonPage = () => {
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <Autocomplete 
+              disableClearable
               value={firstProject}
               options={projects.data}
               getOptionKey={option => option.id}
@@ -81,6 +83,7 @@ const ProjectComparisonPage = () => {
           </Grid>
           <Grid item xs={4}>
             <Autocomplete 
+              disableClearable
               value={secondProject}
               options={projects.data}
               getOptionKey={option => option.id}
@@ -109,6 +112,7 @@ const ProjectComparisonPage = () => {
           </Grid>
           <Grid item xs={4}>
             <Autocomplete 
+              disableClearable
               value={thirdProject}
               options={projects.data}
               getOptionKey={option => option.id}
@@ -136,7 +140,11 @@ const ProjectComparisonPage = () => {
             }
           </Grid>
         </Grid>
-        : null
+        : projects.state === 'loading' ? 
+        <Box sx={{ width: '100%', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <CircularProgress />
+        </Box>
+        : 'error'
         }
     </StandardLayout>    
   )
