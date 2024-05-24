@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -11,9 +11,11 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
-import { Box, CircularProgress, Rating } from '@mui/material'
+import { Box, CircularProgress, IconButton, Rating } from '@mui/material'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 
 const ProjectComparisonPage = () => {
+  const navigate = useNavigate()
   const [urlParams, setUrlParams] = useSearchParams()
 
   const firstProjectId = urlParams.get('firstProject')
@@ -63,7 +65,8 @@ const ProjectComparisonPage = () => {
               onChange={(event, newValue) => handleChangeSelect('firstProject', newValue?.id)}
             />
             {firstProject ?
-              <Card sx={{ marginTop: 4 }}>
+              <Card sx={{ marginTop: 4, position: 'relative' }}>
+                <IconButton sx={{ position: 'absolute', right: 0, margin: 1 }} onClick={() => navigate(`/project/${firstProject.id}`)}><OpenInNewIcon /></IconButton>
                 <CardContent sx={{ textAlign: 'center' }}>
                   <Typography variant='h6'>{firstProject.title}</Typography>
                   <Divider sx={{ margin: 4 }} />
@@ -94,7 +97,8 @@ const ProjectComparisonPage = () => {
               onChange={(event, newValue) => handleChangeSelect('secondProject', newValue?.id)}
             />
             {secondProject ?
-              <Card sx={{ marginTop: 4 }}>
+              <Card sx={{ marginTop: 4, position: 'relative' }}>
+                <IconButton sx={{ position: 'absolute', right: 0, margin: 1 }} onClick={() => navigate(`/project/${secondProject.id}`)}><OpenInNewIcon /></IconButton>
                 <CardContent sx={{ textAlign: 'center' }}>
                   <Typography variant='h6'>{secondProject.title}</Typography>
                   <Divider sx={{ margin: 4 }} />
@@ -125,7 +129,8 @@ const ProjectComparisonPage = () => {
               onChange={(event, newValue) => handleChangeSelect('thirdProject', newValue?.id)}
             />
              {thirdProject ?
-              <Card sx={{ marginTop: 4 }}>
+              <Card sx={{ marginTop: 4, position: 'relative' }}>
+                <IconButton sx={{ position: 'absolute', right: 0, margin: 1 }} onClick={() => navigate(`/project/${thirdProject.id}`)}><OpenInNewIcon /></IconButton>
                 <CardContent sx={{ textAlign: 'center' }}>
                   <Typography variant='h6'>{thirdProject.title}</Typography>
                   <Divider sx={{ margin: 4 }} />
