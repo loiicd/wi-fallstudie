@@ -62,7 +62,7 @@ const DashboardPage = () => {
       </RoleProvider>
 
       <Typography variant='h6' sx={{ marginTop: 4 }}>Übersicht</Typography>
-      {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => navigate('/project/')} /> : null}
+      {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
     </StandardLayout>
   )
 }

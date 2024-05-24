@@ -118,14 +118,14 @@ const ProjectPage = () => {
                   <ListItemAvatar>
                     <Avatar>{project.data.project_lead?.firstname[0]}{project.data.project_lead?.lastname[0]}</Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={`${project.data.project_lead?.firstname} ${project.data.project_lead?.lastname}`} secondary={project.data.project_lead?.type} />
+                  <ListItemText primary={`${project.data.project_lead?.firstname} ${project.data.project_lead?.lastname}`} secondary={project.data.project_lead?.email} />
                 </ListItem>
                 <ListSubheader component="div">Stellv. Projektleiter</ListSubheader>
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar>{project.data.sub_project_lead?.firstname[0]}{project.data.sub_project_lead?.lastname[0]}</Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={`${project.data.sub_project_lead?.firstname} ${project.data.sub_project_lead?.lastname}`} secondary={project.data.sub_project_lead?.type} />
+                  <ListItemText primary={`${project.data.sub_project_lead?.firstname} ${project.data.sub_project_lead?.lastname}`} secondary={project.data.sub_project_lead?.email} />
                 </ListItem>
                 <ListSubheader component="div">Projektteam</ListSubheader>
                 {project.data.team.map(teamUser => (
@@ -133,7 +133,7 @@ const ProjectPage = () => {
                     <ListItemAvatar>
                       <Avatar>{teamUser.firstname[0]}{teamUser.lastname[0]}</Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={`${teamUser.firstname} ${teamUser.lastname}`} secondary={teamUser.role} />
+                    <ListItemText primary={`${teamUser.firstname} ${teamUser.lastname}`} secondary={teamUser.email} />
                   </ListItem> 
                 ))}
               </List>
