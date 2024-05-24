@@ -27,6 +27,7 @@ import MenuItem from '@mui/material/MenuItem'
 import LoadingButton from '@mui/lab/LoadingButton'
 import dayjs from 'dayjs'
 import Cookies from 'js-cookie'
+import { Typography } from '@mui/material'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -218,33 +219,37 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                   } 
                 />
               </Grid>
-              <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
-                <Autocomplete 
-                  getOptionKey={(option) => option.id}
-                  multiple
-                  options={users} 
-                  getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
-                  loading={isLoadingUsers}
-                  onChange={(event, value) => setProjectTeam(value.map((item) => item.id))}
-                  renderInput={params => 
-                    <TextField 
-                      {...params} 
-                      label="Projektteam" 
-                      size='small' 
-                      sx={{ width: '100%'}} 
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                          <>
-                            {isLoadingUsers ? <CircularProgress color="inherit" size={20} /> : null}
-                            {params.InputProps.endAdornment}
-                          </>
-                        ),
-                      }}
-                    />
-                  }
-                />
-              </Grid>
+              {!projectFormData.id ?
+                <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
+                  <Autocomplete 
+                    getOptionKey={(option) => option.id}
+                    multiple
+                    options={users} 
+                    getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
+                    loading={isLoadingUsers}
+                    onChange={(event, value) => setProjectTeam(value.map((item) => item.id))}
+                    renderInput={params => 
+                      <TextField 
+                        {...params} 
+                        label="Projektteam" 
+                        size='small' 
+                        sx={{ width: '100%'}} 
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <>
+                              {isLoadingUsers ? <CircularProgress color="inherit" size={20} /> : null}
+                              {params.InputProps.endAdornment}
+                            </>
+                          ),
+                        }}
+                      />
+                    }
+                  />
+                </Grid>
+              : 
+                <Typography variant='body1' sx={{ marginY: 2 }}>Projektteam kann nur beim Erstellen eines neuen Projekts hinzugefügt werden</Typography>
+              }
             </Grid>
           </TabPanel>
           <TabPanel value='3'>
