@@ -13,6 +13,8 @@ import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
 import { ApiResponse } from '../types/apiResponse'
 import { useNavigate } from 'react-router-dom'
+import Typography from '@mui/material/Typography'
+import Rating from '@mui/material/Rating'
 
 const columns: GridColDef<(any)[number]>[] = [
   {
@@ -59,6 +61,19 @@ const columns: GridColDef<(any)[number]>[] = [
     editable: false,
     renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.lastname : '',
   },
+  {
+    field: 'rates',
+    headerName: 'Bewertung',
+    width: 150,
+    editable: false,
+    renderCell: (params) => {
+      const rates = params.value
+      if (rates.length !== 0) {
+        const averageRate = rates.reduce((sum: any, rate: any) => sum + rate.rate, 0) / rates.length
+        return (<Rating value={averageRate} readOnly precision={0.1} />)
+      }
+    }
+  }
 ]
 
 export default function ProjectsTable() {

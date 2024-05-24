@@ -11,7 +11,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
-import { Box, CircularProgress } from '@mui/material'
+import { Box, CircularProgress, Rating } from '@mui/material'
 
 const ProjectComparisonPage = () => {
   const [urlParams, setUrlParams] = useSearchParams()
@@ -76,6 +76,8 @@ const ProjectComparisonPage = () => {
                   <Typography variant='h6'>{firstProject.project_lead ? `${firstProject.project_lead.firstname} ${firstProject.project_lead.lastname}` : '-' }</Typography>
                   <Typography variant='overline'>Stellv. Projektleiter</Typography>
                   <Typography variant='h6'>{firstProject.sub_project_lead ? `${firstProject.sub_project_lead.firstname} ${firstProject.sub_project_lead.lastname}` : '-' }</Typography>
+                  <Divider sx={{ margin: 4 }} />
+                  <Rating value={firstProject.rates.reduce((sum, rate) => sum + rate.rate, 0) / firstProject.rates.length} readOnly precision={0.1} />
                 </CardContent>
               </Card>
               : null
@@ -105,6 +107,8 @@ const ProjectComparisonPage = () => {
                   <Typography variant='h6'>{secondProject.project_lead ? `${secondProject.project_lead.firstname} ${secondProject.project_lead.lastname}` : '-' }</Typography>
                   <Typography variant='overline'>Stellv. Projektleiter</Typography>
                   <Typography variant='h6'>{secondProject.sub_project_lead ? `${secondProject.sub_project_lead.firstname} ${secondProject.sub_project_lead.lastname}` : '-' }</Typography>
+                  <Divider sx={{ margin: 4 }} />
+                  <Rating value={secondProject.rates.reduce((sum, rate) => sum + rate.rate, 0) / secondProject.rates.length} readOnly precision={0.1} />
                 </CardContent>
               </Card>
               : null
@@ -134,6 +138,8 @@ const ProjectComparisonPage = () => {
                   <Typography variant='h6'>{thirdProject.project_lead ? `${thirdProject.project_lead.firstname} ${thirdProject.project_lead.lastname}` : '-' }</Typography>
                   <Typography variant='overline'>Stellv. Projektleiter</Typography>
                   <Typography variant='h6'>{thirdProject.sub_project_lead ? `${thirdProject.sub_project_lead.firstname} ${thirdProject.sub_project_lead.lastname}` : '-' }</Typography>
+                  <Divider sx={{ margin: 4 }} />
+                  <Rating value={thirdProject.rates.reduce((sum, rate) => sum + rate.rate, 0) / thirdProject.rates.length} readOnly precision={0.1} />
                 </CardContent>
               </Card>
               : null
