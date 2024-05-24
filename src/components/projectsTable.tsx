@@ -69,12 +69,20 @@ export default function ProjectsTable() {
   const [openEditProjectDialog, setOpenEditProjectDialog] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
+  const [searchedProjects, setSearchedProjects] = useState<Project[]>([])
 
   useEffect(() => {
     getProjects()
       .then(projects => setProjects({ state: 'success', data: projects}))
       .catch(error => setProjects({ state: 'error', message: error}))
-  }, [searchTerm, openAddProjectDialog, openProjectDetailDialog, openEditProjectDialog])
+  }, [openAddProjectDialog, openProjectDetailDialog, openEditProjectDialog])
+
+  useEffect(() => {
+    if (projects.state === 'success') {
+      const filteredProjects = projects.data.filter(project => project.title.includes(searchTerm))
+      setSearchedProjects(filteredProjects)
+    }
+  }, [searchTerm, projects])
 
   const handleCellClick = (project: any) => {
     setProject(project)
@@ -102,7 +110,7 @@ export default function ProjectsTable() {
         <DataGrid
           loading={projects.state === 'loading'}
           sx={{ minHeight: 50}}
-          rows={projects.state === 'success' ? projects.data : []}
+          rows={projects.state === 'success' ? searchedProjects : []}
           columns={columns}
           onCellClick={(params) => handleCellClick(params.row)}
           pageSizeOptions={[5, 10, 15]}
