@@ -14,9 +14,9 @@ export type Project = {
   start_date?: string
   end_date?: string
   project_lead?: User
-  project_lead_id?: string
+  project_lead_id?: string // NOT FOR USE
   sub_project_lead?: User
-  sub_project_lead_id?: string
+  sub_project_lead_id?: string // NOT FOR USE
   short_description?: string
   target_description?: string
   vision_description?: string

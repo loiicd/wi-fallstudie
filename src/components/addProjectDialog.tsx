@@ -194,6 +194,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               <Grid item xs={6}>
                 <Autocomplete 
                   options={users} 
+                  value={projectFormData.sub_project_lead_id ? users.find(user => user.id === projectFormData.sub_project_lead_id) : (projectFormData.sub_project_lead && users.find(user => user === projectFormData.sub_project_lead)) || null}
                   getOptionKey={(option) => option.id}
                   getOptionLabel={option => option.firstname + ' ' + option.lastname}
                   loading={isLoadingUsers}
