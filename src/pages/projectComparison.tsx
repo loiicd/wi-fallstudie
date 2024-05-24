@@ -52,6 +52,7 @@ const ProjectComparisonPage = () => {
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <Autocomplete 
+              disableClearable
               value={firstProject}
               options={projects.data}
               getOptionKey={option => option.id}
@@ -81,6 +82,7 @@ const ProjectComparisonPage = () => {
           </Grid>
           <Grid item xs={4}>
             <Autocomplete 
+              disableClearable
               value={secondProject}
               options={projects.data}
               getOptionKey={option => option.id}
@@ -109,6 +111,7 @@ const ProjectComparisonPage = () => {
           </Grid>
           <Grid item xs={4}>
             <Autocomplete 
+              disableClearable
               value={thirdProject}
               options={projects.data}
               getOptionKey={option => option.id}
