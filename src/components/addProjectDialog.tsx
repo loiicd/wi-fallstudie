@@ -58,8 +58,8 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
         .then(() => handleClose())
         .catch(error => alert(error))
         .finally(() => setIsSavingProject(false))
+      console.log('update complete')
     } else if (projectFormData.title !== '') {
-      console.log('... new project')
       postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
         .then(() => handleClose())
         .catch(error => alert(error))
