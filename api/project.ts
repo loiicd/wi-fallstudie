@@ -1,5 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import { sql } from '@vercel/postgres'
+import { log } from 'console'
 import { v4 as uuidv4 } from 'uuid'
 
 const handler = async (request: VercelRequest, response: VercelResponse) => {
@@ -45,11 +46,14 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
   if (request.body.id) {
     const project = request.body
     try {
+      console.log('project to update', project)
       await sql`UPDATE project SET status = ${project.status}, title = ${project.title}, start_date = ${project.start_date}, end_date = ${project.end_date}, project_lead_id = ${project.project_lead_id}, sub_project_lead_id = ${project.sub_project_lead_id}, short_description = ${project.short_description}, target_description = ${project.target_description}, vision_description = ${project.vision_description}, problem_description = ${project.problem_description} WHERE id = ${project.id}`
+      console.log('project updated')
+      console.log('team', project.team)
       for (const teamMember of project.team) {
         await sql`UPDATE project_user_rel SET role = ${teamMember.role} WHERE project_id = ${project.id} AND user_id = ${teamMember.id}`
       }
-  
+      console.log('team updated')
       return response.status(200).send('Updated')
     } catch (error) {
       console.error(error)
