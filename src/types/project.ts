@@ -9,7 +9,7 @@ export type Project = {
   id: string
   status: ProjectType
   title: string
-  created_from: User,
+  created_from: string,
   created_at: string
   start_date?: string
   end_date?: string

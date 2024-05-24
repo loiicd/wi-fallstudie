@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -18,6 +18,57 @@ import ModeIcon from '@mui/icons-material/Mode'
 import SubmitDeleteDialog from '../components/submitDeleteDialog'
 import AddProjectDialog from '../components/addProjectDialog'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
+import { ProjectRole, User } from '../types/user'
+import Cookies from 'js-cookie'
+
+interface HeroActionsProps {
+  project: ApiResponse<Project>
+  handleDelete: () => void
+  handleOpenAddProjectDialog: () => void
+}
+
+const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelete, handleOpenAddProjectDialog }) => {
+  const navigate = useNavigate()
+  const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
+
+  useEffect(() => {
+    const userCookie = Cookies.get('user')
+    if (userCookie) {
+      const [id, firstname, lastname, email, type] = userCookie.split('|')
+      setActiveUser({ id, firstname, lastname, email, title: undefined, type: type as ProjectRole })
+    } 
+  }, [])
+
+  console.log('Project', project)
+  console.log(activeUser)
+
+  return (
+    <Stack direction='row' gap={2} alignItems='center'>
+      <ButtonGroup variant='contained'>
+        <Tooltip title='Projekt vergleichen'>
+          <Button 
+            disabled={project.state !== 'success'}
+            onClick={() => navigate(`/project/comparison?firstProject=${project.state === 'success' ? project.data.id : null}`)}
+          >
+            <CompareArrowsIcon />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
+      <ButtonGroup variant='contained' disabled={project.state !== 'success' || project.data.created_from !== activeUser?.id}>
+        <Tooltip title='Bearbeiten'>
+          <Button onClick={handleOpenAddProjectDialog}>
+            <ModeIcon />
+          </Button>
+        </Tooltip>
+        <Tooltip title='Löschen'>
+          <Button onClick={handleDelete}>
+            <DeleteIcon />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
+    </Stack>
+  )
+}
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -42,32 +93,7 @@ const ProjectPage = () => {
   return (  
     <StandardLayout 
       heroTitle={project.state === 'success' ? project.data.title : '...'}
-      heroActions={
-        <Stack direction='row' gap={2} alignItems='center'>
-          <ButtonGroup variant='contained'>
-            <Tooltip title='Projekt vergleichen'>
-              <Button 
-                disabled={project.state !== 'success'}
-                onClick={() => navigate(`/project/comparison?firstProject=${project.state === 'success' ? project.data.id : null}`)}
-              >
-                <CompareArrowsIcon />
-              </Button>
-            </Tooltip>
-          </ButtonGroup>
-          <ButtonGroup variant='outlined' disabled={project.state !== 'success'}>
-            <Tooltip title='Bearbeiten'>
-              <Button onClick={() => setOpenAddProjectDialog(true)}>
-                <ModeIcon />
-              </Button>
-            </Tooltip>
-            <Tooltip title='Löschen'>
-              <Button onClick={handleDelete}>
-                <DeleteIcon />
-              </Button>
-            </Tooltip>
-          </ButtonGroup>
-        </Stack>
-      }
+      heroActions={<HeroActions project={project} handleDelete={handleDelete} handleOpenAddProjectDialog={() => setOpenAddProjectDialog(true)} />}
       heroLoading={project.state === 'loading'}
     >
       <Stepper sx={{ marginBottom: 4 }}>
