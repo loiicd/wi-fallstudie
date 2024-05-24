@@ -33,7 +33,7 @@ const ProjectPage = () => {
     } else {
       navigate('/notfound')
     }
-  }, [id, navigate])
+  }, [id, navigate, openAddProjectDialog, openDeleteDialog])
 
   const handleDelete = () => {
     setOpenDeleteDialog(true)
