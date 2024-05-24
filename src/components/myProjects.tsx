@@ -13,7 +13,7 @@ const MyProjects: React.FC<MyProjectsProps> = ({ projects, loadingProjects, card
   
   return (
     <>
-      <Grid container gap={2} columns={4}>
+      <Grid container spacing={2} columns={4}>
         {projects.map((project) => (
           <Grid item xs={1}>
             <Card variant='elevation'>
@@ -29,7 +29,7 @@ const MyProjects: React.FC<MyProjectsProps> = ({ projects, loadingProjects, card
             </Card>
           </Grid>
         ))}
-        {loadingProjects ? [1, 2, 3].map(() => (
+        {loadingProjects ? [1, 2, 3, 4].map(() => (
           <Grid item xs={1}>
             <Skeleton variant="rectangular" height={108} />
           </Grid>

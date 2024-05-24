@@ -5,11 +5,16 @@ export type ProjectType = typeof projectTypes[number]
 
 type Team = User & { role: string }
 
+type ProjectRate = {
+  user: User
+  rate: number
+}
+
 export type Project = {
   id: string
   status: ProjectType
   title: string
-  created_from: User,
+  created_from: string,
   created_at: string
   start_date?: string
   end_date?: string
@@ -19,7 +24,8 @@ export type Project = {
   target_description?: string
   vision_description?: string
   problem_description?: string
-  team: Team[]
+  team: Team[],
+  rates: ProjectRate[]
 }
 
 export type ProjectFormData = {

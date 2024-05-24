@@ -11,7 +11,6 @@ import AddIcon from '@mui/icons-material/Add'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { useNavigate } from 'react-router-dom'
 import AddProjectDialog from '../components/addProjectDialog'
-import ProjectDetailDialog from '../components/projectDetailDialog'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
@@ -24,8 +23,8 @@ const DashboardPage = () => {
   useEffect(() => {
     const userCookie = Cookies.get('user')
     if (userCookie) {
-      const [id, firstname, lastname, type] = userCookie.split('|')
-      setActiveUser({ id, firstname, lastname, title: undefined, type: type as ProjectRole })
+      const [id, firstname, lastname, email, type] = userCookie.split('|')
+      setActiveUser({ id, firstname, lastname, email, title: undefined, type: type as ProjectRole })
     } 
   }, [])
 
@@ -63,7 +62,7 @@ const DashboardPage = () => {
       </RoleProvider>
 
       <Typography variant='h6' sx={{ marginTop: 4 }}>Übersicht</Typography>
-      {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => navigate('/project/')} /> : null}
+      {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
     </StandardLayout>
   )
 }

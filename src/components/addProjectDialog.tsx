@@ -68,8 +68,8 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   useEffect(() => {
     const userCookie = Cookies.get('user')
     if (userCookie) {
-      const [id, firstname, lastname, type] = userCookie.split('|')
-      setActiveUser({ id, firstname, lastname, title: undefined, type: type as ProjectRole})
+      const [id, firstname, lastname, email, type] = userCookie.split('|')
+      setActiveUser({ id, firstname, lastname, email, title: undefined, type: type as ProjectRole})
     } 
   }, [])
 
@@ -224,6 +224,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                   getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
                   loading={isLoadingUsers}
                   onChange={(event, value) => setProjectTeam(value.map((item) => item.id))}
+                  disableCloseOnSelect
                   renderInput={params => 
                     <TextField 
                       {...params} 
