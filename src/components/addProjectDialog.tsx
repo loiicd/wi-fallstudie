@@ -222,12 +222,20 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               {!projectFormData.id ?
                 <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
                   <Autocomplete 
-                    getOptionKey={(option) => option.id}
+                    getOptionKey={(option) => option ? option.id : ''}
                     multiple
-                    options={users} 
-                    getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
+                    options={users}
+                    value={projectTeam.map((id) => users.find((user) => user.id === id))}
+                    getOptionLabel={(option) => option ? option.firstname + ' ' + option.lastname : ''}
                     loading={isLoadingUsers}
-                    onChange={(event, value) => setProjectTeam(value.map((item) => item.id))}
+                    onChange={(event, value) => 
+                      value ? 
+                        setProjectTeam(
+                          value.map((item) => 
+                            item && item.id ?
+                              item.id : "")) 
+                              : setProjectTeam([])
+                    }
                     renderInput={params => 
                       <TextField 
                         {...params} 
