@@ -109,7 +109,7 @@ export default function ProjectsTable() {
         </Stack>
         <DataGrid
           loading={projects.state === 'loading'}
-          sx={{ minHeight: 50}}
+          autoHeight
           rows={projects.state === 'success' ? searchedProjects : []}
           columns={columns}
           onCellClick={(params) => handleCellClick(params.row)}
