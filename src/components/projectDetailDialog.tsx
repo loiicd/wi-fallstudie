@@ -7,7 +7,7 @@ import PageviewOutlinedIcon from '@mui/icons-material/PageviewOutlined';
 import { FunctionComponent, useState } from "react"
 import { Project } from "../types/project"
 import RoleProvider from "./RoleProvider"
-import { deleteProject, updateProject } from "../services/projects"
+import { deleteProject } from "../services/projects"
 import { LoadingButton } from "@mui/lab"
 import { useNavigate } from 'react-router-dom'
 
@@ -25,7 +25,7 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
 
   const handleDeletePress = (project: Project) => {
     setIsDeletingProject(true)
-    deleteProject(project)
+    deleteProject(project.id)
     .then(() => {
       setIsUpdatingProject(false)
       handleClose()

@@ -12,12 +12,19 @@ import ListItemText from '@mui/material/ListItemText'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Avatar, Button, CardContent, ListItemAvatar, ListSubheader, Stack, Typography } from '@mui/material'
+import { Avatar, Button, ButtonGroup, CardContent, ListItemAvatar, ListSubheader, Stack, Tooltip, Typography } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+import ModeIcon from '@mui/icons-material/Mode'
+import SubmitDeleteDialog from '../components/submitDeleteDialog'
+import AddProjectDialog from '../components/addProjectDialog'
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const [project, setProject] = useState<ApiResponse<Project>>({ state: 'loading' })
+  const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
+  const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
 
   useEffect(() => {
     if (id) {
@@ -26,15 +33,39 @@ const ProjectPage = () => {
     } else {
       navigate('/notfound')
     }
-  })
+  }, [id, navigate])
+
+  const handleDelete = () => {
+    setOpenDeleteDialog(true)
+  }
 
   return (  
     <StandardLayout 
       heroTitle={project.state === 'success' ? project.data.title : '...'}
       heroActions={
         <Stack direction='row' gap={2} alignItems='center'>
-          <Button variant='contained' disabled>Bearbeiten</Button>
-          <Button variant='contained' disabled>Löschen</Button>
+          <ButtonGroup variant='contained'>
+            <Tooltip title='Projekt vergleichen'>
+              <Button 
+                disabled={project.state !== 'success'}
+                onClick={() => navigate(`/project/comparison?firstProject=${project.state === 'success' ? project.data.id : null}`)}
+              >
+                <CompareArrowsIcon />
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
+          <ButtonGroup variant='outlined' disabled={project.state !== 'success'}>
+            <Tooltip title='Bearbeiten'>
+              <Button onClick={() => setOpenAddProjectDialog(true)}>
+                <ModeIcon />
+              </Button>
+            </Tooltip>
+            <Tooltip title='Löschen'>
+              <Button onClick={handleDelete}>
+                <DeleteIcon />
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
         </Stack>
       }
       heroLoading={project.state === 'loading'}
@@ -108,9 +139,11 @@ const ProjectPage = () => {
               </List>
             </Card>
             : null
-        }
+          }
         </Grid>
       </Grid>
+      {openDeleteDialog && project.state === 'success' ? <SubmitDeleteDialog openDialog={openDeleteDialog} handleClose={() => setOpenDeleteDialog(false)} projectId={project.data.id} /> : null}
+      {openAddProjectDialog && project.state === 'success' ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} project={project.data} /> : null}
     </StandardLayout>
   )
 }

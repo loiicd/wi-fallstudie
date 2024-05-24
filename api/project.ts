@@ -20,17 +20,17 @@ const handleGet = async (request: VercelRequest, response: VercelResponse) => {
 
     for (const data of result.rows) {
       const team = await sql`
-        SELECT id, firstname, lastname, title
+        SELECT *
         FROM "user"
         LEFT JOIN project_user_rel ON "user".id = user_id
         WHERE project_id = ${data.id}`
       
       data.team = team.rows
       if (data.project_lead_id) {
-        data.project_lead = (await sql`SELECT id, firstname, lastname, title FROM "user" WHERE id = ${data.project_lead_id}`).rows[0]
+        data.project_lead = (await sql`SELECT * FROM "user" WHERE id = ${data.project_lead_id}`).rows[0]
       }
       if (data.sub_project_lead_id) {
-        data.sub_project_lead = (await sql`SELECT id, firstname, lastname, title FROM "user" WHERE id = ${data.sub_project_lead_id}`).rows[0]
+        data.sub_project_lead = (await sql`SELECT * FROM "user" WHERE id = ${data.sub_project_lead_id}`).rows[0]
       }
     }
 
@@ -70,8 +70,9 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
 }
 
 const handleDelete = async (request: VercelRequest, response: VercelResponse) => {
-  const id = request.query.id as string
+  const id = request.body.id as string
   try {
+    await sql`DELETE FROM project_user_rel WHERE project_id = ${id}`
     await sql`DELETE FROM project WHERE id = ${id}`
     return response.status(200).send('Deleted')
   } catch (error) {
