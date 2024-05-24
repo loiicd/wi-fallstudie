@@ -111,11 +111,24 @@ const ProjectPage = () => {
               <Card>
                 <CardContent>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Allgemein</Typography>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Rollen</Typography>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <Typography variant='h6'>Startdatum</Typography>
+                      <Typography>{project.data.start_date ? new Date(project.data.start_date).toLocaleDateString() : '-'}</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant='h6'>Enddatum</Typography>
+                      <Typography>{project.data.end_date ? new Date(project.data.end_date).toLocaleDateString() : '-'}</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant='h6'>Erstellt von</Typography>
+                      <Typography>{project.data.created_from}</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant='h6'>Erstellt am</Typography>
+                      <Typography>{project.data.created_at ? new Date(project.data.created_at).toLocaleDateString() : '-'}</Typography>
+                    </Grid>
+                  </Grid>
                 </CardContent>
               </Card>
               <Card>
