@@ -12,7 +12,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Avatar, Button, ButtonGroup, CardContent, ListItemAvatar, ListSubheader, Stack, Tooltip, Typography } from '@mui/material'
+import { Avatar, AvatarGroup, Button, ButtonGroup, CardContent, ListItemAvatar, ListSubheader, Stack, Tooltip, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ModeIcon from '@mui/icons-material/Mode'
 import SubmitDeleteDialog from '../components/submitDeleteDialog'
@@ -167,14 +167,15 @@ const ProjectPage = () => {
                   <ListItemText primary={`${project.data.sub_project_lead?.firstname} ${project.data.sub_project_lead?.lastname}`} secondary={project.data.sub_project_lead?.email} />
                 </ListItem>
                 <ListSubheader component="div">Projektteam</ListSubheader>
-                {project.data.team.map(teamUser => (
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>{teamUser.firstname[0]}{teamUser.lastname[0]}</Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={`${teamUser.firstname} ${teamUser.lastname}`} secondary={teamUser.email} />
-                  </ListItem> 
-                ))}
+                <ListItem>
+                  <AvatarGroup max={6}>
+                    {project.data.team.map(teamUser => (
+                      <Tooltip title={`${teamUser.firstname} ${teamUser.lastname}`}>
+                        <Avatar>{teamUser.firstname[0]}{teamUser.lastname[0]}</Avatar>
+                      </Tooltip>
+                    ))}
+                  </AvatarGroup>
+                </ListItem> 
               </List>
             </Card>
             : null
