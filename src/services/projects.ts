@@ -16,7 +16,6 @@ export const postProject = async (projectFormData: ProjectFormData): Promise<voi
 }
 
 export const updateProject = async (project: Project): Promise<void> => {
-  console.log('services/projects.ts/updateProject()')
   await axios.post('/api/project', project)
 }
 

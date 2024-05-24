@@ -50,15 +50,11 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
 
   const handleSave = () => {
     setIsSavingProject(true)
-    console.log('saving project... ')
     if (projectFormData.id) {
-      console.log('updating project')
-      console.log(projectFormData)
       updateProject(projectFormData as Project)
         .then(() => handleClose())
         .catch(error => alert(error))
         .finally(() => setIsSavingProject(false))
-      console.log('update complete')
     } else if (projectFormData.title !== '') {
       postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
         .then(() => handleClose())

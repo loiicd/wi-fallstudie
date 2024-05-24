@@ -55,17 +55,7 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
       const membersToRemove = [...currentTeamMemberSet].filter(member => !newTeamMemberSet.has(member))
 
       for (const memberId of membersToAdd) {
-        console.log('api/project.ts/handlePost() L58')
-        console.log('memberId', memberId)
-        if (typeof memberId === 'string') {
-          console.log('memberId', memberId)
-          console.log('string YES')
-        await sql`INSERT INTO project_user_rel (project_id, user_id, role) VALUES (${project.id}, ${memberId}, ${null})`
-        }
-        else {
-          console.log('memberId', memberId)
-          console.log('string NO')
-        }
+        if (typeof memberId === 'string') {await sql`INSERT INTO project_user_rel (project_id, user_id, role) VALUES (${project.id}, ${memberId}, ${null})`}
       }
       for (const memberId of membersToRemove) {
         await sql`DELETE FROM project_user_rel WHERE project_id = ${project.id} AND user_id = ${memberId}`
