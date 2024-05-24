@@ -11,7 +11,7 @@ const handler = async (request: VercelRequest, response: VercelResponse) => {
 const handleGet = async (request: VercelRequest, response: VercelResponse) => {
   const userId = request.query.id as string
   try {
-    const result = await sql`SELECT id, firstname, lastname, title, type FROM "user" WHERE id = ${userId}`
+    const result = await sql`SELECT * FROM "user" WHERE id = ${userId}`
     return response.send(JSON.stringify(result.rows))
   } catch (error) {
     console.error(error)
