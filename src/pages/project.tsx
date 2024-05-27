@@ -23,7 +23,6 @@ import Cookies from 'js-cookie'
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 import RateProjectDialog from '../components/rateProjectDialog'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import AddIcon from '@mui/icons-material/Add'
 
 interface HeroActionsProps {
   project: ApiResponse<Project>

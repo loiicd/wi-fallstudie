@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -7,15 +7,10 @@ import { useEffect, useState } from 'react'
 import { getProjects } from '../services/projects'
 import { ApiResponse } from '../types/apiResponse'
 import { Project } from '../types/project'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
-import Divider from '@mui/material/Divider'
-import { Box, CircularProgress, IconButton, Rating } from '@mui/material'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import { Box, CircularProgress } from '@mui/material'
+import CompareCard from '../components/compareCard'
 
 const ProjectComparisonPage = () => {
-  const navigate = useNavigate()
   const [urlParams, setUrlParams] = useSearchParams()
 
   const firstProjectId = urlParams.get('firstProject')
@@ -64,27 +59,7 @@ const ProjectComparisonPage = () => {
               renderInput={(params) => <TextField {...params} />}
               onChange={(event, newValue) => handleChangeSelect('firstProject', newValue?.id)}
             />
-            {firstProject ?
-              <Card sx={{ marginTop: 4, position: 'relative' }}>
-                <IconButton sx={{ position: 'absolute', right: 0, margin: 1 }} onClick={() => navigate(`/project/${firstProject.id}`)}><OpenInNewIcon /></IconButton>
-                <CardContent sx={{ textAlign: 'center' }}>
-                  <Typography variant='h6'>{firstProject.title}</Typography>
-                  <Divider sx={{ margin: 4 }} />
-                  <Typography variant='overline'>Startdatum</Typography>
-                  <Typography variant='h6'>{firstProject.start_date ? new Date(firstProject.start_date).toLocaleDateString() : '-'}</Typography>
-                  <Typography variant='overline'>Enddatum</Typography>
-                  <Typography variant='h6'>{firstProject.end_date ? new Date(firstProject.end_date).toLocaleDateString() : '-'}</Typography>
-                  <Divider sx={{ margin: 4 }} />
-                  <Typography variant='overline'>Projektleiter</Typography>
-                  <Typography variant='h6'>{firstProject.project_lead ? `${firstProject.project_lead.firstname} ${firstProject.project_lead.lastname}` : '-' }</Typography>
-                  <Typography variant='overline'>Stellv. Projektleiter</Typography>
-                  <Typography variant='h6'>{firstProject.sub_project_lead ? `${firstProject.sub_project_lead.firstname} ${firstProject.sub_project_lead.lastname}` : '-' }</Typography>
-                  <Divider sx={{ margin: 4 }} />
-                  <Rating value={firstProject.rates.reduce((sum, rate) => sum + rate.rate, 0) / firstProject.rates.length} readOnly precision={0.1} />
-                </CardContent>
-              </Card>
-              : null
-            }
+            {firstProject ? <CompareCard project={firstProject} /> : null}
           </Grid>
           <Grid item xs={4}>
             <Autocomplete 
@@ -96,27 +71,7 @@ const ProjectComparisonPage = () => {
               renderInput={(params) => <TextField {...params} />} 
               onChange={(event, newValue) => handleChangeSelect('secondProject', newValue?.id)}
             />
-            {secondProject ?
-              <Card sx={{ marginTop: 4, position: 'relative' }}>
-                <IconButton sx={{ position: 'absolute', right: 0, margin: 1 }} onClick={() => navigate(`/project/${secondProject.id}`)}><OpenInNewIcon /></IconButton>
-                <CardContent sx={{ textAlign: 'center' }}>
-                  <Typography variant='h6'>{secondProject.title}</Typography>
-                  <Divider sx={{ margin: 4 }} />
-                  <Typography variant='overline'>Startdatum</Typography>
-                  <Typography variant='h6'>{secondProject.start_date ? new Date(secondProject.start_date).toLocaleDateString() : '-'}</Typography>
-                  <Typography variant='overline'>Enddatum</Typography>
-                  <Typography variant='h6'>{secondProject.end_date ? new Date(secondProject.end_date).toLocaleDateString() : '-'}</Typography>
-                  <Divider sx={{ margin: 4 }} />
-                  <Typography variant='overline'>Projektleiter</Typography>
-                  <Typography variant='h6'>{secondProject.project_lead ? `${secondProject.project_lead.firstname} ${secondProject.project_lead.lastname}` : '-' }</Typography>
-                  <Typography variant='overline'>Stellv. Projektleiter</Typography>
-                  <Typography variant='h6'>{secondProject.sub_project_lead ? `${secondProject.sub_project_lead.firstname} ${secondProject.sub_project_lead.lastname}` : '-' }</Typography>
-                  <Divider sx={{ margin: 4 }} />
-                  <Rating value={secondProject.rates.reduce((sum, rate) => sum + rate.rate, 0) / secondProject.rates.length} readOnly precision={0.1} />
-                </CardContent>
-              </Card>
-              : null
-            }
+            {secondProject ? <CompareCard project={secondProject} /> : null}
           </Grid>
           <Grid item xs={4}>
             <Autocomplete 
@@ -128,27 +83,7 @@ const ProjectComparisonPage = () => {
               renderInput={(params) => <TextField {...params} />}
               onChange={(event, newValue) => handleChangeSelect('thirdProject', newValue?.id)}
             />
-             {thirdProject ?
-              <Card sx={{ marginTop: 4, position: 'relative' }}>
-                <IconButton sx={{ position: 'absolute', right: 0, margin: 1 }} onClick={() => navigate(`/project/${thirdProject.id}`)}><OpenInNewIcon /></IconButton>
-                <CardContent sx={{ textAlign: 'center' }}>
-                  <Typography variant='h6'>{thirdProject.title}</Typography>
-                  <Divider sx={{ margin: 4 }} />
-                  <Typography variant='overline'>Startdatum</Typography>
-                  <Typography variant='h6'>{thirdProject.start_date ? new Date(thirdProject.start_date).toLocaleDateString() : '-'}</Typography>
-                  <Typography variant='overline'>Enddatum</Typography>
-                  <Typography variant='h6'>{thirdProject.end_date ? new Date(thirdProject.end_date).toLocaleDateString() : '-'}</Typography>
-                  <Divider sx={{ margin: 4 }} />
-                  <Typography variant='overline'>Projektleiter</Typography>
-                  <Typography variant='h6'>{thirdProject.project_lead ? `${thirdProject.project_lead.firstname} ${thirdProject.project_lead.lastname}` : '-' }</Typography>
-                  <Typography variant='overline'>Stellv. Projektleiter</Typography>
-                  <Typography variant='h6'>{thirdProject.sub_project_lead ? `${thirdProject.sub_project_lead.firstname} ${thirdProject.sub_project_lead.lastname}` : '-' }</Typography>
-                  <Divider sx={{ margin: 4 }} />
-                  <Rating value={thirdProject.rates.reduce((sum, rate) => sum + rate.rate, 0) / thirdProject.rates.length} readOnly precision={0.1} />
-                </CardContent>
-              </Card>
-              : null
-            }
+             {thirdProject ? <CompareCard project={thirdProject} /> : null}
           </Grid>
         </Grid>
         : projects.state === 'loading' ? 
