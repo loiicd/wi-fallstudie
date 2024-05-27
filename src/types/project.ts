@@ -10,6 +10,13 @@ type ProjectRate = {
   rate: number
 }
 
+type ProjectComment = {
+  user: User
+  content: string
+  type: string
+  created_at: string
+}
+
 export type Project = {
   id: string
   status: ProjectType
@@ -28,6 +35,7 @@ export type Project = {
   problem_description?: string
   team: Team[],
   rates: ProjectRate[]
+  comments?: ProjectComment[]
 }
 
 export type ProjectFormData = {
