@@ -38,7 +38,6 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import AddIcon from '@mui/icons-material/Add'
 import { postComment, deleteComment, updateComment } from '../services/comment'
 import { LoadingButton } from '@mui/lab'
-import CommentInput from '../components/commentInput'
 
 interface HeroActionsProps {
   project: ApiResponse<Project>
@@ -236,14 +235,28 @@ const ProjectPage = () => {
                   </Grid>
 
                   {openNewCommentInput || project.data.comments?.length === 0 ? 
-                  <CommentInput
-                    commentContent={commentContent}
-                    setCommentContent={setCommentContent}
-                    handleComment={handleNewComment}
-                    commentSaving={commentSaving}
-                    resetInput={() => {
-                      setOpenNewCommentInput(false);
-                      setCommentContent('');}} />
+                  <>
+                    <Input placeholder={'Kommentar'} 
+                      multiline
+                      rows={4}
+                      fullWidth
+                      sx={{ padding: 2 }}
+                      value={commentContent}
+                      onChange = {(e) => setCommentContent(e.target.value)}
+                      onSubmit={() => handleNewComment(commentContent)}
+                    />
+                    <Grid container justifyContent={'flex-end'} sx={{marginBottom: 2, marginTop: 1}}>
+                    <Grid item>
+                        <Button onClick={() => {
+                          setOpenNewCommentInput(false)
+                          setCommentContent('')
+                        }}>Abbrechen</Button>
+                      </Grid>
+                      <Grid item>
+                        <LoadingButton loading={commentSaving} onClick={() => handleNewComment(commentContent)}>Senden</LoadingButton>
+                      </Grid>
+                    </Grid>
+                  </>
                   : null}
 
                   <Grid container spacing={2}>
@@ -265,23 +278,35 @@ const ProjectPage = () => {
                                     }} />
                                     <Button title='Löschen' size="small" variant="text" startIcon={<DeleteIcon />} onClick={() => handleDeleteComment(comment.id)}  />
                                   </>
-                                : 
-                                null}
+                                : null}
                               </Grid>
                             </Grid>
-                            {openUpdateCommentInputId === comment.id ?
-                              <CommentInput
-                                commentContent={updateCommentContent}
-                                setCommentContent={setUpdateCommentContent}
-                                handleComment={(content) => handleUpdateComment(comment.id, content)}
-                                commentSaving={commentSaving}
-                                resetInput={() => {
-                                  setOpenUpdateCommentInputId('');
-                                  setUpdateCommentContent('');
-                                }}
-                              />
-                            : 
-                              <Typography>{comment.content}</Typography>}}
+                            {openUpdateCommentInputId === comment.id ? 
+                              <>
+                                <Input placeholder={'Kommentar'}
+                                  multiline
+                                  rows={4}
+                                  fullWidth
+                                  sx={{ padding: 2 }}
+                                  value={updateCommentContent}
+                                  onChange = {(e) => setUpdateCommentContent(e.target.value)}
+                                  onSubmit={() => handleUpdateComment(comment.id, updateCommentContent)}
+                                />
+                                <Grid container justifyContent={'flex-end'} sx={{marginBottom: 2, marginTop: 1}}>
+                                  <Grid item>
+                                    <Button onClick={() => {
+                                      setOpenUpdateCommentInputId('')
+                                      setUpdateCommentContent('')
+                                    }}>Abbrechen</Button>
+                                  </Grid>
+                                  <Grid item>
+                                    <LoadingButton loading={commentSaving} onClick={() => handleUpdateComment(comment.id, updateCommentContent)}>Senden</LoadingButton>
+                                  </Grid>
+                                </Grid>
+                              </>
+                              :
+                              <Typography>{comment.content}</Typography>
+                            }
                           </CardContent>
                         </Card>
                       </Grid>
@@ -293,21 +318,13 @@ const ProjectPage = () => {
             : 
             <Stack gap={2}>
               <Card>
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Allgemein</Typography>
-                </CardContent>
+                <Skeleton variant='rounded' height={200} />
               </Card>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Beschreibungen</Typography>
-                </CardContent>
+                <Skeleton variant='rounded' height={200} />
               </Card>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
-                </CardContent>
+                <Skeleton variant='rounded' height={200} />
               </Card>
             </Stack>
           }
@@ -393,17 +410,11 @@ const ProjectPage = () => {
             :     
             <Stack gap={2}>
               <Card>
-                <Skeleton variant='rectangular' height={300} />
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Projektleiter</Typography>
-                </CardContent>
+                <Skeleton variant='rounded' height={200} />
               </Card>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Bewertungen</Typography>
-                </CardContent>
-              </Card>
+                <Skeleton variant='rounded' height={200} />
+              </Card>  
             </Stack>        
           }
         </Grid>
