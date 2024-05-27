@@ -137,6 +137,10 @@ const ProjectPage = () => {
     if(project.state === 'success' && activeUser){
       setCommentSaving(true)
       postComment(project.data.id, activeUser.id, 'comment', content).then(() => {
+        getProjectsById(id ?? '')
+        .then(project => {
+          setProject({ state: 'success', data: project[0]})
+        })
         setOpenNewCommentInput(false)})
         setCommentContent('')
         setCommentSaving(false)
