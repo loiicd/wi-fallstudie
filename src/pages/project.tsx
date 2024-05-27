@@ -169,7 +169,7 @@ const ProjectPage = () => {
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant='h6'>Erstellt von</Typography>
-                      <Typography>{project.data.created_from}</Typography>
+                      <Typography>{project.data.created_from_user ? `${project.data.created_from_user.firstname} ${project.data.created_from_user?.lastname}` : '-'}</Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant='h6'>Erstellt am</Typography>

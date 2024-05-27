@@ -36,6 +36,7 @@ export type Project = {
   team: Team[],
   rates: ProjectRate[]
   comments?: ProjectComment[]
+  created_from_user?: User
 }
 
 export type ProjectFormData = {
