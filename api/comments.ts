@@ -8,6 +8,8 @@ async function handler(request: VercelRequest, response: VercelResponse) {
             return await handlePost(request, response)
         case 'DELETE':
             return await handleDelete(request, response)
+        case 'PUT':
+            return await handlePut(request, response)
     }
 }
 
@@ -32,6 +34,19 @@ async function handleDelete(request: VercelRequest, response: VercelResponse) {
     try {
         await sql`DELETE FROM comment WHERE id = ${comment_id}`
         return response.status(200).send('Deleted')
+    } catch (error) {
+        console.error(error)
+        return response.status(500).send('Internal Server Error')
+    }
+}
+
+async function handlePut(request: VercelRequest, response: VercelResponse) {
+    const comment = request.body
+    try {
+        await sql`
+        UPDATE comment SET content = ${comment.content} WHERE id = ${comment.id}
+        `
+        return response.status(200).send('Updated')
     } catch (error) {
         console.error(error)
         return response.status(500).send('Internal Server Error')

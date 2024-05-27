@@ -36,7 +36,8 @@ import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 import RateProjectDialog from '../components/rateProjectDialog'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import AddIcon from '@mui/icons-material/Add'
-import { postComment, deleteComment } from '../services/comment'
+import { postComment, deleteComment, updateComment } from '../services/comment'
+import { LoadingButton } from '@mui/lab'
 
 interface HeroActionsProps {
   project: ApiResponse<Project>
@@ -103,6 +104,9 @@ const ProjectPage = () => {
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
   const [openNewCommentInput, setOpenNewCommentInput] = useState<boolean>(false)
   const [commentContent, setCommentContent] = useState<string>('')
+  const [openUpdateCommentInputId, setOpenUpdateCommentInputId] = useState<string>('')
+  const [updateCommentContent, setUpdateCommentContent] = useState<string>('')
+  const [commentSaving, setCommentSaving] = useState<boolean>(false)
 
   useEffect(() => {
     const userCookie = Cookies.get('user')
@@ -131,18 +135,34 @@ const ProjectPage = () => {
 
   const handleNewComment = (content: string) => {
     if(project.state === 'success' && activeUser){
-      setOpenNewCommentInput(true)
+      setCommentSaving(true)
       postComment(project.data.id, activeUser.id, 'comment', content).then(() => {
         setOpenNewCommentInput(false)})
         setCommentContent('')
+        setCommentSaving(false)
     }
   }
 
   const handleDeleteComment = (comment_id: string) => {
+    setCommentSaving(true)
     deleteComment(comment_id).then(() => {
+      setCommentSaving(false)
       getProjectsById(id ?? '')
       .then(project => {
         setProject({ state: 'success', data: project[0]})
+      })
+    })
+  }
+
+  const handleUpdateComment = (comment_id: string, content: string) => {
+    setCommentSaving(true)
+    updateComment(comment_id, content).then(() => {
+      getProjectsById(id ?? '')
+      .then(project => {
+        setProject({ state: 'success', data: project[0]})
+        setOpenUpdateCommentInputId('')
+        setUpdateCommentContent('')
+        setCommentSaving(false)
       })
     })
   }
@@ -233,7 +253,7 @@ const ProjectPage = () => {
                         }}>Abbrechen</Button>
                       </Grid>
                       <Grid item>
-                        <Button onClick={() => handleNewComment(commentContent)}>Senden</Button>
+                        <LoadingButton loading={commentSaving} onClick={() => handleNewComment(commentContent)}>Senden</LoadingButton>
                       </Grid>
                     </Grid>
                   </>
@@ -246,19 +266,47 @@ const ProjectPage = () => {
                           <CardContent>
                             <Grid direction={'row'} container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
                               <Grid item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}>
-                                <Avatar sx={{ width: 28, height: 28, marginRight: 1}}>{comment.user.firstname[0]}{comment.user.lastname[0]}</Avatar>
-                                <Typography variant="overline">{comment.user.firstname} {comment.user.lastname}, {new Date(comment.created_at).toLocaleDateString()}</Typography>
+                                <Avatar sx={{ width: 30, height: 30, marginRight: 1}}>{comment.user.firstname[0]}{comment.user.lastname[0]}</Avatar>
+                                <Typography sx={{ fontSize: 14 }} color="text.secondary">{comment.user.firstname} {comment.user.lastname}, {new Date(comment.created_at).toLocaleDateString()}</Typography>
                               </Grid>
                               <Grid item>
-                                {comment.user.id === activeUser?.id ?
+                                {comment.user.id === activeUser?.id || activeUser?.type === 'administrator' ?
                                   <>
-                                    <Button title= "Bearbeiten" size="small" variant="text" startIcon={<ModeIcon />} onClick={() => {alert("edit")}} />
+                                    <Button title= "Bearbeiten" size="small" variant="text" startIcon={<ModeIcon />} onClick={() => {
+                                      openUpdateCommentInputId === comment.id ? setOpenUpdateCommentInputId('') : setOpenUpdateCommentInputId(comment.id)
+                                      openUpdateCommentInputId === comment.id ? setUpdateCommentContent('') : setUpdateCommentContent(comment.content)
+                                    }} />
                                     <Button title='Löschen' size="small" variant="text" startIcon={<DeleteIcon />} onClick={() => handleDeleteComment(comment.id)}  />
                                   </>
                                 : null}
                               </Grid>
                             </Grid>
-                            <Typography>{comment.content}</Typography>
+                            {openUpdateCommentInputId === comment.id ? 
+                              <>
+                                <Input placeholder={'Kommentar'}
+                                  multiline
+                                  rows={4}
+                                  fullWidth
+                                  sx={{ padding: 2 }}
+                                  value={updateCommentContent}
+                                  onChange = {(e) => setUpdateCommentContent(e.target.value)}
+                                  onSubmit={() => handleUpdateComment(comment.id, updateCommentContent)}
+                                />
+                                <Grid container justifyContent={'flex-end'} sx={{marginBottom: 2, marginTop: 1}}>
+                                  <Grid item>
+                                    <Button onClick={() => {
+                                      setOpenUpdateCommentInputId('')
+                                      setUpdateCommentContent('')
+                                    }}>Abbrechen</Button>
+                                  </Grid>
+                                  <Grid item>
+                                    <LoadingButton loading={commentSaving} onClick={() => handleUpdateComment(comment.id, updateCommentContent)}>Senden</LoadingButton>
+                                  </Grid>
+                                </Grid>
+                              </>
+                              :
+                              <Typography>{comment.content}</Typography>
+                            }
                           </CardContent>
                         </Card>
                       </Grid>
