@@ -12,7 +12,18 @@ import ListItemText from '@mui/material/ListItemText'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Alert, Avatar, AvatarGroup, Button, ButtonGroup, CardContent, Input, ListItemAvatar, ListSubheader, Rating, Stack, Tooltip, Typography } from '@mui/material'
+import { Alert, 
+  Avatar, AvatarGroup, 
+  Button, ButtonGroup, 
+  CardContent, 
+  Input, 
+  ListItemAvatar, 
+  ListSubheader, 
+  Rating, 
+  Skeleton, 
+  Stack, 
+  Tooltip, 
+  Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ModeIcon from '@mui/icons-material/Mode'
 import SubmitDeleteDialog from '../components/submitDeleteDialog'
@@ -24,7 +35,7 @@ import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 import RateProjectDialog from '../components/rateProjectDialog'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import AddIcon from '@mui/icons-material/Add'
-import { createCommentTable, postComment } from '../services/comment'
+import { postComment } from '../services/comment'
 
 interface HeroActionsProps {
   project: ApiResponse<Project>
@@ -89,7 +100,7 @@ const ProjectPage = () => {
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
   const [openRateProjectDialog, setOpenRateProjectDialog] = useState<boolean>(false)
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
-  const [openNewCommentDialog, setOpenNewCommentDialog] = useState<boolean>(false)
+  const [openNewCommentInput, setOpenNewCommentInput] = useState<boolean>(false)
   const [commentContent, setCommentContent] = useState<string>('')
 
   useEffect(() => {
@@ -111,7 +122,7 @@ const ProjectPage = () => {
       navigate('/notfound')
     }
 
-  }, [id, navigate, openRateProjectDialog, openAddProjectDialog, openNewCommentDialog])
+  }, [id, navigate, openRateProjectDialog, openAddProjectDialog, openNewCommentInput])
 
   const handleDelete = () => {
     setOpenDeleteDialog(true)
@@ -119,9 +130,9 @@ const ProjectPage = () => {
 
   const handleNewComment = (content: string) => {
     if(project.state === 'success' && activeUser){
-      setOpenNewCommentDialog(true)
+      setOpenNewCommentInput(true)
       postComment(project.data.id, activeUser.id, 'comment', content).then(() => {
-        setOpenNewCommentDialog(false)})
+        setOpenNewCommentInput(false)})
         setCommentContent('')
     }
   }
@@ -167,6 +178,7 @@ const ProjectPage = () => {
                   </Grid>
                 </CardContent>
               </Card>
+              
               <Card>
                 <CardContent>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Beschreibungen</Typography>
@@ -183,28 +195,40 @@ const ProjectPage = () => {
 
               <Card>
                 <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
-                  <Grid container justifyContent={'flex-end'}>
-                    <Button startIcon={<AddIcon />} onClick={() => setOpenNewCommentDialog(true)}>Neuer Kommentar</Button>
+                  <Grid container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
+                    <Grid item>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
+                    </Grid>
+                    <Grid item>
+                      <Button startIcon={<AddIcon />} onClick={() => setOpenNewCommentInput(true)}>Neuer Kommentar</Button>
+                    </Grid>
                   </Grid>
-                  {openNewCommentDialog ? 
-                    <Card>
-                      <Input placeholder={'Kommentar'} 
-                        multiline
-                        rows={4}
-                        fullWidth
-                        sx={{ padding: 2 }}
-                        value={commentContent}
-                        onChange = {(e) => setCommentContent(e.target.value)}
-                        onSubmit={() => handleNewComment(commentContent)}
-                      />
-                      <Button onClick={() => handleNewComment(commentContent)}>Senden</Button>
-                      <Button onClick={() => {
-                        setOpenNewCommentDialog(false)
-                        setCommentContent('')
-                      }}>Abbrechen</Button>
-                    </Card> 
+
+                  {openNewCommentInput ? 
+                  <>
+                    <Input placeholder={'Kommentar'} 
+                      multiline
+                      rows={4}
+                      fullWidth
+                      sx={{ padding: 2 }}
+                      value={commentContent}
+                      onChange = {(e) => setCommentContent(e.target.value)}
+                      onSubmit={() => handleNewComment(commentContent)}
+                    />
+                    <Grid container justifyContent={'flex-end'} sx={{marginBottom: 2, marginTop: 1}}>
+                    <Grid item>
+                        <Button onClick={() => {
+                          setOpenNewCommentInput(false)
+                          setCommentContent('')
+                        }}>Abbrechen</Button>
+                      </Grid>
+                      <Grid item>
+                        <Button onClick={() => handleNewComment(commentContent)}>Senden</Button>
+                      </Grid>
+                    </Grid>
+                  </>
                   : null}
+
                   <Grid container spacing={2}>
                     {project.data.comments?.map(comment => (
                       <Grid item xs={12}>
@@ -223,7 +247,18 @@ const ProjectPage = () => {
                 </CardContent>
               </Card>
             </Stack>
-            : null
+            : 
+            <Stack gap={2}>
+              <Card>
+                <Skeleton variant='rectangular' height={200} />
+              </Card>
+              <Card>
+                <Skeleton variant='rectangular' height={200} />
+              </Card>
+              <Card>
+                <Skeleton variant='rectangular' height={200} />
+              </Card>
+            </Stack>
           }
         </Grid>
         <Grid item lg={3}>
@@ -281,7 +316,15 @@ const ProjectPage = () => {
                 </List>
               </Card>
             </>
-            : null
+            :     
+            <Stack gap={2}>
+              <Card>
+                <Skeleton variant='rectangular' height={200} />
+              </Card>
+              <Card>
+                <Skeleton variant='rectangular' height={200} />
+              </Card>  
+            </Stack>        
           }
         </Grid>
       </Grid>
