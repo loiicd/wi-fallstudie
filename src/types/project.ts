@@ -11,6 +11,7 @@ type ProjectRate = {
 }
 
 type ProjectComment = {
+  id: string
   user: User
   content: string
   type: string

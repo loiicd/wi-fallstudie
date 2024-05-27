@@ -5,5 +5,5 @@ export const postComment = async (project_id: string, user_id: string, type: str
 }
 
 export const deleteComment = async (comment_id: string): Promise<void> => {
-  await axios.delete(`/api/comments/${comment_id}`)
+  await axios.delete(`/api/comments`, { data: { id: comment_id } })
 }

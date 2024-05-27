@@ -36,7 +36,7 @@ import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 import RateProjectDialog from '../components/rateProjectDialog'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import AddIcon from '@mui/icons-material/Add'
-import { postComment } from '../services/comment'
+import { postComment, deleteComment } from '../services/comment'
 
 interface HeroActionsProps {
   project: ApiResponse<Project>
@@ -138,6 +138,15 @@ const ProjectPage = () => {
     }
   }
 
+  const handleDeleteComment = (comment_id: string) => {
+    deleteComment(comment_id).then(() => {
+      getProjectsById(id ?? '')
+      .then(project => {
+        setProject({ state: 'success', data: project[0]})
+      })
+    })
+  }
+
   return (  
     <StandardLayout 
       heroTitle={project.state === 'success' ? project.data.title : '...'}
@@ -237,14 +246,14 @@ const ProjectPage = () => {
                           <CardContent>
                             <Grid direction={'row'} container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
                               <Grid item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}>
-                                <Avatar sx={{ width: 24, height: 24, marginRight: 1}}>{comment.user.firstname[0]}{comment.user.lastname[0]}</Avatar>
-                                <Typography variant="overline">{comment.user.firstname} {comment.user.lastname}, {new Date(comment.created_at).toLocaleDateString()}:</Typography>
+                                <Avatar sx={{ width: 28, height: 28, marginRight: 1}}>{comment.user.firstname[0]}{comment.user.lastname[0]}</Avatar>
+                                <Typography variant="overline">{comment.user.firstname} {comment.user.lastname}, {new Date(comment.created_at).toLocaleDateString()}</Typography>
                               </Grid>
                               <Grid item>
                                 {comment.user.id === activeUser?.id ?
                                   <>
-                                    <Button title='Löschen' size="small" variant="text" startIcon={<DeleteIcon />} onClick={() => {alert("delete")}}  />
                                     <Button title= "Bearbeiten" size="small" variant="text" startIcon={<ModeIcon />} onClick={() => {alert("edit")}} />
+                                    <Button title='Löschen' size="small" variant="text" startIcon={<DeleteIcon />} onClick={() => handleDeleteComment(comment.id)}  />
                                   </>
                                 : null}
                               </Grid>
