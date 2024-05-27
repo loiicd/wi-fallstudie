@@ -1,82 +1,21 @@
+import { ApiResponse } from '../types/apiResponse'
+import { useNavigate } from 'react-router-dom'
+import { DataGrid, GridColDef, GridFilterModel, GridToolbar } from '@mui/x-data-grid'
+import { useEffect, useState } from 'react'
+import { Project } from '../types/project'
+import { getProjects } from '../services/projects'
 import Card from '@mui/material/Card'
-import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import { useEffect, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
 import Stack from '@mui/material/Stack'
 import AddProjectDialog from './addProjectDialog'
 import ProjectDetailDialog from './projectDetailDialog'
-import { Project } from '../types/project'
-import { getProjects } from '../services/projects'
 import RoleProvider from './RoleProvider'
 import StatusChip from './statusChip'
-import { ApiResponse } from '../types/apiResponse'
-import { useNavigate } from 'react-router-dom'
-import Typography from '@mui/material/Typography'
 import Rating from '@mui/material/Rating'
 
-const columns: GridColDef<(any)[number]>[] = [
-  {
-    field: 'status',
-    headerName: 'Status',
-    width: 150,
-    editable: false,
-    renderCell: (params) => {
-      return <StatusChip value={params.value} />
-    }
-  },
-  {
-    field: 'title',
-    headerName: 'Titel',
-    width: 150,
-    editable: false,
-    type: 'string',
-  },
-  {
-    field: 'start_date',
-    headerName: 'Startdatum',
-    width: 150,
-    editable: false,
-    renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
-  },
-  {
-    field: 'end_date',
-    headerName: 'EndDatum',
-    width: 150,
-    editable: false,
-    renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
-  },
-  {
-    field: 'project_lead',
-    headerName: 'Projektleiter',
-    width: 150,
-    editable: false,
-    renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.lastname : '',
-  },
-  {
-    field: 'sub_project_lead',
-    headerName: 'Stellv. Projektleiter',
-    width: 150,
-    editable: false,
-    renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.lastname : '',
-  },
-  {
-    field: 'rates',
-    headerName: 'Bewertung',
-    width: 150,
-    editable: false,
-    renderCell: (params) => {
-      const rates = params.value
-      if (rates.length !== 0) {
-        const averageRate = rates.reduce((sum: any, rate: any) => sum + rate.rate, 0) / rates.length
-        return (<Rating value={averageRate} readOnly precision={0.1} />)
-      }
-    }
-  }
-]
-
-export default function ProjectsTable() {
+const ProjectsTable = () => {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
@@ -84,7 +23,91 @@ export default function ProjectsTable() {
   const [openEditProjectDialog, setOpenEditProjectDialog] = useState<boolean>(false)
   const [project, setProject] = useState<null | any>(null)
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
-  const [searchedProjects, setSearchedProjects] = useState<Project[]>([])
+  const [searchedProjects, setSearchedProjects] = useState<(Project & { avgRate: number })[]>([])
+
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] })
+
+  const columns: GridColDef<(any)[number]>[] = [
+    {
+      field: 'status',
+      headerName: 'Status',
+      editable: false,
+      type: 'singleSelect',
+      valueOptions: () => {
+        const statusSet = new Set<string>()
+        searchedProjects.forEach(project => statusSet.add(project.status))
+        return Array.from(statusSet)
+      },
+      renderCell: (params) => <StatusChip value={params.value} />
+    }, {
+      field: 'title',
+      headerName: 'Titel',
+      editable: false,
+      flex: 1,
+      type: 'string',
+    }, {
+      field: 'start_date',
+      headerName: 'Startdatum',
+      editable: false,
+      type: 'date',
+      renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
+    }, {
+      field: 'end_date',
+      headerName: 'EndDatum',
+      editable: false,
+      type: 'date',
+      renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
+    }, {
+      field: 'project_lead',
+      headerName: 'Projektleiter',
+      editable: false,
+      type: 'custom',
+      renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.lastname : '',
+    }, {
+      field: 'sub_project_lead',
+      headerName: 'Stellv. Projektleiter',
+      editable: false,
+      type: 'string',
+      renderCell: (params) => params.value ? params.value.firstname + ' ' + params.value.lastname : '',
+    }, {
+      field: 'department',
+      headerName: 'Abteilung',
+      editable: false,
+      flex: 1,
+      type: 'singleSelect',
+      valueOptions: () => {
+        const departmentSet = new Set<string>()
+        searchedProjects.forEach(project => {
+          if (project.department) {
+            departmentSet.add(project.department)
+          }
+        })
+        return Array.from(departmentSet)
+      },
+    }, {
+      field: 'location',
+      headerName: 'Standort',
+      editable: false,
+      flex: 1,
+      type: 'singleSelect',
+      valueOptions: () => {
+        const locationSet = new Set<string>()
+        searchedProjects.forEach(project => {
+          if (project.location) {
+            locationSet.add(project.location)
+          }
+        })
+        return Array.from(locationSet)
+      },
+    }, {
+      field: 'avgRate',
+      headerName: 'Bewertung',
+      width: 140,
+      editable: false,
+      type: 'number',
+      renderCell: (params) => (<Rating value={params.value} readOnly precision={0.1} />)
+    }
+  ]
 
   useEffect(() => {
     getProjects()
@@ -94,10 +117,11 @@ export default function ProjectsTable() {
 
   useEffect(() => {
     if (projects.state === 'success') {
-      const filteredProjects = projects.data.filter(project => project.title.includes(searchTerm))
-      setSearchedProjects(filteredProjects)
-    }
-  }, [searchTerm, projects])
+    const filteredProjects = projects.data.filter(project => project.title.includes(searchTerm))
+      const updatedProjects = filteredProjects.map((project) => ({ ...project, avgRate: project.rates.reduce((sum, rate) => sum + rate.rate, 0) / project.rates.length }))
+      setSearchedProjects(updatedProjects)
+      }
+    }, [searchTerm, projects])
 
   const handleCellClick = (project: any) => {
     setProject(project)
@@ -123,32 +147,30 @@ export default function ProjectsTable() {
           </RoleProvider>
         </Stack>
         <DataGrid
+          filterModel={filterModel}
+          onFilterModelChange={setFilterModel}
           loading={projects.state === 'loading'}
           autoHeight
           rows={projects.state === 'success' ? searchedProjects : []}
           columns={columns}
           onCellClick={(params) => handleCellClick(params.row)}
           pageSizeOptions={[5, 10, 15]}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10,
-              },
-            },
-            sorting: {
-              sortModel: [
-                {
-                  field: 'start_date',
-                  sort: 'asc',
-                },
-              ]
-            }
-          }}
           disableRowSelectionOnClick
           disableDensitySelector
           disableColumnSelector
           disableColumnMenu
           disableColumnResize
+          slots={{ toolbar: GridToolbar }}
+          slotProps={{ toolbar: { showQuickFilter: true } }}
+          initialState={{
+            pagination: { paginationModel: {
+              pageSize: 10,
+            },},
+            sorting: { sortModel: [{
+              field: 'start_date',
+              sort: 'asc',
+            },]}
+          }}
         />
       </Card>
       {openProjectDetailDialog && project ? <ProjectDetailDialog project={project} open={openProjectDetailDialog} handleClose={() => setOpenProjectDetailDialog(false)} handleEdit={() => editProject()} /> : null}
@@ -158,6 +180,4 @@ export default function ProjectsTable() {
   )
 }
 
-// function useFocusEffect(arg0: () => void, arg1: (string | boolean)[]) {
-//   throw new Error('Function not implemented.')
-// }
+export default ProjectsTable
