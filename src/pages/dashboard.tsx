@@ -41,7 +41,7 @@ const DashboardPage = () => {
     <StandardLayout 
       heroTitle={`Willkommen zurück ${activeUser?.firstname}`}
     >
-      <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
+      <RoleProvider roles={['administrator']} type='include'>
         <Typography variant='h6'>Meine Projektanträge</Typography>
           {projects.state === 'success' && projects.data.length === 0 ?
             <Alert 

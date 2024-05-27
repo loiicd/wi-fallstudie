@@ -9,4 +9,4 @@ export type User = {
 
 export type UserFormData = Omit<User, 'id'>
 
-export type ProjectRole = 'projekteigner' | 'bewerter' | 'projektmanager' | 'administrator' | 'geschäftsleitung'
+export type ProjectRole = 'controller' | 'administrator' | 'geschäftsleitung' | 'projektleitung' | 'base'

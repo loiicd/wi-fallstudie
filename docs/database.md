@@ -74,11 +74,11 @@ CREATE TABLE comment (
 
 ```sql
 INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('bc3bff48-e956-4da2-b916-87de9c851017', 'Simon', 'Bühler', 'buehlsim@dhbw-loerrach.de', null, 'administrator');
-INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('d435e3d4-9516-49a0-aeb8-a066507ea51d', 'Moritz', 'Höft', 'hoeftm@dhbw-loerrach.de', null, 'administrator');
-INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('423ee4e0-1002-4b8c-8dd4-8bf950a0e67d', 'Anna-Lehna', 'Grittke', 'grittkea@dhbw-loerrach.de', null, 'administrator');
-INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('ea6d075d-4f21-4d15-9da4-7f901e59ada7', 'Jacob', 'Ruhnau', 'ruhnauja@dhbw-loerrach.de', null, 'administrator');
-INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('1810e48d-539e-4e9b-9524-2da12f833728', 'Chiara', 'Facciola', 'facciolc@dhbw-loerrach.de', null, 'administrator');
-INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('8b6911ef-5e77-4da1-9e80-87b9d69ec622', 'Annika', 'Geppert', 'gepperta@dhbw-loerrach.de', null, 'administrator');
-INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('c3fef2d3-9250-4751-9ad4-dd112556e818', 'Loïc', 'Dörr', 'doerrl@dhbw-loerrach.de', null, 'administrator');
-INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('a4e5bb22-11c3-411c-bd92-665e7ef47629', 'Daniel', 'Riesterer', 'riesterer@example.com', null, 'administrator');
+INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('d435e3d4-9516-49a0-aeb8-a066507ea51d', 'Moritz', 'Höft', 'hoeftm@dhbw-loerrach.de', null, 'geschäftsleitung');
+INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('423ee4e0-1002-4b8c-8dd4-8bf950a0e67d', 'Anna-Lehna', 'Grittke', 'grittkea@dhbw-loerrach.de', null, 'controller');
+INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('ea6d075d-4f21-4d15-9da4-7f901e59ada7', 'Jacob', 'Ruhnau', 'ruhnauja@dhbw-loerrach.de', null, 'projektleitung');
+INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('1810e48d-539e-4e9b-9524-2da12f833728', 'Chiara', 'Facciola', 'facciolc@dhbw-loerrach.de', null, 'base');
+INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('8b6911ef-5e77-4da1-9e80-87b9d69ec622', 'Annika', 'Geppert', 'gepperta@dhbw-loerrach.de', null, 'base');
+INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('c3fef2d3-9250-4751-9ad4-dd112556e818', 'Loïc', 'Dörr', 'doerrl@dhbw-loerrach.de', null, 'base');
+INSERT INTO "user" (id, firstname, lastname, email, title, type) VALUES ('a4e5bb22-11c3-411c-bd92-665e7ef47629', 'Daniel', 'Riesterer', 'riesterer@example.com', null, 'base');
 ```
