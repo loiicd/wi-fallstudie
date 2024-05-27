@@ -100,6 +100,7 @@ const ProjectPage = () => {
     if (id) {
       getProjectsById(id)
         .then(project => setProject({ state: 'success', data: project[0]}))
+        .finally(() => console.log('Project loaded' + project))
     } else {
       navigate('/notfound')
     }
