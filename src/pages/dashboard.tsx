@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import AddProjectDialog from '../components/addProjectDialog'
 import { ApiResponse } from '../types/apiResponse'
 import ProjectChart from '../components/projectChart'
+import ProjectBarChart from '../components/projectBarChart'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
@@ -64,12 +65,12 @@ const DashboardPage = () => {
       <Grid container spacing={2}>
         <Grid item xs={3}>
           <Card>
-            {/* <ProjectChart /> */}
+            <ProjectChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} />
           </Card>
         </Grid>
         <Grid item xs={3}>
           <Card>
-            1
+            <ProjectBarChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} />
           </Card>
         </Grid>
         <Grid item xs={3}>

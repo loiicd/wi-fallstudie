@@ -16,15 +16,19 @@ const xLabels = [
 
 interface ProjectChartProps {
   projects: Project[]
+  loading: boolean
 }
 
-const ProjectChart: FunctionComponent<ProjectChartProps> = ({ projects }) => {
+const ProjectChart: FunctionComponent<ProjectChartProps> = ({ projects, loading }) => {
+
+  const test = projects.map(project => project.created_at)
 
   return (
     <LineChart
+      loading={loading}
       width={300}
       height={200}
-      series={[{ data: pData, label: 'Standort 1' }, { data: uData, label: 'Standort 2' }]}
+      series={[{ data: pData, label: 'Test' }]}
       xAxis={[{ scaleType: 'point', data: xLabels }]}
     />
   )
