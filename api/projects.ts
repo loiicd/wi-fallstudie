@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
-import { QueryResultRow, sql } from '@vercel/postgres'
+import { sql } from '@vercel/postgres'
 
 const handler = async (request: VercelRequest, response: VercelResponse) => {
   switch (request.method) {
@@ -11,7 +11,7 @@ const handler = async (request: VercelRequest, response: VercelResponse) => {
 const handleGet = async (response: VercelResponse) => {
   try {
     const result = await sql`
-      SELECT id, status, title, start_date, end_date, project_lead_id, sub_project_lead_id, short_description, target_description, vision_description, problem_description
+      SELECT *
       FROM "project"`
     
     for (const data of result.rows) {

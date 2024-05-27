@@ -12,6 +12,8 @@ CREATE TABLE project (
   end_date date,
   project_lead_id text,
   sub_project_lead_id text,
+  department: text,
+  location: text,
   short_description text,
   target_description text,
   vision_description text,
@@ -54,6 +56,19 @@ CREATE TABLE project_rate (
   PRIMARY KEY (project_id, user_id),
   FOREIGN KEY (project_id) REFERENCES project (id),
   FOREIGN KEY (user_id) REFERENCES "user" (id)
+)
+```
+
+```sql
+CREATE TABLE comment (
+  id text PRIMARY KEY,
+  project_id text NOT NULL,
+  user_id text NOT NULL,
+  type text NOT NULL,
+  content text NOT NULL,
+  created_at date DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (project_id) REFERENCES project(id),
+  FOREIGN KEY (user_id) REFERENCES "user"(id)
 )
 ```
 

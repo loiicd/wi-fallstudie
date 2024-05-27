@@ -20,6 +20,8 @@ export type Project = {
   end_date?: string
   project_lead?: User
   sub_project_lead?: User
+  department?: string,
+  location?: string,
   short_description?: string
   target_description?: string
   vision_description?: string
@@ -37,6 +39,8 @@ export type ProjectFormData = {
   end_date?: string | null
   project_lead_id?: string
   sub_project_lead_id?: string
+  department?: string,
+  location?: string,
   short_description?: string
   target_description?: string
   vision_description?: string
