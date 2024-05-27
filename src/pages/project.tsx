@@ -101,8 +101,10 @@ const ProjectPage = () => {
   useEffect(() => {
     if (id) {
       getProjectsById(id)
-        .then(project => setProject({ state: 'success', data: project[0]}))
-        .finally(() => console.log('Project loaded' + project))
+      .then(project => {
+        console.log(project[0]);
+        setProject({ state: 'success', data: project[0]})
+      })
     } else {
       navigate('/notfound')
     }
@@ -170,8 +172,22 @@ const ProjectPage = () => {
               <Card>
                 <CardContent>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
-                  <Button onClick={() => createCommentTable()}>Tabelle Erstellen</Button>
                   {activeUser && <Button onClick={() => postComment(project.data.id, activeUser.id, 'comment', 'test')}>Dummy Kommentar erstellen</Button>}
+                  <Grid container spacing={2}>
+                    {project.data.comments?.map(comment => (
+                      <Grid item xs={12}>
+                        <Card>
+                          <CardContent>
+                            <Stack direction='row' justifyContent='space-between'>
+                              <Typography>{comment.user.firstname} {comment.user.lastname}</Typography>
+                              <Typography>{new Date(comment.created_at).toLocaleString()}</Typography>
+                            </Stack>
+                            <Typography>{comment.content}</Typography>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    ))}
+                  </Grid>
                 </CardContent>
               </Card>
             </Stack>

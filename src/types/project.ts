@@ -14,7 +14,7 @@ type ProjectComment = {
   user: User
   content: string
   type: string
-  date: string
+  created_at: string
 }
 
 export type Project = {

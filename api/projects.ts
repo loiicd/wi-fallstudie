@@ -34,16 +34,6 @@ const handleGet = async (response: VercelResponse) => {
         item.user = (await sql`SELECT * FROM "user" WHERE id = ${item.user_id}`).rows[0]
       ))
 
-      const comments = await sql`
-        SELECT *
-        FROM comment
-        WHERE project_id = ${data.id}
-      `
-      data.comments = comments.rows
-      await Promise.all(data.comments.map(async (item: any) =>
-        item.user = (await sql`SELECT * FROM "user" WHERE id = ${item.user_id}`).rows[0]
-      ))
-
     }
     return response.status(200).send(JSON.stringify(result.rows))
   } catch (error) {
