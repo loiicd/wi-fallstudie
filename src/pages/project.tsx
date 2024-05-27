@@ -182,12 +182,16 @@ const ProjectPage = () => {
               </Card>
 
               <Card>
-                <CardContent>
+                <Grid container>
+                  <Grid item xs={8}>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
-                  <Grid container justifyContent={'flex-end'}>
-                    <Button startIcon={<AddIcon />} onClick={() => setOpenNewCommentDialog(true)}>Neuer Kommentar</Button>
+                  </Grid>
+
+                  <Grid item  xs={4} justifyContent={'flex-end'}>
+                      <Button startIcon={<AddIcon />} onClick={() => setOpenNewCommentDialog(true)}>Neuer Kommentar</Button>
                   </Grid>
                   {openNewCommentDialog ? 
+                  <Grid container sx={{marginTop: 1, marginBottom: 1}}>                  
                     <Card>
                       <Input placeholder={'Kommentar'} 
                         multiline
@@ -203,8 +207,11 @@ const ProjectPage = () => {
                         setOpenNewCommentDialog(false)
                         setCommentContent('')
                       }}>Abbrechen</Button>
-                    </Card> 
+                    </Card>
+                  </Grid> 
                   : null}
+                </Grid>
+                <CardContent>              
                   <Grid container spacing={2}>
                     {project.data.comments?.map(comment => (
                       <Grid item xs={12}>
