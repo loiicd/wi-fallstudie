@@ -318,7 +318,10 @@ const ProjectPage = () => {
             : 
             <Stack gap={2}>
               <Card>
-                <Skeleton variant='rounded' height={200} />
+                <Skeleton variant='rectangular' height={200} />
+                <CardContent>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Allgemein</Typography>
+                </CardContent>
               </Card>
               <Card>
                 <Skeleton variant='rounded' height={200} />
