@@ -2,9 +2,10 @@ import React from 'react'
 import { Grid, Typography, Card, CardContent, Skeleton, CardActionArea } from '@mui/material'
 import { Project } from '../types/project'
 import StatusChip from './statusChip'
+import { ApiResponse } from '../types/apiResponse'
 
 interface MyProjectsProps {
-  projects: Project[]
+  projects: ApiResponse<Project[]>
   loadingProjects: boolean
   cardClick: (project: Project) => void
 }
@@ -14,7 +15,7 @@ const MyProjects: React.FC<MyProjectsProps> = ({ projects, loadingProjects, card
   return (
     <>
       <Grid container spacing={2} columns={4}>
-        {projects.map((project) => (
+        {projects.state === 'success' ? projects.data.map((project) => (
           <Grid item xs={1}>
             <Card variant='elevation'>
               <CardActionArea onClick={() => cardClick(project)}>
@@ -28,12 +29,11 @@ const MyProjects: React.FC<MyProjectsProps> = ({ projects, loadingProjects, card
               </CardActionArea>
             </Card>
           </Grid>
-        ))}
-        {loadingProjects ? [1, 2, 3, 4].map(() => (
+          )): 
           <Grid item xs={1}>
             <Skeleton variant="rectangular" height={108} />
           </Grid>
-        )) : null}
+        }
       </Grid>
     </>
   )

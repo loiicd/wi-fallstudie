@@ -21,7 +21,7 @@ import { ProjectRole, User } from '../types/user'
 import { getUsers } from '../services/user'
 import CircularProgress from '@mui/material/CircularProgress'
 import { postProject, updateProject } from '../services/projects'
-import { Project, ProjectFormData, ProjectType } from '../types/project'
+import { Project, ProjectFormData, ProjectType, Team } from '../types/project'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -167,6 +167,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
             <Grid item xs={6}>
                 <Autocomplete 
                   options={users} 
+                  value={projectFormData.project_lead_id ? users.find(user => user.id === projectFormData.project_lead_id) : (projectFormData.project_lead && users.find(user => user === projectFormData.project_lead)) || null}
                   getOptionKey={(option) => option.id}
                   getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
                   loading={isLoadingUsers}
@@ -193,6 +194,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               <Grid item xs={6}>
                 <Autocomplete 
                   options={users} 
+                  value={projectFormData.sub_project_lead_id ? users.find(user => user.id === projectFormData.sub_project_lead_id) : (projectFormData.sub_project_lead && users.find(user => user === projectFormData.sub_project_lead)) || null}
                   getOptionKey={(option) => option.id}
                   getOptionLabel={option => option.firstname + ' ' + option.lastname}
                   loading={isLoadingUsers}
@@ -216,34 +218,80 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                   } 
                 />
               </Grid>
-              <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
-                <Autocomplete 
-                  getOptionKey={(option) => option.id}
-                  multiple
-                  options={users} 
-                  getOptionLabel={(option) => option.firstname + ' ' + option.lastname}
-                  loading={isLoadingUsers}
-                  onChange={(event, value) => setProjectTeam(value.map((item) => item.id))}
-                  disableCloseOnSelect
-                  renderInput={params => 
-                    <TextField 
-                      {...params} 
-                      label="Projektteam" 
-                      size='small' 
-                      sx={{ width: '100%'}} 
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                          <>
-                            {isLoadingUsers ? <CircularProgress color="inherit" size={20} /> : null}
-                            {params.InputProps.endAdornment}
-                          </>
-                        ),
-                      }}
-                    />
-                  }
-                />
-              </Grid>
+              {!projectFormData.id ?
+                <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
+                  <Autocomplete 
+                    getOptionKey={(option) => option ? option.id : ''}
+                    multiple
+                    options={users}
+                    value={projectTeam.map((id) => users.find((user) => user.id === id))}
+                    getOptionLabel={(option) => option ? 
+                      option.firstname + ' ' + option.lastname 
+                    :
+                    ''}
+                    loading={isLoadingUsers}
+                    onChange={(event, value) => value ? 
+                      setProjectTeam(value.map((item) => item && item.id ? item.id : "")) 
+                    : 
+                      setProjectTeam([])}
+                    renderInput={params => 
+                      <TextField 
+                        {...params} 
+                        label="Projektteam" 
+                        size='small' 
+                        sx={{ width: '100%'}} 
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <>
+                              {isLoadingUsers ? <CircularProgress color="inherit" size={20} /> : null}
+                              {params.InputProps.endAdornment}
+                            </>
+                          ),
+                        }}
+                      />
+                    }
+                  />
+                </Grid>
+              : 
+                <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
+                  <Autocomplete 
+                    getOptionKey={(option) => option && typeof option !== 'string' && option.id ? option.id : ''}
+                    multiple
+                    options={users}
+                    value={
+                      Array.isArray(projectFormData.team) 
+                        ? projectFormData.team
+                            .map((idOrUser) => typeof idOrUser === 'string' ? users.find((user) => user.id === idOrUser) : idOrUser)
+                            .filter((item): item is User => item !== undefined)
+                        : []
+                    }
+                    getOptionLabel={(option) => option && typeof option !== 'string' ? option.firstname + ' ' + option.lastname : ''}
+                    loading={isLoadingUsers}
+                    onChange={(event, value) => {setProjectFormData({...projectFormData,
+                      team: value as Team[]
+                    });
+                    }}
+                    renderInput={params => 
+                      <TextField 
+                        {...params} 
+                        label="Projektteam" 
+                        size='small' 
+                        sx={{ width: '100%'}} 
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <>
+                              {isLoadingUsers ? <CircularProgress color="inherit" size={20} /> : null}
+                              {params.InputProps.endAdornment}
+                            </>
+                          ),
+                        }}
+                      />
+                    }
+                  />
+                </Grid>
+              }
             </Grid>
           </TabPanel>
           <TabPanel value='3'>

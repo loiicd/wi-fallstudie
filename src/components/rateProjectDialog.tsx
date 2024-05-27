@@ -47,7 +47,7 @@ const RateProjectDialog: FunctionComponent<RateProjectDialogProps> = ({ openDial
       <Stack justifyContent='center' alignItems='center'>
         <DialogTitle id="alert-dialog-title">Projektantrag bewerten</DialogTitle>
         <DialogContent>
-          <Rating size='large' onChange={(event, value) => setRate(value ? value : 0)}/>
+          <Rating size='large' onChange={(event, value) => setRate(value ? value : 0)} />
         </DialogContent>
         <DialogActions>
           <Button variant='outlined' onClick={handleClose}>Abbrechen</Button>
