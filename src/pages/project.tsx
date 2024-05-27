@@ -24,6 +24,7 @@ import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 import RateProjectDialog from '../components/rateProjectDialog'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import AddIcon from '@mui/icons-material/Add'
+import { createCommentTable, postComment } from '../services/comment'
 
 interface HeroActionsProps {
   project: ApiResponse<Project>
@@ -87,6 +88,15 @@ const ProjectPage = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
   const [openRateProjectDialog, setOpenRateProjectDialog] = useState<boolean>(false)
+  const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
+
+  useEffect(() => {
+    const userCookie = Cookies.get('user')
+    if (userCookie) {
+      const [id, firstname, lastname, email, type] = userCookie.split('|')
+      setActiveUser({ id, firstname, lastname, email, title: undefined, type: type as ProjectRole })
+    } else navigate('/login')
+  }, [])
 
   useEffect(() => {
     if (id) {
@@ -154,6 +164,13 @@ const ProjectPage = () => {
                   <Typography>{project.data.vision_description}</Typography>
                   <Typography variant='h6'>Problemstellung</Typography>
                   <Typography>{project.data.problem_description}</Typography>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
+                  <Button onClick={() => createCommentTable()}>Tabelle Erstellen</Button>
+                  {activeUser && <Button onClick={() => postComment(project.data.id, activeUser.id, 'comment', 'test')}>Dummy Kommentar erstellen</Button>}
                 </CardContent>
               </Card>
             </Stack>
