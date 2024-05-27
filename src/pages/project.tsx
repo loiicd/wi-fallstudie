@@ -93,6 +93,7 @@ const ProjectPage = () => {
     } else {
       navigate('/notfound')
     }
+
   }, [id, navigate, openRateProjectDialog, openAddProjectDialog])
 
   const handleDelete = () => {
