@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { FunctionComponent, useState } from 'react'
 import { User } from '../types/user'
 import Avatar from '@mui/material/Avatar'
-import { Chip, Divider, ListItem, ListItemIcon } from '@mui/material'
+import { Chip, Divider, ListItem, ListItemIcon, ListItemText } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import LogoutIcon from '@mui/icons-material/Logout'
@@ -46,8 +46,12 @@ const UserDropDown: FunctionComponent<UserDropDownProps> = ({ activeUser }) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <ListItem>{activeUser.firstname} {activeUser.lastname}</ListItem>
-        <ListItem><Chip label={activeUser.type}/></ListItem>
+        <MenuItem>
+          <ListItemText>{activeUser.firstname} {activeUser.lastname}</ListItemText>
+        </MenuItem>
+        <MenuItem>
+          <ListItemText>{activeUser.email}</ListItemText>
+        </MenuItem>
         <Divider />
         <MenuItem onClick={logout}>
           <ListItemIcon><LogoutIcon /></ListItemIcon>

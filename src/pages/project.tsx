@@ -12,7 +12,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Avatar, AvatarGroup, Button, ButtonGroup, CardContent, ListItemAvatar, ListSubheader, Rating, Stack, Tooltip, Typography } from '@mui/material'
+import { Alert, Avatar, AvatarGroup, Button, ButtonGroup, CardContent, ListItemAvatar, ListSubheader, Rating, Stack, Tooltip, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ModeIcon from '@mui/icons-material/Mode'
 import SubmitDeleteDialog from '../components/submitDeleteDialog'
@@ -22,6 +22,8 @@ import { ProjectRole, User } from '../types/user'
 import Cookies from 'js-cookie'
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 import RateProjectDialog from '../components/rateProjectDialog'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import AddIcon from '@mui/icons-material/Add'
 
 interface HeroActionsProps {
   project: ApiResponse<Project>
@@ -162,8 +164,7 @@ const ProjectPage = () => {
           {project.state === 'success' ? 
             <>
               <Card>
-                <List>
-                  <ListSubheader component="div">Projektleiter</ListSubheader>
+                <List subheader={<ListSubheader>Projektleiter</ListSubheader>}>
                   <ListItem>
                     <ListItemAvatar>
                       <Avatar>{project.data.project_lead?.firstname[0]}{project.data.project_lead?.lastname[0]}</Avatar>
@@ -190,8 +191,7 @@ const ProjectPage = () => {
                 </List>
               </Card>
               <Card sx={{ marginTop: 2}}>
-                <List>
-                  <ListSubheader component="div">Projekt Berwertungen</ListSubheader>
+                <List subheader={<ListSubheader>Bewertungen</ListSubheader>}>
                   {project.data.rates.map((rate) => (
                     <ListItem>
                       <Stack>
@@ -200,6 +200,18 @@ const ProjectPage = () => {
                       </Stack>
                     </ListItem>
                   ))}
+                  {project.data.rates.length === 0 ? 
+                    <ListItem>
+                      <Alert icon={<InfoOutlinedIcon fontSize="inherit" />} severity="info">Es gibt derzeit keine Berwertungen</Alert>
+                    </ListItem>
+                    : 
+                    <ListItem>
+                      <Stack>
+                        <Typography component="legend">Durchschnitt</Typography>
+                        <Rating value={project.data.rates.reduce((sum, rate) => sum + rate.rate, 0) / project.data.rates.length} readOnly precision={0.1}/>
+                      </Stack>
+                    </ListItem>
+                  }
                 </List>
               </Card>
             </>

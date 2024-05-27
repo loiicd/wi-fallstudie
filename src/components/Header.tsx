@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from '@mui/icons-material/Menu'
 import { useNavigate } from 'react-router-dom';
 import MuiDrawer from '@mui/material/Drawer';
 import { FunctionComponent, useState } from 'react';
