@@ -42,9 +42,10 @@ interface HeroActionsProps {
   handleDelete: () => void
   handleOpenAddProjectDialog: () => void
   handleOpenRateProjectDialog: () => void
+  handleOpenReviewMode: () => void
 }
 
-const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelete, handleOpenAddProjectDialog, handleOpenRateProjectDialog }) => {
+const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelete, handleOpenAddProjectDialog, handleOpenRateProjectDialog, handleOpenReviewMode}) => {
   const navigate = useNavigate()
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
 
@@ -88,6 +89,9 @@ const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelet
           </Button>
         </Tooltip>
       </ButtonGroup>
+      <Button onClick={handleOpenReviewMode}>
+        <Typography variant='button'>Review</Typography>
+      </Button>
     </Stack>
   )
 }
@@ -102,6 +106,8 @@ const ProjectPage = () => {
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
   const [openNewCommentInput, setOpenNewCommentInput] = useState<boolean>(false)
   const [commentContent, setCommentContent] = useState<string>('')
+  const [inReviewMode, setInReviewMode] = useState<boolean>(false)
+  const [sectionReviews, setSectionReviews] = useState<{section: string, review: string}[]>([])
 
   useEffect(() => {
     const userCookie = Cookies.get('user')
@@ -137,10 +143,14 @@ const ProjectPage = () => {
     }
   }
 
+  const addSectionReview = (section: string, review: string) => {
+    setSectionReviews(prevState => [...prevState, { section, review }]);
+  };
+
   return (  
     <StandardLayout 
       heroTitle={project.state === 'success' ? project.data.title : '...'}
-      heroActions={<HeroActions project={project} handleDelete={handleDelete} handleOpenAddProjectDialog={() => setOpenAddProjectDialog(true)} handleOpenRateProjectDialog={() => setOpenRateProjectDialog(true)} />}
+      heroActions={<HeroActions project={project} handleDelete={handleDelete} handleOpenAddProjectDialog={() => setOpenAddProjectDialog(true)} handleOpenRateProjectDialog={() => setOpenRateProjectDialog(true)} handleOpenReviewMode={() => setInReviewMode(true)} />}
       heroLoading={project.state === 'loading'}
     >
       <Stepper sx={{ marginBottom: 4 }}>
@@ -177,6 +187,33 @@ const ProjectPage = () => {
                     </Grid>
                   </Grid>
                 </CardContent>
+                  {inReviewMode ?
+                    <CardContent>
+                      <Input placeholder={'Anmerkung hinzufügen ...'} 
+                        multiline
+                        rows={4}
+                        fullWidth
+                        sx={{ padding: 2 }}
+                        value={sectionReviews.find(review => review.section === 'review_allgemein')?.review || ''}
+                        onChange = {(e) => addSectionReview('review_allgemein', e.target.value)}
+                        onSubmit={() => handleNewComment(commentContent)}
+                      />
+                      <Grid container justifyContent={'flex-end'} sx={{marginBottom: 2, marginTop: 1}}>
+                      <Grid item>
+                          <Button disabled onClick={() => {
+                            setOpenNewCommentInput(false)
+                            setCommentContent('')
+                          }}>Abbrechen</Button>
+                        </Grid>
+                        <Grid item>
+                          <Button disabled onClick={() => handleNewComment(commentContent)}>Senden</Button>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+
+                  : 
+                    null
+                  }
               </Card>
               
               <Card>
