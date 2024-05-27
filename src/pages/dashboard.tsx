@@ -12,6 +12,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { useNavigate } from 'react-router-dom'
 import AddProjectDialog from '../components/addProjectDialog'
 import { ApiResponse } from '../types/apiResponse'
+import ProjectChart from '../components/projectChart'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
@@ -63,7 +64,7 @@ const DashboardPage = () => {
       <Grid container spacing={2}>
         <Grid item xs={3}>
           <Card>
-            1
+            {/* <ProjectChart /> */}
           </Card>
         </Grid>
         <Grid item xs={3}>
