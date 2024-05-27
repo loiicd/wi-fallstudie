@@ -6,28 +6,10 @@ async function handler(request: VercelRequest, response: VercelResponse) {
     switch (request.method) {
         case 'POST':
             return await handlePost(request, response)
-        case 'CREATE':
-            return await handleCreateTable(request, response)
-    }
-}
-
-async function handleCreateTable(request: VercelRequest, response: VercelResponse) {
-    try {
-        await sql`
-        CREATE TABLE comment (
-            id text PRIMARY KEY,
-            project_id text NOT NULL,
-            user_id text NOT NULL,
-            type text NOT NULL,
-            content text NOT NULL,
-            created_at date DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (project_id) REFERENCES project(id),
-            FOREIGN KEY (user_id) REFERENCES "user"(id)
-          )`
-        return response.status(201).send('Created')
-    } catch (error) {
-        console.error(error)
-        return response.status(500).send('Internal Server Error')
+        case 'DELETE':
+            return await handleDelete(request, response)
+        case 'PUT':
+            return await handlePut(request, response)
     }
 }
 
@@ -41,6 +23,30 @@ async function handlePost(request: VercelRequest, response: VercelResponse) {
         VALUES (${comment_id}, ${comment.project_id}, ${comment.user_id}, ${comment.type}, ${comment.content})
         `
         return response.status(201).send('Created')
+    } catch (error) {
+        console.error(error)
+        return response.status(500).send('Internal Server Error')
+    }
+}
+
+async function handleDelete(request: VercelRequest, response: VercelResponse) {
+    const comment_id = request.body.id as string
+    try {
+        await sql`DELETE FROM comment WHERE id = ${comment_id}`
+        return response.status(200).send('Deleted')
+    } catch (error) {
+        console.error(error)
+        return response.status(500).send('Internal Server Error')
+    }
+}
+
+async function handlePut(request: VercelRequest, response: VercelResponse) {
+    const comment = request.body
+    try {
+        await sql`
+        UPDATE comment SET content = ${comment.content} WHERE id = ${comment.id}
+        `
+        return response.status(200).send('Updated')
     } catch (error) {
         console.error(error)
         return response.status(500).send('Internal Server Error')

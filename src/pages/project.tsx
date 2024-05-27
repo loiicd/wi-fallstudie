@@ -15,6 +15,7 @@ import StepLabel from '@mui/material/StepLabel'
 import { Alert, 
   Avatar, AvatarGroup, 
   Button, ButtonGroup, 
+  CardActions, 
   CardContent, 
   Input, 
   ListItemAvatar, 
@@ -35,7 +36,8 @@ import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 import RateProjectDialog from '../components/rateProjectDialog'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import AddIcon from '@mui/icons-material/Add'
-import { postComment } from '../services/comment'
+import { postComment, deleteComment, updateComment } from '../services/comment'
+import { LoadingButton } from '@mui/lab'
 
 interface HeroActionsProps {
   project: ApiResponse<Project>
@@ -102,6 +104,9 @@ const ProjectPage = () => {
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
   const [openNewCommentInput, setOpenNewCommentInput] = useState<boolean>(false)
   const [commentContent, setCommentContent] = useState<string>('')
+  const [openUpdateCommentInputId, setOpenUpdateCommentInputId] = useState<string>('')
+  const [updateCommentContent, setUpdateCommentContent] = useState<string>('')
+  const [commentSaving, setCommentSaving] = useState<boolean>(false)
 
   useEffect(() => {
     const userCookie = Cookies.get('user')
@@ -130,11 +135,36 @@ const ProjectPage = () => {
 
   const handleNewComment = (content: string) => {
     if(project.state === 'success' && activeUser){
-      setOpenNewCommentInput(true)
+      setCommentSaving(true)
       postComment(project.data.id, activeUser.id, 'comment', content).then(() => {
         setOpenNewCommentInput(false)})
         setCommentContent('')
+        setCommentSaving(false)
     }
+  }
+
+  const handleDeleteComment = (comment_id: string) => {
+    setCommentSaving(true)
+    deleteComment(comment_id).then(() => {
+      setCommentSaving(false)
+      getProjectsById(id ?? '')
+      .then(project => {
+        setProject({ state: 'success', data: project[0]})
+      })
+    })
+  }
+
+  const handleUpdateComment = (comment_id: string, content: string) => {
+    setCommentSaving(true)
+    updateComment(comment_id, content).then(() => {
+      getProjectsById(id ?? '')
+      .then(project => {
+        setProject({ state: 'success', data: project[0]})
+        setOpenUpdateCommentInputId('')
+        setUpdateCommentContent('')
+        setCommentSaving(false)
+      })
+    })
   }
 
   return (  
@@ -169,7 +199,7 @@ const ProjectPage = () => {
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant='h6'>Erstellt von</Typography>
-                      <Typography>{project.data.created_from}</Typography>
+                      <Typography>{project.data.created_from_user ? `${project.data.created_from_user.firstname} ${project.data.created_from_user?.lastname}` : '-'}</Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant='h6'>Erstellt am</Typography>
@@ -200,11 +230,11 @@ const ProjectPage = () => {
                       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
                     </Grid>
                     <Grid item>
-                      <Button startIcon={<AddIcon />} onClick={() => setOpenNewCommentInput(true)}>Neuer Kommentar</Button>
+                      <Button startIcon={<AddIcon />} onClick={() => openNewCommentInput ? setOpenNewCommentInput(false) : setOpenNewCommentInput(true)}>Neuer Kommentar</Button>
                     </Grid>
                   </Grid>
 
-                  {openNewCommentInput ? 
+                  {openNewCommentInput || project.data.comments?.length === 0 ? 
                   <>
                     <Input placeholder={'Kommentar'} 
                       multiline
@@ -223,7 +253,7 @@ const ProjectPage = () => {
                         }}>Abbrechen</Button>
                       </Grid>
                       <Grid item>
-                        <Button onClick={() => handleNewComment(commentContent)}>Senden</Button>
+                        <LoadingButton loading={commentSaving} onClick={() => handleNewComment(commentContent)}>Senden</LoadingButton>
                       </Grid>
                     </Grid>
                   </>
@@ -234,11 +264,49 @@ const ProjectPage = () => {
                       <Grid item xs={12}>
                         <Card>
                           <CardContent>
-                            <Stack direction='row' justifyContent='space-between'>
-                              <Typography>{comment.user.firstname} {comment.user.lastname}</Typography>
-                              <Typography>{new Date(comment.created_at).toLocaleDateString()}</Typography>
-                            </Stack>
-                            <Typography>{comment.content}</Typography>
+                            <Grid direction={'row'} container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
+                              <Grid item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}>
+                                <Avatar sx={{ width: 30, height: 30, marginRight: 1}}>{comment.user.firstname[0]}{comment.user.lastname[0]}</Avatar>
+                                <Typography sx={{ fontSize: 14 }} color="text.secondary">{comment.user.firstname} {comment.user.lastname}, {new Date(comment.created_at).toLocaleDateString()}</Typography>
+                              </Grid>
+                              <Grid item>
+                                {comment.user.id === activeUser?.id || activeUser?.type === 'administrator' ?
+                                  <>
+                                    <Button title= "Bearbeiten" size="small" variant="text" startIcon={<ModeIcon />} onClick={() => {
+                                      openUpdateCommentInputId === comment.id ? setOpenUpdateCommentInputId('') : setOpenUpdateCommentInputId(comment.id)
+                                      openUpdateCommentInputId === comment.id ? setUpdateCommentContent('') : setUpdateCommentContent(comment.content)
+                                    }} />
+                                    <Button title='Löschen' size="small" variant="text" startIcon={<DeleteIcon />} onClick={() => handleDeleteComment(comment.id)}  />
+                                  </>
+                                : null}
+                              </Grid>
+                            </Grid>
+                            {openUpdateCommentInputId === comment.id ? 
+                              <>
+                                <Input placeholder={'Kommentar'}
+                                  multiline
+                                  rows={4}
+                                  fullWidth
+                                  sx={{ padding: 2 }}
+                                  value={updateCommentContent}
+                                  onChange = {(e) => setUpdateCommentContent(e.target.value)}
+                                  onSubmit={() => handleUpdateComment(comment.id, updateCommentContent)}
+                                />
+                                <Grid container justifyContent={'flex-end'} sx={{marginBottom: 2, marginTop: 1}}>
+                                  <Grid item>
+                                    <Button onClick={() => {
+                                      setOpenUpdateCommentInputId('')
+                                      setUpdateCommentContent('')
+                                    }}>Abbrechen</Button>
+                                  </Grid>
+                                  <Grid item>
+                                    <LoadingButton loading={commentSaving} onClick={() => handleUpdateComment(comment.id, updateCommentContent)}>Senden</LoadingButton>
+                                  </Grid>
+                                </Grid>
+                              </>
+                              :
+                              <Typography>{comment.content}</Typography>
+                            }
                           </CardContent>
                         </Card>
                       </Grid>
@@ -250,13 +318,13 @@ const ProjectPage = () => {
             : 
             <Stack gap={2}>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
+                <Skeleton variant='rounded' height={200} />
               </Card>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
+                <Skeleton variant='rounded' height={200} />
               </Card>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
+                <Skeleton variant='rounded' height={200} />
               </Card>
             </Stack>
           }
@@ -266,29 +334,52 @@ const ProjectPage = () => {
             <>
               <Card>
                 <List subheader={<ListSubheader>Projektleiter</ListSubheader>}>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>{project.data.project_lead?.firstname[0]}{project.data.project_lead?.lastname[0]}</Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={`${project.data.project_lead?.firstname} ${project.data.project_lead?.lastname}`} secondary={project.data.project_lead?.email} />
-                  </ListItem>
+                  {project.data.project_lead ?
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>{project.data.project_lead?.firstname[0]}{project.data.project_lead?.lastname[0]}</Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={`${project.data.project_lead?.firstname} ${project.data.project_lead?.lastname}`} secondary={project.data.project_lead?.email} />
+                    </ListItem>
+                  :
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>?</Avatar>
+                      </ListItemAvatar>
+                      <ListItemText secondary={`Nicht definiert`}/>
+                    </ListItem>
+                  }
+                  
                   <ListSubheader component="div">Stellv. Projektleiter</ListSubheader>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>{project.data.sub_project_lead?.firstname[0]}{project.data.sub_project_lead?.lastname[0]}</Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={`${project.data.sub_project_lead?.firstname} ${project.data.sub_project_lead?.lastname}`} secondary={project.data.sub_project_lead?.email} />
-                  </ListItem>
+                  {project.data.sub_project_lead ?
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>{project.data.sub_project_lead?.firstname[0]}{project.data.sub_project_lead?.lastname[0]}</Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={`${project.data.sub_project_lead?.firstname} ${project.data.sub_project_lead?.lastname}`} secondary={project.data.sub_project_lead?.email} />
+                    </ListItem>
+                  :
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>?</Avatar>
+                      </ListItemAvatar>
+                      <ListItemText secondary={`Nicht definiert`}/>
+                    </ListItem>
+                    }                
+                 
                   <ListSubheader component="div">Projektteam</ListSubheader>
-                  <ListItem>
-                    <AvatarGroup max={6}>
-                      {project.data.team.map(teamUser => (
-                        <Tooltip title={`${teamUser.firstname} ${teamUser.lastname}`}>
-                          <Avatar>{teamUser.firstname[0]}{teamUser.lastname[0]}</Avatar>
-                        </Tooltip>
-                      ))}
-                    </AvatarGroup>
-                  </ListItem> 
+                    <ListItem>
+                      <AvatarGroup max={6}>
+                        {project.data.team.length !==0 ? 
+                        project.data.team.map(teamUser => (
+                          <Tooltip title={`${teamUser.firstname} ${teamUser.lastname}`}>
+                            <Avatar>{teamUser.firstname[0]}{teamUser.lastname[0]}</Avatar>
+                          </Tooltip>
+                        ))
+                      :
+                        <Avatar>?</Avatar>}
+                      </AvatarGroup>
+                    </ListItem>
                 </List>
               </Card>
               <Card sx={{ marginTop: 2}}>
@@ -319,10 +410,10 @@ const ProjectPage = () => {
             :     
             <Stack gap={2}>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
+                <Skeleton variant='rounded' height={200} />
               </Card>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
+                <Skeleton variant='rounded' height={200} />
               </Card>  
             </Stack>        
           }

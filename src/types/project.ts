@@ -11,6 +11,7 @@ type ProjectRate = {
 }
 
 type ProjectComment = {
+  id: string
   user: User
   content: string
   type: string
@@ -36,6 +37,7 @@ export type Project = {
   team: Team[],
   rates: ProjectRate[]
   comments?: ProjectComment[]
+  created_from_user?: User
 }
 
 export type ProjectFormData = {
