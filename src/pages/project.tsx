@@ -15,6 +15,7 @@ import StepLabel from '@mui/material/StepLabel'
 import { Alert, 
   Avatar, AvatarGroup, 
   Button, ButtonGroup, 
+  CardActions, 
   CardContent, 
   Input, 
   ListItemAvatar, 
@@ -234,10 +235,20 @@ const ProjectPage = () => {
                       <Grid item xs={12}>
                         <Card>
                           <CardContent>
-                            <Stack direction='row' justifyContent='space-between'>
-                              <Typography>{comment.user.firstname} {comment.user.lastname}</Typography>
-                              <Typography>{new Date(comment.created_at).toLocaleDateString()}</Typography>
-                            </Stack>
+                            <Grid direction={'row'} container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
+                              <Grid item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}>
+                                <Avatar sx={{ width: 24, height: 24, marginRight: 1}}>{comment.user.firstname[0]}{comment.user.lastname[0]}</Avatar>
+                                <Typography variant="overline">{comment.user.firstname} {comment.user.lastname}, {new Date(comment.created_at).toLocaleDateString()}:</Typography>
+                              </Grid>
+                              <Grid item>
+                                {comment.user.id === activeUser?.id ?
+                                  <>
+                                    <Button title='Löschen' size="small" variant="text" startIcon={<DeleteIcon />} onClick={() => {alert("delete")}}  />
+                                    <Button title= "Bearbeiten" size="small" variant="text" startIcon={<ModeIcon />} onClick={() => {alert("edit")}} />
+                                  </>
+                                : null}
+                              </Grid>
+                            </Grid>
                             <Typography>{comment.content}</Typography>
                           </CardContent>
                         </Card>
