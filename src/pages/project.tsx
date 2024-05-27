@@ -200,11 +200,11 @@ const ProjectPage = () => {
                       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
                     </Grid>
                     <Grid item>
-                      <Button startIcon={<AddIcon />} onClick={() => setOpenNewCommentInput(true)}>Neuer Kommentar</Button>
+                      <Button startIcon={<AddIcon />} onClick={() => openNewCommentInput ? setOpenNewCommentInput(false) : setOpenNewCommentInput(true)}>Neuer Kommentar</Button>
                     </Grid>
                   </Grid>
 
-                  {openNewCommentInput ? 
+                  {openNewCommentInput || project.data.comments?.length === 0 ? 
                   <>
                     <Input placeholder={'Kommentar'} 
                       multiline
@@ -250,13 +250,13 @@ const ProjectPage = () => {
             : 
             <Stack gap={2}>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
+                <Skeleton variant='rounded' height={200} />
               </Card>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
+                <Skeleton variant='rounded' height={200} />
               </Card>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
+                <Skeleton variant='rounded' height={200} />
               </Card>
             </Stack>
           }
@@ -319,10 +319,10 @@ const ProjectPage = () => {
             :     
             <Stack gap={2}>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
+                <Skeleton variant='rounded' height={200} />
               </Card>
               <Card>
-                <Skeleton variant='rectangular' height={200} />
+                <Skeleton variant='rounded' height={200} />
               </Card>  
             </Stack>        
           }
