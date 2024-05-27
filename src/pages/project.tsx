@@ -163,8 +163,7 @@ const ProjectPage = () => {
           {project.state === 'success' ? 
             <>
               <Card>
-                <List>
-                  <ListSubheader component="div">Projektleiter</ListSubheader>
+                <List subheader={<ListSubheader>Projektleiter</ListSubheader>}>
                   <ListItem>
                     <ListItemAvatar>
                       <Avatar>{project.data.project_lead?.firstname[0]}{project.data.project_lead?.lastname[0]}</Avatar>
@@ -191,8 +190,7 @@ const ProjectPage = () => {
                 </List>
               </Card>
               <Card sx={{ marginTop: 2}}>
-                <List>
-                  <ListSubheader component="div">Projekt Berwertungen</ListSubheader>
+                <List subheader={<ListSubheader>Bewertungen</ListSubheader>}>
                   {project.data.rates.map((rate) => (
                     <ListItem>
                       <Stack>
