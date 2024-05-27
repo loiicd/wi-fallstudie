@@ -12,7 +12,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Alert, Avatar, AvatarGroup, Button, ButtonGroup, CardContent, ListItemAvatar, ListSubheader, Rating, Stack, Tooltip, Typography } from '@mui/material'
+import { Alert, Avatar, AvatarGroup, Button, ButtonGroup, CardContent, Input, ListItemAvatar, ListSubheader, Rating, Stack, Tooltip, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ModeIcon from '@mui/icons-material/Mode'
 import SubmitDeleteDialog from '../components/submitDeleteDialog'
@@ -89,6 +89,8 @@ const ProjectPage = () => {
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
   const [openRateProjectDialog, setOpenRateProjectDialog] = useState<boolean>(false)
   const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
+  const [openNewCommentDialog, setOpenNewCommentDialog] = useState<boolean>(false)
+  const [commentContent, setCommentContent] = useState<string>('')
 
   useEffect(() => {
     const userCookie = Cookies.get('user')
@@ -109,10 +111,19 @@ const ProjectPage = () => {
       navigate('/notfound')
     }
 
-  }, [id, navigate, openRateProjectDialog, openAddProjectDialog])
+  }, [id, navigate, openRateProjectDialog, openAddProjectDialog, openNewCommentDialog])
 
   const handleDelete = () => {
     setOpenDeleteDialog(true)
+  }
+
+  const handleNewComment = (content: string) => {
+    if(project.state === 'success' && activeUser){
+      setOpenNewCommentDialog(true)
+      postComment(project.data.id, activeUser.id, 'comment', content).then(() => {
+        setOpenNewCommentDialog(false)})
+        setCommentContent('')
+    }
   }
 
   return (  
@@ -169,10 +180,31 @@ const ProjectPage = () => {
                   <Typography>{project.data.problem_description}</Typography>
                 </CardContent>
               </Card>
+
               <Card>
                 <CardContent>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
-                  {activeUser && <Button onClick={() => postComment(project.data.id, activeUser.id, 'comment', 'test')}>Dummy Kommentar erstellen</Button>}
+                  <Grid container justifyContent={'flex-end'}>
+                    <Button startIcon={<AddIcon />} onClick={() => setOpenNewCommentDialog(true)}>Neuer Kommentar</Button>
+                  </Grid>
+                  {openNewCommentDialog ? 
+                    <Card>
+                      <Input placeholder={'Kommentar'} 
+                        multiline
+                        rows={4}
+                        fullWidth
+                        sx={{ padding: 2 }}
+                        value={commentContent}
+                        onChange = {(e) => setCommentContent(e.target.value)}
+                        onSubmit={() => handleNewComment(commentContent)}
+                      />
+                      <Button onClick={() => handleNewComment(commentContent)}>Senden</Button>
+                      <Button onClick={() => {
+                        setOpenNewCommentDialog(false)
+                        setCommentContent('')
+                      }}>Abbrechen</Button>
+                    </Card> 
+                  : null}
                   <Grid container spacing={2}>
                     {project.data.comments?.map(comment => (
                       <Grid item xs={12}>
@@ -180,7 +212,7 @@ const ProjectPage = () => {
                           <CardContent>
                             <Stack direction='row' justifyContent='space-between'>
                               <Typography>{comment.user.firstname} {comment.user.lastname}</Typography>
-                              <Typography>{new Date(comment.created_at).toLocaleString()}</Typography>
+                              <Typography>{new Date(comment.created_at).toLocaleDateString()}</Typography>
                             </Stack>
                             <Typography>{comment.content}</Typography>
                           </CardContent>

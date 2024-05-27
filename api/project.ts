@@ -35,7 +35,7 @@ const handleGet = async (request: VercelRequest, response: VercelResponse) => {
 
       data.rates = (await sql`SELECT * FROM project_rate WHERE project_id = ${data.id}`).rows
 
-      data.comments = (await sql`SELECT * FROM comment WHERE project_id = ${data.id} ORDER BY created_at DESC`).rows
+      data.comments = (await sql`SELECT * FROM comment WHERE project_id = ${data.id} ORDER BY created_at ASC`).rows
       await Promise.all(data.comments.map(async (item: any) =>
         item.user = (await sql`SELECT * FROM "user" WHERE id = ${item.user_id}`).rows[0]
       ))
