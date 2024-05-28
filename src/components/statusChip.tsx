@@ -1,6 +1,5 @@
 import React from 'react'
-import { Chip } from '@mui/material'
-
+import Chip from '@mui/material/Chip'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import MoveToInboxIcon from '@mui/icons-material/MoveToInbox'
 import UpdateIcon from '@mui/icons-material/Update'

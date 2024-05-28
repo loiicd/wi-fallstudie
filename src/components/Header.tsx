@@ -1,25 +1,25 @@
-import { styled } from '@mui/material/styles';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
 import MenuIcon from '@mui/icons-material/Menu'
-import { useNavigate } from 'react-router-dom';
-import MuiDrawer from '@mui/material/Drawer';
-import { FunctionComponent, useState } from 'react';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import GroupsIcon from '@mui/icons-material/Groups';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { User } from '../types/user';
-import Cookies from 'js-cookie';
-import Tooltip from '@mui/material/Tooltip';
-import UserDropDown from './userDropDown';
+import { useNavigate } from 'react-router-dom'
+import MuiDrawer from '@mui/material/Drawer'
+import { FunctionComponent, useState } from 'react'
+import List from '@mui/material/List'
+import Divider from '@mui/material/Divider'
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import AssignmentIcon from '@mui/icons-material/Assignment'
+import GroupsIcon from '@mui/icons-material/Groups'
+import LogoutIcon from '@mui/icons-material/Logout'
+import { User } from '../types/user'
+import Cookies from 'js-cookie'
+import Tooltip from '@mui/material/Tooltip'
+import UserDropDown from './userDropDown'
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;

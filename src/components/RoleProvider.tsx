@@ -1,6 +1,6 @@
-import { FunctionComponent, ReactNode, useEffect, useState } from 'react'
-import { ProjectRole, User } from '../types/user'
-import Cookies from 'js-cookie'
+import { FunctionComponent, ReactNode, useContext } from 'react'
+import { ProjectRole } from '../types/user'
+import { UserContext } from '../context/userContext'
 
 interface RoleProviderProps {
   roles: ProjectRole[]
@@ -9,26 +9,14 @@ interface RoleProviderProps {
 }
 
 const RoleProvider: FunctionComponent<RoleProviderProps> = ({ roles, type, children }) => {
-  const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
-
-  useEffect(() => {
-    const userCookie = Cookies.get('user')
-    if (userCookie) {
-      const [id, firstname, lastname, email, type] = userCookie.split('|')
-      setActiveUser({ id, firstname, lastname, email, title: undefined, type: type as ProjectRole })
-    } 
-  }, [])
+  const { activeUser } = useContext(UserContext)
 
   if (type === 'include' && activeUser) {
-    return roles.includes(activeUser!.type) ? (
-      <>{children}</>
-    ) : null
+    return roles.includes(activeUser!.type) ? (children) : null
   }
 
   if (type === 'exclude' && activeUser) { 
-    return !roles.includes(activeUser!.type) ? (
-      <>{children}</>
-    ) : null
+    return !roles.includes(activeUser!.type) ? (children) : null
   }
 
   return null

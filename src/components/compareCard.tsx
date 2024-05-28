@@ -1,3 +1,4 @@
+import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Project } from '../types/project'
 import Card from '@mui/material/Card'
@@ -7,7 +8,6 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Rating from '@mui/material/Rating'
-import { FunctionComponent } from 'react'
 
 interface CompareSectionProps {
   items: { label: string, value?: any }[]
