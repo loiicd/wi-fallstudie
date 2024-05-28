@@ -14,7 +14,6 @@ import ControllerOverview from '../components/dashboard/controllerOverview'
 import BaseOverView from '../components/dashboard/baseOverview'
 import { UserContext } from '../context/userContext'
 import BusinessViewOverview from '../components/dashboard/businessLeadOverview'
-import ProjectChart from '../components/charts/projectChart'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
@@ -53,13 +52,8 @@ const DashboardPage = () => {
         }
       </RoleProvider>
 
-      <Box sx={{ margin: 4}}>Geschäftsführung View</Box>
       <BusinessViewOverview />
-
-      <Box sx={{ margin: 4}}>Base View</Box>
       <BaseOverView />
-
-      <Box sx={{ margin: 4}}>Controller View</Box>
       <ControllerOverview />
 
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}

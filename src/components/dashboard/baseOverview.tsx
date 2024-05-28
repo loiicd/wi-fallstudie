@@ -74,7 +74,7 @@ const BaseOverView: FunctionComponent = () => {
   }, [activeUser])
 
   return (
-    <RoleProvider roles={['controller', 'base']} type='include'>
+    <RoleProvider roles={['base']} type='include'>
       <Typography variant='h6'>Meine Projektanträge</Typography>
       {projects.state === 'success' && projects.data.length === 0 ?
         <Alert 

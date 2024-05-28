@@ -14,41 +14,8 @@ import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import Skeleton from '@mui/material/Skeleton'
-
-interface LoadingRowProps {
-  loading: boolean
-}
-
-const LoadingRow: FunctionComponent<LoadingRowProps> = ({ loading }) => {
-  const numbers = [1, 2, 3, 4, 5]
-
-  return loading ? (
-    <>
-      {numbers.map(() => (
-        <TableRow>
-          <TableCell><Skeleton variant='text' sx={{ fontSize: '1rem' }} /></TableCell>
-          <TableCell><Skeleton variant='text' sx={{ fontSize: '1rem' }} /></TableCell>
-          <TableCell><Skeleton variant='text' sx={{ fontSize: '1rem' }} /></TableCell>
-        </TableRow>
-      ))}
-    </>
-  ) : null
-}
-
-interface EmptyRowProps {
-  isEmpty: boolean
-}
-
-const EmptyRow: FunctionComponent<EmptyRowProps> = ({ isEmpty }) => {
-  return isEmpty ? (
-    <TableRow >
-      <TableCell colSpan={3} sx={{ textAlign: 'center' }}>
-        <Typography variant='body2' color='grey'>Keine Daten vorhanden</Typography>
-      </TableCell>
-    </TableRow>
-  ) : null
-}
+import LoadingRow from '../table/loadingRow'
+import EmptyRow from '../table/emptyRow'
 
 const ControllerOverview: FunctionComponent = () => {
   const navigate = useNavigate()
@@ -105,7 +72,7 @@ const ControllerOverview: FunctionComponent = () => {
                       <TableCell>{project.created_from_user?.firstname} {project.created_from_user?.lastname}</TableCell>
                     </TableRow>
                   )) : null}
-                  <LoadingRow loading={projects.state === 'loading'} />
+                  <LoadingRow cellCount={3} loading={projects.state === 'loading'} />
                   <EmptyRow isEmpty={projects.state === 'success' && submittedProjects.length === 0} />
                 </TableBody>
               </Table>
@@ -145,7 +112,7 @@ const ControllerOverview: FunctionComponent = () => {
                       <TableCell>{project.created_from_user?.firstname} {project.created_from_user?.lastname}</TableCell>
                     </TableRow>
                   )) : null}
-                  <LoadingRow loading={projects.state === 'loading'} />
+                  <LoadingRow cellCount={3} loading={projects.state === 'loading'} />
                   <EmptyRow isEmpty={projects.state === 'success' && approvedProjects.length === 0} />
                 </TableBody>
               </Table>

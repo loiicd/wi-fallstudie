@@ -52,6 +52,9 @@ const UserDropDown: FunctionComponent<UserDropDownProps> = ({ activeUser }) => {
         <MenuItem>
           <ListItemText>{activeUser.email}</ListItemText>
         </MenuItem>
+        <MenuItem>
+          <ListItemText>{activeUser.type}</ListItemText>
+        </MenuItem>
         <Divider />
         <MenuItem onClick={logout}>
           <ListItemIcon><LogoutIcon /></ListItemIcon>
