@@ -17,6 +17,7 @@ import CardActions from '@mui/material/CardActions'
 import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
+import AddProjectDialog from '../addProjectDialog'
 
 interface CardExampleProps {
   project: Project
@@ -64,6 +65,7 @@ const CardExample: FunctionComponent<CardExampleProps> = ({ project }) => {
 const BaseOverView: FunctionComponent = () => {
   const { activeUser } = useContext(UserContext)
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
+  const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
 
   useEffect(() => {
     if (activeUser) {
@@ -96,20 +98,35 @@ const BaseOverView: FunctionComponent = () => {
               <CardExample project={project} />
             </Grid>
             )): 
-            <Grid item xs={1}>
-              <Skeleton variant="rectangular" height={108} />
-            </Grid>
+            <>
+              <Grid item xs={1}>
+                <Skeleton variant="rectangular" height={175} />
+              </Grid>
+              <Grid item xs={1}>
+                <Skeleton variant="rectangular" height={175} />
+              </Grid>
+              <Grid item xs={1}>
+                <Skeleton variant="rectangular" height={175} />
+              </Grid>
+              <Grid item xs={1}>
+                <Skeleton variant="rectangular" height={175} />
+              </Grid>
+            </>
           }
-          <Grid item xs={1}>
-            <Button 
-              startIcon={<AddIcon />} 
-              sx={{ width: '100%', height: '100%', border: 'dashed', borderWidth: 2 }}
-            >
-              Projektantrag
-            </Button>
-          </Grid>
+          {projects.state === 'success' ? 
+            <Grid item xs={1}>
+              <Button 
+                onClick={() => setOpenAddProjectDialog(true)}
+                startIcon={<AddIcon />} 
+                sx={{ width: '100%', height: '100%', border: 'dashed', borderWidth: 2 }}
+              >
+                Projektantrag
+              </Button>
+            </Grid> : null 
+          }
         </Grid>
       }
+      {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
     </RoleProvider>
   )
 }
