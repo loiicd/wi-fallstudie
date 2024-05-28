@@ -1,9 +1,9 @@
 import { useContext } from 'react'
 import { UserContext } from '../context/userContext'
 import StandardLayout from '../layout/StandardLayout'
-import ControllerOverview from '../components/dashboard/controllerOverview'
-import BaseOverView from '../components/dashboard/baseOverview'
-import BusinessViewOverview from '../components/dashboard/businessLeadOverview'
+import ControllerOverview from '../components/dashboardPage/controllerOverview'
+import BaseOverView from '../components/dashboardPage/baseOverview'
+import BusinessViewOverview from '../components/dashboardPage/businessLeadOverview'
 
 const DashboardPage = () => {
   const { activeUser } = useContext(UserContext)
