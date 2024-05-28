@@ -1,6 +1,6 @@
 
 import { useState, SyntheticEvent, useEffect, ChangeEvent, FunctionComponent, useContext } from 'react'
-import { Project, ProjectFormData, ProjectType, Team } from '../types/project'
+import { Project, ProjectFormData, ProjectStatus, Team } from '../types/project'
 import { postProject, updateProject } from '../services/projects'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { UserContext } from '../context/userContext'
@@ -82,7 +82,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const handleStatusChange = (event: SelectChangeEvent<string>) => {
     setProjectFormData({
       ...projectFormData,
-      status: event.target.value as ProjectType,
+      status: event.target.value as ProjectStatus,
     })
   }
 

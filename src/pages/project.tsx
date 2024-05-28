@@ -106,7 +106,7 @@ const ProjectPage = () => {
       heroLoading={project.state === 'loading'}
     >
 
-      <StatusSection />
+      <StatusSection projectStatus={project.state === 'success' ? project.data.status : undefined} />
 
       <Grid container spacing={2} columns={12}>
         <Grid item lg={9}>
