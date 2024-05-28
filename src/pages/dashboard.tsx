@@ -1,10 +1,8 @@
 import StandardLayout from '../layout/StandardLayout'
-import { Alert, Button, Card, CircularProgress, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemSecondaryAction, ListItemText, ListSubheader, Typography } from '@mui/material'
+import { Alert, Box, Button, Card, CircularProgress, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemSecondaryAction, ListItemText, ListSubheader, Typography } from '@mui/material'
 import { Project } from '../types/project'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { getProjectsById } from '../services/projects'
-import Cookies from 'js-cookie'
-import { ProjectRole, User } from '../types/user'
 import RoleProvider from '../components/RoleProvider'
 import MyProjects from '../components/myProjects'
 import AddIcon from '@mui/icons-material/Add'
@@ -14,20 +12,15 @@ import AddProjectDialog from '../components/addProjectDialog'
 import { ApiResponse } from '../types/apiResponse'
 import ProjectChart from '../components/projectChart'
 import ProjectBarChart from '../components/projectBarChart'
+import ControllerOverview from '../components/dashboard/controllerOverview'
+import BaseOverView from '../components/dashboard/baseOverview'
+import { UserContext } from '../context/userContext'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
-  const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
+  const { activeUser } = useContext(UserContext)
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
-
-  useEffect(() => {
-    const userCookie = Cookies.get('user')
-    if (userCookie) {
-      const [id, firstname, lastname, email, type] = userCookie.split('|')
-      setActiveUser({ id, firstname, lastname, email, title: undefined, type: type as ProjectRole })
-    } 
-  }, [])
 
   useEffect(() => {
     if (activeUser) {
@@ -132,6 +125,14 @@ const DashboardPage = () => {
           </Card>
         </Grid>
       </Grid>
+
+      <Box sx={{ margin: 4}}></Box>
+
+      <Box sx={{ margin: 4}}></Box>
+      <BaseOverView />
+
+      <Box sx={{ margin: 4}}></Box>
+      <ControllerOverview />
 
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
     </StandardLayout>
