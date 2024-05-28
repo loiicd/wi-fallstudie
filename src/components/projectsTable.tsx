@@ -45,18 +45,18 @@ const ProjectsTable = () => {
       editable: false,
       flex: 1,
       type: 'string',
-    // }, {
-    //   field: 'start_date',
-    //   headerName: 'Startdatum',
-    //   editable: false,
-    //   type: 'date',
-    //   renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
-    // }, {
-    //   field: 'end_date',
-    //   headerName: 'EndDatum',
-    //   editable: false,
-    //   type: 'date',
-    //   renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
+    }, {
+      field: 'start_date',
+      headerName: 'Startdatum',
+      editable: false,
+      // type: 'date',
+      renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
+    }, {
+      field: 'end_date',
+      headerName: 'EndDatum',
+      editable: false,
+      // type: 'date',
+      renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
     }, {
       field: 'project_lead',
       headerName: 'Projektleiter',

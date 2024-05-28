@@ -1,10 +1,8 @@
 import StandardLayout from '../layout/StandardLayout'
-import { Alert, Button, Card, CircularProgress, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemSecondaryAction, ListItemText, ListSubheader, Typography } from '@mui/material'
+import { Alert, Box, Button, Typography } from '@mui/material'
 import { Project } from '../types/project'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { getProjectsById } from '../services/projects'
-import Cookies from 'js-cookie'
-import { ProjectRole, User } from '../types/user'
 import RoleProvider from '../components/RoleProvider'
 import MyProjects from '../components/myProjects'
 import AddIcon from '@mui/icons-material/Add'
@@ -12,22 +10,16 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { useNavigate } from 'react-router-dom'
 import AddProjectDialog from '../components/addProjectDialog'
 import { ApiResponse } from '../types/apiResponse'
-import ProjectChart from '../components/projectChart'
-import ProjectBarChart from '../components/projectBarChart'
+import ControllerOverview from '../components/dashboard/controllerOverview'
+import BaseOverView from '../components/dashboard/baseOverview'
+import { UserContext } from '../context/userContext'
+import BusinessViewOverview from '../components/dashboard/businessLeadOverview'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
-  const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
+  const { activeUser } = useContext(UserContext)
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
-
-  useEffect(() => {
-    const userCookie = Cookies.get('user')
-    if (userCookie) {
-      const [id, firstname, lastname, email, type] = userCookie.split('|')
-      setActiveUser({ id, firstname, lastname, email, title: undefined, type: type as ProjectRole })
-    } 
-  }, [])
 
   useEffect(() => {
     if (activeUser) {
@@ -60,78 +52,9 @@ const DashboardPage = () => {
         }
       </RoleProvider>
 
-      <Typography variant='h6' sx={{ marginTop: 4 }}>Übersicht</Typography>
-
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <Card>
-            <ProjectChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} />
-          </Card>
-        </Grid>
-        <Grid item xs={3}>
-          <Card>
-            <ProjectBarChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} />
-          </Card>
-        </Grid>
-        <Grid item xs={3}>
-          <Card>
-            1
-          </Card>
-        </Grid>
-        <Grid item xs={3}>
-          <Card>
-            1
-          </Card>
-        </Grid>
-
-        <Grid item xs={8}>
-          <Card>
-            <List subheader={<ListSubheader>Standort / Abteilung</ListSubheader>}>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemText>Test</ListItemText>
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemText>Test</ListItemText>
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemText>Test</ListItemText>
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemText>Test</ListItemText>
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemText>Test</ListItemText>
-                </ListItemButton>
-              </ListItem>
-            </List>
-          </Card>
-        </Grid>
-        <Grid item xs={4}>
-          <Card>
-            <List subheader={<ListSubheader>Deine Projektanträge</ListSubheader>}>
-              {projects.state === 'success' && projects.data.map((project) => (
-                <ListItem disablePadding>
-                  <ListItemButton onClick={() => navigate(`/project/${project.id}`)}>
-                    <ListItemIcon><InfoOutlinedIcon /></ListItemIcon>
-                    <ListItemText>{project.title}</ListItemText>
-                    <ListItemSecondaryAction>{ new Date(project.created_at).toLocaleDateString() }</ListItemSecondaryAction>
-                  </ListItemButton>
-                </ListItem>
-              ))}
-              {projects.state === 'loading' ? <CircularProgress /> : null}
-            </List>
-          </Card>
-        </Grid>
-      </Grid>
+      <BusinessViewOverview />
+      <BaseOverView />
+      <ControllerOverview />
 
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
     </StandardLayout>

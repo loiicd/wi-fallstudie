@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { FunctionComponent, useState } from 'react'
 import { User } from '../types/user'
 import Avatar from '@mui/material/Avatar'
-import { Chip, Divider, ListItem, ListItemIcon, ListItemText } from '@mui/material'
+import { Divider, ListItemIcon, ListItemText } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import LogoutIcon from '@mui/icons-material/Logout'
@@ -51,6 +51,9 @@ const UserDropDown: FunctionComponent<UserDropDownProps> = ({ activeUser }) => {
         </MenuItem>
         <MenuItem>
           <ListItemText>{activeUser.email}</ListItemText>
+        </MenuItem>
+        <MenuItem>
+          <ListItemText>{activeUser.type}</ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem onClick={logout}>
