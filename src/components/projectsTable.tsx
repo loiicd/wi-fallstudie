@@ -151,7 +151,7 @@ const ProjectsTable = () => {
       <Card>
         <Stack direction='row' spacing={2} justifyContent="flex-end" alignItems="center" sx={{ margin: 2 }}>
           <TextField placeholder='Suche ...' size='small' onChange={handleSearch} />
-          <RoleProvider roles={['administrator']} type='include'>
+          <RoleProvider roles={['base', 'controller', 'administrator']} type='include'>
             <Button variant='contained' startIcon={<AddIcon />} onClick={() => setOpenAddProjectDialog(true)}>Projekt</Button>
           </RoleProvider>
         </Stack>
