@@ -7,6 +7,9 @@ import { getProjectsById } from '../services/projects'
 import { Project } from '../types/project'
 import { ApiResponse } from '../types/apiResponse'
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Avatar, 
   Button,
   CardContent, 
@@ -29,6 +32,8 @@ import DescriptionSection from '../components/projectPage/descriptionSection'
 import StatusSection from '../components/projectPage/statusSection'
 import RolesSection from '../components/projectPage/rolesSection'
 import RateSection from '../components/projectPage/rateSection'
+import EvaluateProjectDialog from '../components/evaluateProjectDialog'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -43,6 +48,7 @@ const ProjectPage = () => {
   const [openUpdateCommentInputId, setOpenUpdateCommentInputId] = useState<string>('')
   const [updateCommentContent, setUpdateCommentContent] = useState<string>('')
   const [commentSaving, setCommentSaving] = useState<boolean>(false)
+  const [openEvaluateDialog, setOpenEvaluateDialog] = useState<boolean>(false)
 
   useEffect(() => {
     if (id) {
@@ -55,7 +61,7 @@ const ProjectPage = () => {
       navigate('/notfound')
     }
 
-  }, [id, navigate, openRateProjectDialog, openAddProjectDialog, openNewCommentInput])
+  }, [id, navigate, openRateProjectDialog, openAddProjectDialog, openNewCommentInput, openEvaluateDialog])
 
   const handleDelete = () => {
     setOpenDeleteDialog(true)
@@ -102,7 +108,15 @@ const ProjectPage = () => {
   return (  
     <StandardLayout 
       heroTitle={project.state === 'success' ? project.data.title : '...'}
-      heroActions={<HeroActions project={project} handleDelete={handleDelete} handleOpenAddProjectDialog={() => setOpenAddProjectDialog(true)} handleOpenRateProjectDialog={() => setOpenRateProjectDialog(true)} />}
+      heroActions={
+        <HeroActions 
+          project={project} 
+          handleDelete={handleDelete} 
+          handleOpenAddProjectDialog={() => setOpenAddProjectDialog(true)} 
+          handleOpenRateProjectDialog={() => setOpenRateProjectDialog(true)} 
+          handleOpenEvaluateDialog={() => setOpenEvaluateDialog(true)}
+        />
+      }
       heroLoading={project.state === 'loading'}
     >
 
@@ -116,8 +130,15 @@ const ProjectPage = () => {
             <DescriptionSection project={project.state === 'success' ? project.data : undefined} loading={project.state === 'loading'} />
 
             {project.state === 'success' ? 
-              <Card>
-                <CardContent>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                >
+                  Kommentare ({project.data.comments ? project.data.comments.length : '-'})
+                </AccordionSummary>
+                <AccordionDetails>
+              {/* <Card>
+                <CardContent> */}
                   <Grid container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
                     <Grid item>
                       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
@@ -205,8 +226,10 @@ const ProjectPage = () => {
                       </Grid>
                     ))}
                   </Grid>
-                </CardContent>
-              </Card>
+                {/* </CardContent>
+              </Card> */}
+                </AccordionDetails>
+              </Accordion>
               : null
             }
             </Stack>
@@ -229,9 +252,15 @@ const ProjectPage = () => {
           </Grid>
         }
       </Grid>
-      {openDeleteDialog && project.state === 'success' ? <SubmitDeleteDialog openDialog={openDeleteDialog} handleClose={() => setOpenDeleteDialog(false)} projectId={project.data.id} /> : null}
-      {openAddProjectDialog && project.state === 'success' ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} project={project.data} /> : null}
-      {openRateProjectDialog && project.state === 'success' ? <RateProjectDialog openDialog={openRateProjectDialog} handleClose={() => setOpenRateProjectDialog(false)} projectId={project.data.id} /> : null}
+      {project.state === 'success' ? 
+        <>
+          {openDeleteDialog ? <SubmitDeleteDialog openDialog={openDeleteDialog} handleClose={() => setOpenDeleteDialog(false)} projectId={project.data.id} /> : null}
+          {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} project={project.data} /> : null}
+          {openRateProjectDialog ? <RateProjectDialog openDialog={openRateProjectDialog} handleClose={() => setOpenRateProjectDialog(false)} projectId={project.data.id} /> : null}
+          {openEvaluateDialog ? <EvaluateProjectDialog open={openEvaluateDialog} handleClose={() => setOpenEvaluateDialog(false)} project={project.data} /> : null}
+        </>
+        : null
+      }
     </StandardLayout>
   )
 }
