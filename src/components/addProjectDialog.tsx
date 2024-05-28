@@ -138,6 +138,24 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                   <MenuItem value='Eingereicht'>Eingereicht</MenuItem>
                 </Select>
               </Grid>
+              <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
+                <TextField 
+                  label='Abteilung' 
+                  size='small' 
+                  value={projectFormData.department}
+                  sx={{ width: '100%'}} 
+                  onChange={handleChange('department')} 
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField 
+                  label='Standort' 
+                  size='small' 
+                  value={projectFormData.location}
+                  sx={{ width: '100%'}} 
+                  onChange={handleChange('location')} 
+                />
+              </Grid>
               <Grid item xs={6}>
                 <DateTimePicker 
                   label='Startdatum' 
@@ -164,7 +182,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
           </TabPanel>
           <TabPanel value='2'>
             <Grid container spacing={4} sx={{ paddingY: 2 }}>
-            <Grid item xs={6}>
+              <Grid item xs={6}>
                 <Autocomplete 
                   options={users} 
                   value={projectFormData.project_lead_id ? users.find(user => user.id === projectFormData.project_lead_id) : (projectFormData.project_lead && users.find(user => user === projectFormData.project_lead)) || null}

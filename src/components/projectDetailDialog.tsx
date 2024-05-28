@@ -45,10 +45,10 @@ const ProjectDetailDialog: FunctionComponent<ProjectDetailDialogProps> = ({ proj
         </Grid>
         <Grid item xs={4}>
           <Grid container justifyContent={"flex-end"} alignItems={"center"} spacing={2} sx={{ paddingRight: 1 }}>
-            <RoleProvider roles={['projektmanager', 'administrator']} type='include'>
+            <RoleProvider roles={['administrator']} type='include'>
               <LoadingButton variant='text' color="error" startIcon={<DeleteIcon />} onClick={() => handleDeletePress(project)} autoFocus loading={isDeletingProject} disabled={isUpdatingProject}>Löschen</LoadingButton>
             </RoleProvider>
-            <RoleProvider roles={['projekteigner', 'projektmanager', 'administrator']} type='include'>
+            <RoleProvider roles={['administrator']} type='include'>
               <Button variant='outlined'startIcon={<EditOutlinedIcon />} onClick={() => handleEdit()} disabled={isDeletingProject} sx={{ marginLeft: 1 }}>Bearbeiten</Button>
             </RoleProvider>
           </Grid>

@@ -29,6 +29,8 @@ export type Project = {
   project_lead?: User
   project_lead_id?: string // NOT FOR USE
   sub_project_lead?: User
+  department?: string,
+  location?: string,
   sub_project_lead_id?: string // NOT FOR USE
   short_description?: string
   target_description?: string
@@ -50,6 +52,8 @@ export type ProjectFormData = {
   project_lead_id?: string
   project_lead?: User // NOT FOR USE
   sub_project_lead_id?: string
+  department?: string,
+  location?: string,
   sub_project_lead?: User // NOT FOR USE
   short_description?: string
   target_description?: string

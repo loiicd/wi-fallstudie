@@ -26,7 +26,7 @@ const UsersPage = () => {
       <List sx={{ width: '30%' }}>
         {users ? users.map(user => (
           <ListItem>
-            <ListItemText primary={user.firstname + ' ' + user.lastname} secondary={user.title} />
+            <ListItemText primary={user.firstname + ' ' + user.lastname} secondary={user.type}/>
           </ListItem>
         )) : null}
       </List>

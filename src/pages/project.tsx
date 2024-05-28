@@ -78,7 +78,7 @@ const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelet
           </Button>
         </Tooltip>
       </ButtonGroup>
-      <ButtonGroup variant='contained' disabled={project.state !== 'success' || project.data.created_from !== activeUser?.id}>
+      <ButtonGroup variant='contained' disabled={project.state !== 'success' || project.data.created_from !== activeUser?.id || activeUser.type === 'administrator' || activeUser.type === 'controller'}>
         <Tooltip title='Bearbeiten'>
           <Button onClick={handleOpenAddProjectDialog}>
             <ModeIcon />
@@ -193,6 +193,14 @@ const ProjectPage = () => {
                 <CardContent>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Allgemein</Typography>
                   <Grid container spacing={2}>
+                   <Grid item xs={6}>
+                      <Typography variant='h6'>Abteilung</Typography>
+                      <Typography>{project.data.department}</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant='h6'>Standort</Typography>
+                      <Typography>{project.data.location}</Typography>
+                    </Grid>
                     <Grid item xs={6}>
                       <Typography variant='h6'>Startdatum</Typography>
                       <Typography>{project.data.start_date ? new Date(project.data.start_date).toLocaleDateString() : '-'}</Typography>
