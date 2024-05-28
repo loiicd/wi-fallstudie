@@ -6,15 +6,11 @@ import Card from '@mui/material/Card'
 import { getProjectsById } from '../services/projects'
 import { Project } from '../types/project'
 import { ApiResponse } from '../types/apiResponse'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import { Alert, 
+import {
   Avatar, 
   Button,
   CardContent, 
   Input, 
-  ListSubheader, 
-  Rating, 
   Skeleton, 
   Stack, 
   Typography } from '@mui/material'
@@ -23,7 +19,6 @@ import ModeIcon from '@mui/icons-material/Mode'
 import SubmitDeleteDialog from '../components/submitDeleteDialog'
 import AddProjectDialog from '../components/addProjectDialog'
 import RateProjectDialog from '../components/rateProjectDialog'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import AddIcon from '@mui/icons-material/Add'
 import { postComment, deleteComment, updateComment } from '../services/comment'
 import { LoadingButton } from '@mui/lab'
@@ -33,6 +28,7 @@ import GeneralSection from '../components/projectPage/generalSection'
 import DescriptionSection from '../components/projectPage/descriptionSection'
 import StatusSection from '../components/projectPage/statusSection'
 import RolesSection from '../components/projectPage/rolesSection'
+import RateSection from '../components/projectPage/rateSection'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -215,36 +211,13 @@ const ProjectPage = () => {
             }
             </Stack>
         </Grid>
-        <Grid item lg={3}>
-          {project.state === 'success' ? 
-            <>
-              <RolesSection project={project.data} />
-              <Card sx={{ marginTop: 2}}>
-                <List subheader={<ListSubheader>Bewertungen</ListSubheader>}>
-                  {project.data.rates.map((rate) => (
-                    <ListItem>
-                      <Stack>
-                        <Typography component="legend">{rate.user.firstname} {rate.user.lastname}</Typography>
-                        <Rating value={rate.rate} readOnly />
-                      </Stack>
-                    </ListItem>
-                  ))}
-                  {project.data.rates.length === 0 ? 
-                    <ListItem>
-                      <Alert icon={<InfoOutlinedIcon fontSize="inherit" />} severity="info">Es gibt derzeit keine Berwertungen</Alert>
-                    </ListItem>
-                    : 
-                    <ListItem>
-                      <Stack>
-                        <Typography component="legend">Durchschnitt</Typography>
-                        <Rating value={project.data.rates.reduce((sum, rate) => sum + rate.rate, 0) / project.data.rates.length} readOnly precision={0.1}/>
-                      </Stack>
-                    </ListItem>
-                  }
-                </List>
-              </Card>
-            </>
-            :     
+        {project.state === 'success' ? 
+          <Grid item lg={3}>
+            <RolesSection project={project.data} />
+            <RateSection project={project.data} />
+          </Grid>
+          :     
+          <Grid item lg={3}>
             <Stack gap={2}>
               <Card>
                 <Skeleton variant='rounded' height={200} />
@@ -253,8 +226,8 @@ const ProjectPage = () => {
                 <Skeleton variant='rounded' height={200} />
               </Card>  
             </Stack>        
-          }
-        </Grid>
+          </Grid>
+        }
       </Grid>
       {openDeleteDialog && project.state === 'success' ? <SubmitDeleteDialog openDialog={openDeleteDialog} handleClose={() => setOpenDeleteDialog(false)} projectId={project.data.id} /> : null}
       {openAddProjectDialog && project.state === 'success' ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} project={project.data} /> : null}
