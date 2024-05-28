@@ -1,7 +1,7 @@
 import { User } from './user'
 
-export const projectTypes = ['Entwurf', 'Eingereicht', 'In Prüfung', 'Angenommen', 'Abgelehnt'] as const
-export type ProjectType = typeof projectTypes[number]
+export const projectStatus = ['Entwurf', 'Eingereicht', 'In Prüfung', 'Angenommen', 'Abgelehnt'] as const
+export type ProjectStatus = typeof projectStatus[number]
 
 export type Team = User & { role: string }
 
@@ -20,7 +20,7 @@ type ProjectComment = {
 
 export type Project = {
   id: string
-  status: ProjectType
+  status: ProjectStatus
   title: string
   created_from: string,
   created_at: string
@@ -44,7 +44,7 @@ export type Project = {
 
 export type ProjectFormData = {
   id?: string
-  status: ProjectType
+  status: ProjectStatus
   title: string
   created_from: string,
   start_date?: string | null

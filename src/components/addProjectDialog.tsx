@@ -1,5 +1,11 @@
 
-import { useState, SyntheticEvent, useEffect, ChangeEvent } from 'react'
+import { useState, SyntheticEvent, useEffect, ChangeEvent, FunctionComponent, useContext } from 'react'
+import { Project, ProjectFormData, ProjectStatus, Team } from '../types/project'
+import { postProject, updateProject } from '../services/projects'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import { UserContext } from '../context/userContext'
+import { getUsers } from '../services/user'
+import { User } from '../types/user'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -7,26 +13,19 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
-import { FunctionComponent } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
-import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined'
 import Autocomplete from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import TabContext from '@mui/lab/TabContext'
 import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
-import { ProjectRole, User } from '../types/user'
-import { getUsers } from '../services/user'
 import CircularProgress from '@mui/material/CircularProgress'
-import { postProject, updateProject } from '../services/projects'
-import { Project, ProjectFormData, ProjectType, Team } from '../types/project'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import LoadingButton from '@mui/lab/LoadingButton'
 import dayjs from 'dayjs'
-import Cookies from 'js-cookie'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -35,7 +34,7 @@ interface AddProjectDialogProps {
 }
 
 const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, handleClose, project}) => {
-  const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
+  const { activeUser } = useContext(UserContext)
   const [tab, setTab] = useState<string>('1')
   const [projectFormData, setProjectFormData] = useState<Project | ProjectFormData>(project ? project : { title: '', status: 'Entwurf', team: [], created_from: '1'})
   const [users, setUsers] = useState<User[]>([])
@@ -66,14 +65,6 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   }
 
   useEffect(() => {
-    const userCookie = Cookies.get('user')
-    if (userCookie) {
-      const [id, firstname, lastname, email, type] = userCookie.split('|')
-      setActiveUser({ id, firstname, lastname, email, title: undefined, type: type as ProjectRole})
-    } 
-  }, [])
-
-  useEffect(() => {
     setIsLoadingUsers(true)
     getUsers()
       .then(data => setUsers(data))
@@ -91,7 +82,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const handleStatusChange = (event: SelectChangeEvent<string>) => {
     setProjectFormData({
       ...projectFormData,
-      status: event.target.value as ProjectType,
+      status: event.target.value as ProjectStatus,
     })
   }
 
