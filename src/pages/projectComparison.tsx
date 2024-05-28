@@ -1,14 +1,15 @@
+import { useEffect, useState } from 'react'
+import { getProjects } from '../services/projects'
+import { ApiResponse } from '../types/apiResponse'
+import { Project } from '../types/project'
 import { useSearchParams } from 'react-router-dom'
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
-import { useEffect, useState } from 'react'
-import { getProjects } from '../services/projects'
-import { ApiResponse } from '../types/apiResponse'
-import { Project } from '../types/project'
-import { Box, CircularProgress } from '@mui/material'
 import CompareCard from '../components/compareCard'
+import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
 
 const ProjectComparisonPage = () => {
   const [urlParams, setUrlParams] = useSearchParams()
@@ -88,7 +89,7 @@ const ProjectComparisonPage = () => {
         </Grid>
         : projects.state === 'loading' ? 
         <Box sx={{ width: '100%', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <CircularProgress />
+          <CircularProgress />
         </Box>
         : 'error'
         }

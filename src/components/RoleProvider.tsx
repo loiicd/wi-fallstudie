@@ -12,11 +12,11 @@ const RoleProvider: FunctionComponent<RoleProviderProps> = ({ roles, type, child
   const { activeUser } = useContext(UserContext)
 
   if (type === 'include' && activeUser) {
-    return roles.includes(activeUser!.type) ? (children) : null
+    return roles.includes(activeUser!.type) ? (<>{children}</>) : null
   }
 
   if (type === 'exclude' && activeUser) { 
-    return !roles.includes(activeUser!.type) ? (children) : null
+    return !roles.includes(activeUser!.type) ? (<>{children}</>) : null
   }
 
   return null

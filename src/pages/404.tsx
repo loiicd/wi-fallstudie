@@ -1,4 +1,4 @@
-import StandardLayout from "../layout/StandardLayout"
+import StandardLayout from '../layout/StandardLayout'
 
 const NotFoundPage = () => {
   return (
