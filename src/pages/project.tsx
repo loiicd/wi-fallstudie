@@ -137,8 +137,6 @@ const ProjectPage = () => {
                   Kommentare ({project.data.comments ? project.data.comments.length : '-'})
                 </AccordionSummary>
                 <AccordionDetails>
-              {/* <Card>
-                <CardContent> */}
                   <Grid container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
                     <Grid item>
                       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
@@ -226,8 +224,6 @@ const ProjectPage = () => {
                       </Grid>
                     ))}
                   </Grid>
-                {/* </CardContent>
-              </Card> */}
                 </AccordionDetails>
               </Accordion>
               : null

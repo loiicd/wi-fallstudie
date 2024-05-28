@@ -21,7 +21,9 @@ const ControllerOverview: FunctionComponent = () => {
   const navigate = useNavigate()
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
   const [submittedProjects, setSubmittedProjects] = useState<Project[]>([])
+  const [auditProjects, setAuditProjects] = useState<Project[]>([])
   const [approvedProjects, setApprovedProjects] = useState<Project[]>([])
+  const [declinedProjects, setDeclinedProjects] = useState<Project[]>([])
 
   useEffect(() => {
     getProjects()
@@ -32,7 +34,9 @@ const ControllerOverview: FunctionComponent = () => {
   useEffect(() => {
     if (projects.state === 'success') {
       setSubmittedProjects(projects.data.filter(project => project.status === 'Eingereicht'))
+      setAuditProjects(projects.data.filter(project => project.status === 'In Prüfung'))
       setApprovedProjects(projects.data.filter(project => project.status === 'Angenommen'))
+      setDeclinedProjects(projects.data.filter(project => project.status === 'Abgelehnt'))
     }
   }, [projects])
 
@@ -88,6 +92,46 @@ const ControllerOverview: FunctionComponent = () => {
                 id="tableTitle"
                 component="div"
                 >
+                  In Prüfung
+              </Typography>
+            </Box>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Titel</TableCell>
+                    <TableCell>Datum</TableCell>
+                    <TableCell>User</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {projects.state === 'success' ? auditProjects.slice(0, 5).map((project) => (
+                    <TableRow
+                      key={project.id}
+                      hover
+                      onClick={() => navigate(`/project/${project.id}`)}
+                    >
+                      <TableCell>{project.title}</TableCell>
+                      <TableCell>{new Date(project.created_at).toLocaleDateString()}</TableCell>
+                      <TableCell>{project.created_from_user?.firstname} {project.created_from_user?.lastname}</TableCell>
+                    </TableRow>
+                  )) : null}
+                  <LoadingRow cellCount={3} loading={projects.state === 'loading'} />
+                  <EmptyRow isEmpty={projects.state === 'success' && auditProjects.length === 0} />
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Card>
+        </Grid>
+        <Grid item xs={6}>
+          <Card>
+            <Box sx={{ m: 2 }}>
+              <Typography
+                sx={{ flex: '1 1 100%' }}
+                variant="h6"
+                id="tableTitle"
+                component="div"
+                >
                   Angenommene Projektanträge
               </Typography>
             </Box>
@@ -114,6 +158,46 @@ const ControllerOverview: FunctionComponent = () => {
                   )) : null}
                   <LoadingRow cellCount={3} loading={projects.state === 'loading'} />
                   <EmptyRow isEmpty={projects.state === 'success' && approvedProjects.length === 0} />
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Card>
+        </Grid>
+        <Grid item xs={6}>
+          <Card>
+            <Box sx={{ m: 2 }}>
+              <Typography
+                sx={{ flex: '1 1 100%' }}
+                variant="h6"
+                id="tableTitle"
+                component="div"
+                >
+                  Abgelehnte Projektanträge
+              </Typography>
+            </Box>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Titel</TableCell>
+                    <TableCell>Datum</TableCell>
+                    <TableCell>User</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {projects.state === 'success' ? declinedProjects.slice(0, 5).map((project) => (
+                    <TableRow
+                      key={project.id}
+                      hover
+                      onClick={() => navigate(`/project/${project.id}`)}
+                    >
+                      <TableCell>{project.title}</TableCell>
+                      <TableCell>{new Date(project.created_at).toLocaleDateString()}</TableCell>
+                      <TableCell>{project.created_from_user?.firstname} {project.created_from_user?.lastname}</TableCell>
+                    </TableRow>
+                  )) : null}
+                  <LoadingRow cellCount={3} loading={projects.state === 'loading'} />
+                  <EmptyRow isEmpty={projects.state === 'success' && declinedProjects.length === 0} />
                 </TableBody>
               </Table>
             </TableContainer>
