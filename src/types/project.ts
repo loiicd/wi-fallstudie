@@ -10,7 +10,7 @@ type ProjectRate = {
   rate: number
 }
 
-type ProjectComment = {
+export type ProjectComment = {
   id: string
   user: User
   content: string
