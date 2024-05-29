@@ -1,12 +1,14 @@
+import { FunctionComponent, useContext, useState } from 'react'
+import { postProjectRate } from '../services/projectRate'
+import { UserContext } from '../context/userContext'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Stack from '@mui/material/Stack'
-import { FunctionComponent, useEffect, useState } from 'react'
-import { LoadingButton } from '@mui/lab'
-import { Button, DialogActions, DialogContent, Rating } from '@mui/material'
-import { postProjectRate } from '../services/projectRate'
-import Cookies from 'js-cookie'
-import { ProjectRole, User } from '../types/user'
+import LoadingButton from '@mui/lab/LoadingButton'
+import DialogContent from '@mui/material/DialogContent'
+import Rating from '@mui/material/Rating'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 
 interface RateProjectDialogProps {
   openDialog: boolean
@@ -15,17 +17,9 @@ interface RateProjectDialogProps {
 }
 
 const RateProjectDialog: FunctionComponent<RateProjectDialogProps> = ({ openDialog, handleClose, projectId }) => {
-  const [activeUser, setActiveUser] = useState<User | undefined>(undefined)
+  const { activeUser } = useContext(UserContext)
   const [rate, setRate] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(false)
-
-  useEffect(() => {
-    const userCookie = Cookies.get('user')
-    if (userCookie) {
-      const [id, firstname, lastname, email, type] = userCookie.split('|')
-      setActiveUser({ id, firstname, lastname, email, title: undefined, type: type as ProjectRole })
-    } 
-  }, [])
 
   const handleSubmitRate = () => {
     if (activeUser) {

@@ -7,14 +7,16 @@ import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { getUsers } from '../services/user'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { User } from '../types/user'
 import TextField from '@mui/material/TextField'
 import { ApiResponse } from '../types/apiResponse'
 import LinearProgress from '@mui/material/LinearProgress'
+import { UserContext } from '../context/userContext'
 
 const LoginPage = () => {
   const navigate = useNavigate()
+  const { reloadUserContext } = useContext(UserContext)
   const [user, setUser] = useState<User | undefined>(undefined) 
   const [users, setUsers] = useState<ApiResponse<User[]>>({ state: 'loading' })
   const [email, setEmail] = useState<string | undefined>(undefined)
@@ -24,6 +26,7 @@ const LoginPage = () => {
   const login = async () => {
     if (user) {
       Cookies.set('user', `${user.id}|${user.firstname}|${user.lastname}|${user.email}|${user.type}`)
+      reloadUserContext()
       navigate('/dashboard')
     }
   }

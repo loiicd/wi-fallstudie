@@ -34,6 +34,8 @@ const handleGet = async (response: VercelResponse) => {
         item.user = (await sql`SELECT * FROM "user" WHERE id = ${item.user_id}`).rows[0]
       ))
 
+      data.created_from_user = (await sql`SELECT * FROM "user" WHERE id = ${data.created_from}`).rows[0]
+
     }
     return response.status(200).send(JSON.stringify(result.rows))
   } catch (error) {

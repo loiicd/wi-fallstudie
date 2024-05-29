@@ -10,11 +10,12 @@ import UsersPage from "./pages/users"
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import LoginPage from "./pages/login"
 import ProjectComparisonPage from "./pages/projectComparison"
+import { UserProvider } from "./context/userContext"
 
 const App = () => {
   return (
-    <>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <UserProvider>
         <CssBaseline />
         <SpeedInsights />
         <BrowserRouter>
@@ -30,8 +31,8 @@ const App = () => {
             <Route path='/login' element={<LoginPage />} />
           </Routes>
         </BrowserRouter>
-      </LocalizationProvider>
-    </>
+      </UserProvider>
+    </LocalizationProvider>
   )
 }
 

@@ -1,7 +1,8 @@
 import { ApiResponse } from '../types/apiResponse'
 import { useNavigate } from 'react-router-dom'
 import { DataGrid, GridColDef, GridFilterModel, GridToolbar } from '@mui/x-data-grid'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { UserContext } from '../context/userContext'
 import { Project } from '../types/project'
 import { getProjects } from '../services/projects'
 import Card from '@mui/material/Card'
@@ -17,6 +18,7 @@ import Rating from '@mui/material/Rating'
 
 const ProjectsTable = () => {
   const navigate = useNavigate()
+  const { activeUser } = useContext(UserContext)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
@@ -45,18 +47,18 @@ const ProjectsTable = () => {
       editable: false,
       flex: 1,
       type: 'string',
-    // }, {
-    //   field: 'start_date',
-    //   headerName: 'Startdatum',
-    //   editable: false,
-    //   type: 'date',
-    //   renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
-    // }, {
-    //   field: 'end_date',
-    //   headerName: 'EndDatum',
-    //   editable: false,
-    //   type: 'date',
-    //   renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
+    }, {
+      field: 'start_date',
+      headerName: 'Startdatum',
+      editable: false,
+      // type: 'date',
+      renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
+    }, {
+      field: 'end_date',
+      headerName: 'EndDatum',
+      editable: false,
+      // type: 'date',
+      renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
     }, {
       field: 'project_lead',
       headerName: 'Projektleiter',
@@ -128,9 +130,10 @@ const ProjectsTable = () => {
         project.sub_project_lead?.lastname.includes(searchTerm)
       )
       const updatedProjects = filteredProjects.map((project) => ({ ...project, avgRate: project.rates.reduce((sum, rate) => sum + rate.rate, 0) / project.rates.length }))
-      setSearchedProjects(updatedProjects)
+      const test = updatedProjects.filter(project => project.status !== 'Entwurf' || project.created_from === activeUser?.id)
+      setSearchedProjects(test)
       }
-    }, [searchTerm, projects])
+    }, [searchTerm, projects, activeUser])
 
   const handleCellClick = (project: any) => {
     setProject(project)

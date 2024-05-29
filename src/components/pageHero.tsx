@@ -1,6 +1,7 @@
-import { Skeleton, Typography } from '@mui/material'
-import Stack from '@mui/material/Stack'
 import { FunctionComponent, ReactNode } from 'react'
+import Stack from '@mui/material/Stack'
+import Skeleton from '@mui/material/Skeleton'
+import Typography from '@mui/material/Typography'
 
 interface PageHeroProps {
   title: string
@@ -15,7 +16,8 @@ const PageHero: FunctionComponent<PageHeroProps> = ({ title, actions, loading })
         <Skeleton>
           <Typography variant='h3'>Das hier ist ein Platzhalter Text</Typography>
         </Skeleton> 
-        : <Typography variant='h3'>{title}</Typography>
+        : 
+        <Typography variant='h3'>{title}</Typography>
       }
       {actions}
     </Stack>
