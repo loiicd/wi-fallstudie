@@ -32,6 +32,13 @@ export type Project = {
   department?: string,
   location?: string,
   sub_project_lead_id?: string // NOT FOR USE
+  fte_intern?: number
+  fte_extern?: number
+  investment?: number
+  stakeholder?: string
+  customer?: string
+  dependencies?: string
+  expected_effects?: string
   short_description?: string
   target_description?: string
   vision_description?: string
@@ -55,6 +62,13 @@ export type ProjectFormData = {
   department?: string,
   location?: string,
   sub_project_lead?: User // NOT FOR USE
+  fte_intern?: number
+  fte_extern?: number
+  investment?: number
+  stakeholder?: string
+  customer?: string
+  dependencies?: string
+  expected_effects?: string
   short_description?: string
   target_description?: string
   vision_description?: string
