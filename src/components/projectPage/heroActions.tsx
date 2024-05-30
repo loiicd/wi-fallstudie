@@ -25,6 +25,7 @@ const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelet
   const navigate = useNavigate()
   const { activeUser } = useContext(UserContext)
   const projectPrüfenNotAllowed = activeUser?.type !== 'administrator' && activeUser?.type !== 'controller' && activeUser?.type !== 'geschäftsleitung'
+  const projectEditNotAllowed = activeUser?.type !== 'administrator' && activeUser?.type !== 'controller' && (project.state === 'success' && activeUser?.id !== project.data.created_from)
 
   return (
     <Stack direction='row' gap={2} alignItems='center'>
@@ -54,7 +55,7 @@ const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelet
           </Button>
         </Tooltip>
       </ButtonGroup>
-      <ButtonGroup variant='contained' disabled={project.state !== 'success' || project.data.created_from !== activeUser?.id || activeUser.type === 'administrator' || activeUser.type === 'controller'}>
+      <ButtonGroup variant='contained' disabled={projectEditNotAllowed}>
         <Tooltip title='Bearbeiten'>
           <Button onClick={handleOpenAddProjectDialog}>
             <ModeIcon />

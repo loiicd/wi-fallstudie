@@ -19,6 +19,9 @@ import EvaluateProjectDialog from '../components/evaluateProjectDialog'
 import CommentSection from '../components/projectPage/commentSection'
 import Stack from '@mui/material/Stack'
 import Skeleton from '@mui/material/Skeleton'
+import BudgetSection from '../components/projectPage/budgetSection'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -71,6 +74,19 @@ const ProjectPage = () => {
           <Stack gap={2}>
 
             <GeneralSection project={project.state === 'success' ? project.data : undefined} loading={project.state === 'loading'} />
+            <BudgetSection project={project.state === 'success' ? project.data : undefined} />
+
+            <Card>
+              <CardContent>
+                <Typography variant='h6'>Stakeholder</Typography>
+                <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.stakeholder ? project?.data.stakeholder : '-'}</Typography>
+                <Typography variant='h6'>Abhängigkeiten</Typography>
+                <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.dependencies ? project?.data.dependencies : '-'}</Typography>
+                <Typography variant='h6'>Erwarteter Effekt</Typography>
+                <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.expected_effects ? project?.data.expected_effects : '-' }</Typography>
+              </CardContent>
+            </Card>
+
             <DescriptionSection project={project.state === 'success' ? project.data : undefined} loading={project.state === 'loading'} />
 
             {project.state === 'success' ? 
