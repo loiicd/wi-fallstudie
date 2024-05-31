@@ -4,7 +4,7 @@ import { User } from '../types/user'
 import {ProjectProjectRelation} from '../types/projectProjectRelation'
 
 export const saveRelation = async (relation: ProjectProjectRelation): Promise<void> => {
-  console.log(relation, relation)
+  console.log("relation", relation)
   await axios.post('/api/projectRelations', { relation})
 }
 
