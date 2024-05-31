@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import ModeIcon from '@mui/icons-material/Mode'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import GavelIcon from '@mui/icons-material/Gavel'
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
 
 interface HeroActionsProps {
   project: ApiResponse<Project>
@@ -19,9 +20,10 @@ interface HeroActionsProps {
   handleOpenAddProjectDialog: () => void
   handleOpenRateProjectDialog: () => void
   handleOpenEvaluateDialog: () => void
+  handleOpenPrioDialog: () => void
 }
 
-const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelete, handleOpenAddProjectDialog, handleOpenRateProjectDialog, handleOpenEvaluateDialog }) => {
+const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelete, handleOpenAddProjectDialog, handleOpenRateProjectDialog, handleOpenEvaluateDialog, handleOpenPrioDialog }) => {
   const navigate = useNavigate()
   const { activeUser } = useContext(UserContext)
   const projectPrüfenNotAllowed = activeUser?.type !== 'administrator' && activeUser?.type !== 'controller' && activeUser?.type !== 'geschäftsleitung'
@@ -30,6 +32,14 @@ const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelet
   return (
     <Stack direction='row' gap={2} alignItems='center'>
       <ButtonGroup variant='contained'>
+        <Tooltip title='Projekt Priorisieren'>
+          <Button 
+            disabled={project.state !== 'success' || projectPrüfenNotAllowed} 
+            onClick={handleOpenPrioDialog}
+          >
+            <PriorityHighIcon />
+          </Button>
+        </Tooltip>
         <Tooltip title='Projekt Prüfen'>
           <Button 
             disabled={project.state !== 'success' || projectPrüfenNotAllowed} 

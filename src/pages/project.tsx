@@ -22,6 +22,7 @@ import Skeleton from '@mui/material/Skeleton'
 import BudgetSection from '../components/projectPage/budgetSection'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
+import PrioProjectDialog from '../components/prioProjectDialog'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -31,6 +32,7 @@ const ProjectPage = () => {
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
   const [openRateProjectDialog, setOpenRateProjectDialog] = useState<boolean>(false)
   const [openEvaluateDialog, setOpenEvaluateDialog] = useState<boolean>(false)
+  const [openPrioDialog, setOpenPrioDialog] = useState<boolean>(false)
 
   const handleReloadProject = useCallback(() => {
     if (id) {
@@ -62,6 +64,7 @@ const ProjectPage = () => {
           handleOpenAddProjectDialog={() => setOpenAddProjectDialog(true)} 
           handleOpenRateProjectDialog={() => setOpenRateProjectDialog(true)} 
           handleOpenEvaluateDialog={() => setOpenEvaluateDialog(true)}
+          handleOpenPrioDialog={() => setOpenPrioDialog(true)}
         />
       }
       heroLoading={project.state === 'loading'}
@@ -123,6 +126,7 @@ const ProjectPage = () => {
           {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} project={project.data} /> : null}
           {openRateProjectDialog ? <RateProjectDialog openDialog={openRateProjectDialog} handleClose={() => setOpenRateProjectDialog(false)} projectId={project.data.id} /> : null}
           {openEvaluateDialog ? <EvaluateProjectDialog open={openEvaluateDialog} handleClose={() => setOpenEvaluateDialog(false)} project={project.data} /> : null}
+          {openPrioDialog ? <PrioProjectDialog open={openPrioDialog} handleClose={() => setOpenPrioDialog(false)} project={project.data} /> : null}
         </>
         : null
       }

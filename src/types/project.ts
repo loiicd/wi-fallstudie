@@ -39,6 +39,7 @@ export type Project = {
   customer?: string
   dependencies?: string
   expected_effects?: string
+  prio?: number,
   short_description?: string
   target_description?: string
   vision_description?: string
