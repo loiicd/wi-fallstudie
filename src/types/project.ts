@@ -18,6 +18,12 @@ export type ProjectComment = {
   created_at: string
 }
 
+export type RelatedProject = {
+  relation_id: string
+  project: Project
+  role: string
+}
+
 export type Project = {
   id: string
   status: ProjectStatus
@@ -40,6 +46,7 @@ export type Project = {
   rates: ProjectRate[]
   comments?: ProjectComment[]
   created_from_user?: User
+  related_projects?: RelatedProject[]
 }
 
 export type ProjectFormData = {

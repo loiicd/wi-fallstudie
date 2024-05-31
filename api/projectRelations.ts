@@ -20,11 +20,10 @@ async function createProject_Project_Relation_Table(request: VercelRequest, resp
             id text not null,
             project_1_id text not null,
             project_2_id text not null,
-            relation_name_1_to_2 text not null,
+            role_1_to_2 text not null,
             relation_name_2_to_1 text not null,
             created_at date,
             created_from text NOT NULL,
-            project_project_relation_type_id text not null,
             Foreign Key (project_1_id) references project(id),
             Foreign Key (project_2_id) references project(id),
             FOREIGN KEY (created_from) REFERENCES "user" (id))`

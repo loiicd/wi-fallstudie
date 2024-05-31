@@ -15,9 +15,6 @@ const DashboardPage = () => {
       <BusinessViewOverview />
       <BaseOverView />
       <ControllerOverview />
-      <Button onClick={() => createProject_Project_Relation_Table()}>
-        <Typography variant="h6">create table</Typography>
-      </Button>
     </StandardLayout>
   )
 }
