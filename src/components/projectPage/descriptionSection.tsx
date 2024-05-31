@@ -1,9 +1,11 @@
+import { FunctionComponent } from 'react'
 import { Project } from '../../types/project'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
 import Skeleton from '@mui/material/Skeleton'
 import Typography from '@mui/material/Typography'
-import { FunctionComponent } from 'react'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 interface DescriptionSectionProps {
   project?: Project
@@ -12,9 +14,11 @@ interface DescriptionSectionProps {
 
 const DescriptionSection: FunctionComponent<DescriptionSectionProps> = ({ project, loading }) => {
   return (
-    <Card>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>Beschreibungen</Typography>
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        Beschreibungen
+      </AccordionSummary>
+      <AccordionDetails>
         <Typography variant='h6'>Kurzbeschreibung</Typography>
         <Typography>{loading ? <Skeleton /> : project!.short_description}</Typography>
         <Typography variant='h6'>Ziel</Typography>
@@ -23,8 +27,8 @@ const DescriptionSection: FunctionComponent<DescriptionSectionProps> = ({ projec
         <Typography>{loading ? <Skeleton /> : project!.vision_description}</Typography>
         <Typography variant='h6'>Problemstellung</Typography>
         <Typography>{loading ? <Skeleton /> : project!.problem_description}</Typography>
-      </CardContent>
-    </Card>
+      </AccordionDetails>
+    </Accordion>
   )
 }
 

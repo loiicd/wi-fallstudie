@@ -26,6 +26,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import LoadingButton from '@mui/lab/LoadingButton'
 import dayjs from 'dayjs'
+import InputAdornment from '@mui/material/InputAdornment'
+import Stack from '@mui/material/Stack'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -100,7 +102,9 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
             <TabList onChange={handleChangeTab} aria-label="lab API tabs example">
               <Tab label="Allgemein" value='1' />
               <Tab label="Rollen" value='2' />
-              <Tab label="Beschreibungen" value='3' />
+              <Tab label="Budget" value='3' />
+              <Tab label="Beschreibungen" value='4' />
+              <Tab label="Weiteres" value='5' />
             </TabList>
           </Box>
           <TabPanel value='1'>
@@ -147,6 +151,16 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                   onChange={handleChange('location')} 
                 />
               </Grid>
+              <Grid item xs={6}>
+                <TextField 
+                  label='Kunde' 
+                  size='small' 
+                  value={projectFormData.customer}
+                  sx={{ width: '100%'}} 
+                  onChange={handleChange('customer')} 
+                />
+              </Grid>
+              <Grid item xs={6}></Grid>
               <Grid item xs={6}>
                 <DateTimePicker 
                   label='Startdatum' 
@@ -228,7 +242,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                 />
               </Grid>
               {!projectFormData.id ?
-                <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
+                <Grid item xs={12} sx={{ justifyContent: 'stretch' }}>
                   <Autocomplete 
                     getOptionKey={(option) => option ? option.id : ''}
                     multiple
@@ -263,7 +277,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                   />
                 </Grid>
               : 
-                <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
+                <Grid item xs={12} sx={{ justifyContent: 'stretch' }}>
                   <Autocomplete 
                     getOptionKey={(option) => option && typeof option !== 'string' && option.id ? option.id : ''}
                     multiple
@@ -304,6 +318,43 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
             </Grid>
           </TabPanel>
           <TabPanel value='3'>
+            <Grid container spacing={4} sx={{ paddingY: 2 }}>
+              <Grid item xs={3}>
+                <TextField 
+                  label='FTE Intern' 
+                  size='small' 
+                  value={projectFormData.fte_intern}
+                  sx={{ width: '100%'}} 
+                  type='number'
+                  onChange={handleChange('fte_intern')} 
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField 
+                  label='FTE Extern' 
+                  size='small' 
+                  value={projectFormData.fte_extern}
+                  sx={{ width: '100%'}} 
+                  type='number'
+                  onChange={handleChange('fte_extern')} 
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField 
+                  label='Investitionen' 
+                  size='small' 
+                  value={projectFormData.investment}
+                  sx={{ width: '100%'}} 
+                  type='number'
+                  InputProps={{
+                    endAdornment: <InputAdornment position='end'>€</InputAdornment>,
+                  }}
+                  onChange={handleChange('investment')} 
+                />
+              </Grid>
+            </Grid>
+          </TabPanel>
+          <TabPanel value='4'>
             <Grid container spacing={4} sx={{ paddingY: 2 }}>
               <Grid item xs={12}>
                 <TextField 
@@ -351,7 +402,38 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               </Grid>
             </Grid>
           </TabPanel>
-          </TabContext>
+          <TabPanel value='5'>
+            <Stack spacing={2}>
+              <TextField 
+                label='Stakeholder' 
+                size='small' 
+                value={projectFormData.stakeholder}
+                sx={{ width: '100%'}} 
+                multiline 
+                rows={4} 
+                onChange={handleChange('stakeholder')} 
+              />
+              <TextField 
+                label='Abhängigkeiten' 
+                size='small' 
+                value={projectFormData.dependencies}
+                sx={{ width: '100%'}} 
+                multiline 
+                rows={4} 
+                onChange={handleChange('dependencies')} 
+              />
+              <TextField 
+                label='Erwartete Effekte' 
+                size='small' 
+                value={projectFormData.expected_effects}
+                sx={{ width: '100%'}} 
+                multiline 
+                rows={4} 
+                onChange={handleChange('expected_effects')} 
+              />
+            </Stack>
+          </TabPanel>
+        </TabContext>
       </DialogContent>
       <DialogActions>
         <Button variant='outlined' startIcon={< CloseIcon />} onClick={handleClose}>Abbrechen</Button>

@@ -21,6 +21,10 @@ import Stack from '@mui/material/Stack'
 import Skeleton from '@mui/material/Skeleton'
 import { ProjectRelationDialog } from '../components/projectPage/projectRelationDialog'
 import RelationsSection from '../components/projectPage/projectRelationsSection'
+import BudgetSection from '../components/projectPage/budgetSection'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
+import PrioProjectDialog from '../components/prioProjectDialog'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -31,6 +35,7 @@ const ProjectPage = () => {
   const [openRateProjectDialog, setOpenRateProjectDialog] = useState<boolean>(false)
   const [openEvaluateDialog, setOpenEvaluateDialog] = useState<boolean>(false)
   const [openNewRelationDialog, setOpenNewRelationDialog] = useState<boolean>(false)
+  const [openPrioDialog, setOpenPrioDialog] = useState<boolean>(false)
 
   const handleReloadProject = useCallback(() => {
     if (id) {
@@ -62,6 +67,7 @@ const ProjectPage = () => {
           handleOpenAddProjectDialog={() => setOpenAddProjectDialog(true)} 
           handleOpenRateProjectDialog={() => setOpenRateProjectDialog(true)} 
           handleOpenEvaluateDialog={() => setOpenEvaluateDialog(true)}
+          handleOpenPrioDialog={() => setOpenPrioDialog(true)}
         />
       }
       heroLoading={project.state === 'loading'}
@@ -74,6 +80,19 @@ const ProjectPage = () => {
           <Stack gap={2}>
 
             <GeneralSection project={project.state === 'success' ? project.data : undefined} loading={project.state === 'loading'} />
+            <BudgetSection project={project.state === 'success' ? project.data : undefined} />
+
+            <Card>
+              <CardContent>
+                <Typography variant='h6'>Stakeholder</Typography>
+                <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.stakeholder ? project?.data.stakeholder : '-'}</Typography>
+                <Typography variant='h6'>Abhängigkeiten</Typography>
+                <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.dependencies ? project?.data.dependencies : '-'}</Typography>
+                <Typography variant='h6'>Erwarteter Effekt</Typography>
+                <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.expected_effects ? project?.data.expected_effects : '-' }</Typography>
+              </CardContent>
+            </Card>
+
             <DescriptionSection project={project.state === 'success' ? project.data : undefined} loading={project.state === 'loading'} />
 
             {project.state === 'success' ?
@@ -121,6 +140,7 @@ const ProjectPage = () => {
           {openRateProjectDialog ? <RateProjectDialog openDialog={openRateProjectDialog} handleClose={() => setOpenRateProjectDialog(false)} projectId={project.data.id} /> : null}
           {openEvaluateDialog ? <EvaluateProjectDialog open={openEvaluateDialog} handleClose={() => setOpenEvaluateDialog(false)} project={project.data} /> : null}
           {openNewRelationDialog ? <ProjectRelationDialog project={project.data} setOpenNewRelationDialog={() => setOpenNewRelationDialog(false)} openNewRelationDialog={openNewRelationDialog} handleReloadProject={handleReloadProject}  /> : null}
+          {openPrioDialog ? <PrioProjectDialog open={openPrioDialog} handleClose={() => setOpenPrioDialog(false)} project={project.data} /> : null}
         </>
         : null
       }
