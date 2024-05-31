@@ -30,8 +30,6 @@ const handleGet = async (response: VercelResponse) => {
       }
       data.rates = (await sql`SELECT * FROM project_rate WHERE project_id = ${data.id}`).rows
 
-      // todo: related projects
-
       await Promise.all(data.rates.map(async (item: any) =>
         item.user = (await sql`SELECT * FROM "user" WHERE id = ${item.user_id}`).rows[0]
       ))

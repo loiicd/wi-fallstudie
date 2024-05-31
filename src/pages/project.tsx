@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
 import { getProjectsById } from '../services/projects'
-import { Project, RelatedProject } from '../types/project'
+import { Project, ProjectRelation } from '../types/project'
 import { ApiResponse } from '../types/apiResponse'
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
@@ -20,7 +20,7 @@ import CommentSection from '../components/projectPage/commentSection'
 import Stack from '@mui/material/Stack'
 import Skeleton from '@mui/material/Skeleton'
 import { ProjectRelationDialog } from '../components/projectPage/projectRelationDialog'
-import RelationsSection from '../components/projectPage/relationsSection'
+import RelationsSection from '../components/projectPage/projectRelationsSection'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -81,6 +81,7 @@ const ProjectPage = () => {
                 project={project.data}
                 openNewRelationDialog={openNewRelationDialog}
                 setOpenNewRelationDialog={() => setOpenNewRelationDialog(true)}
+                handleReloadProject={handleReloadProject}
               />
               :
               null}
@@ -119,7 +120,7 @@ const ProjectPage = () => {
           {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} project={project.data} /> : null}
           {openRateProjectDialog ? <RateProjectDialog openDialog={openRateProjectDialog} handleClose={() => setOpenRateProjectDialog(false)} projectId={project.data.id} /> : null}
           {openEvaluateDialog ? <EvaluateProjectDialog open={openEvaluateDialog} handleClose={() => setOpenEvaluateDialog(false)} project={project.data} /> : null}
-          {openNewRelationDialog ? <ProjectRelationDialog project={project.data} setOpenNewRelationDialog={() => setOpenNewRelationDialog(false)} openNewRelationDialog={openNewRelationDialog}   /> : null}
+          {openNewRelationDialog ? <ProjectRelationDialog project={project.data} setOpenNewRelationDialog={() => setOpenNewRelationDialog(false)} openNewRelationDialog={openNewRelationDialog} handleReloadProject={handleReloadProject}  /> : null}
         </>
         : null
       }

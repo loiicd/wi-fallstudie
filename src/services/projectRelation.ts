@@ -1,6 +1,4 @@
 import axios from 'axios'
-import { Project } from '../types/project'
-import { User } from '../types/user'
 import {ProjectProjectRelation} from '../types/projectProjectRelation'
 
 export const saveRelation = async (relation: ProjectProjectRelation): Promise<void> => {
@@ -8,7 +6,7 @@ export const saveRelation = async (relation: ProjectProjectRelation): Promise<vo
   await axios.post('/api/projectRelations', relation)
 }
 
-export const deleteRelation = async (Relation_id: string): Promise<void> => {
+export const deleteProjectRelation = async (Relation_id: string): Promise<void> => {
   await axios.delete(`/api/projectRelations`, { data: { id: Relation_id } })
 }
 

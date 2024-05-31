@@ -54,7 +54,7 @@ const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelet
           </Button>
         </Tooltip>
       </ButtonGroup>
-      <ButtonGroup variant='contained' disabled={project.state !== 'success' || project.data.created_from !== activeUser?.id || activeUser.type === 'administrator' || activeUser.type === 'controller'}>
+      <ButtonGroup variant='contained' disabled={project.state !== 'success' || project.data.created_from !== activeUser?.id || (activeUser.type !== 'administrator' && activeUser.type !== 'controller')}>
         <Tooltip title='Bearbeiten'>
           <Button onClick={handleOpenAddProjectDialog}>
             <ModeIcon />
