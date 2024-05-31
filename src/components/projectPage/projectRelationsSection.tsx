@@ -50,13 +50,13 @@ const RolesSection: React.FC<RolesSectionProps> = ({ project, openNewRelationDia
             >
                 <Box sx={{ display: "flex" }}>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon color='secondary' />}
+                    expandIcon={<ExpandMoreIcon color='action' />}
                     sx={{ flexGrow: 1 }}
                   >
                     <Typography>Verwandte Projekte ({project.related_projects ? project.related_projects.length : '0'})</Typography>
                   </AccordionSummary>
-                  <Box sx={{height: 48, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <Button startIcon={<AddIcon color='secondary' />}  onClick={() => handleAddButtonPressed()} />
+                  <Box sx={{height: 'fit-content', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    {/*<Button sx={{ position: 'absolute', right: 0 }} startIcon={<AddIcon color='action' />}  onClick={() => handleAddButtonPressed()} /> */}
                   </Box>
                 </Box>
                 <AccordionDetails>
@@ -80,7 +80,7 @@ const RolesSection: React.FC<RolesSectionProps> = ({ project, openNewRelationDia
                                 </Grid> 
                                 <Grid item xs={6}>
                                   <Typography sx={{fontWeight: 'bold'}}>{related.project.title}</Typography>
-                                </Grid>
+                                </Grid> 
                                 <Grid item xs={2}>
                                   <StatusChip value={related.project.status} />
                                 </Grid>
