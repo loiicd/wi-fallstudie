@@ -1,6 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import { sql } from '@vercel/postgres'
 import { v4 as uuidv4 } from 'uuid'
+import { ProjectProjectRelation } from '../src/types/projectProjectRelation'
 
 async function handler(request: VercelRequest, response: VercelResponse) {
     switch (request.method) {
@@ -13,6 +14,40 @@ async function handler(request: VercelRequest, response: VercelResponse) {
     }
 }
 
+async function handlePost(request: VercelRequest, response: VercelResponse) {
+    const relation = request.body as ProjectProjectRelation
+    if (relation.id?.length !== undefined) {
+        return response.status(400).send("UPDATE IS TODO")
+    } else {
+        const relation_id = uuidv4()
+        try {
+            await sql`
+            INSERT INTO project_project_relation ( 
+                id,
+                project_1_id,
+                project_2_id,
+                relation_name_1_to_2,
+                relation_name_2_to_1,
+                created_at,
+                created_from
+            ) 
+            VALUES (
+                ${relation.id},
+                ${relation.project_1?.id},
+                ${relation.project_2?.id},
+                ${relation.relation_name_1_to_2},
+                ${relation.relation_name_2_to_1},
+                now()::timestamp, 
+                ${relation.created_from?.id}
+            )`
+            return response.status(201).send('Created')
+        } catch (error) {
+            console.error(error)
+            return response.status(500).send('Internal Server Error')
+        }
+    }
+}
+
 async function createProject_Project_Relation_Table(request: VercelRequest, response: VercelResponse) {
     try {
         await sql`
@@ -20,7 +55,7 @@ async function createProject_Project_Relation_Table(request: VercelRequest, resp
             id text not null,
             project_1_id text not null,
             project_2_id text not null,
-            role_1_to_2 text not null,
+            relation_name_1_to_2 text not null,
             relation_name_2_to_1 text not null,
             created_at date,
             created_from text NOT NULL,
@@ -70,22 +105,5 @@ async function handleGet(request: VercelRequest, response: VercelResponse) {
         return response.status(500).send('Internal Server Error')
     }
 }
-
-async function handlePost(request: VercelRequest, response: VercelResponse) {
-    const project_relation = request.body
-    const project_project_relation_id = uuidv4()
-    try {
-        await sql`
-        INSERT INTO project_project_relation (id, project_1_id, project_2_id, project_project_relation_type_id) 
-        VALUES (${project_project_relation_id}, ${project_relation.project_1_id}, ${project_relation.project_2_id}, ${project_relation.project_project_relation_type_id})
-        `
-        return response.status(201).send('Created')
-    } catch (error) {
-        console.error(error)
-        return response.status(500).send('Internal Server Error')
-    }
-}
-
-
 
 export default handler
