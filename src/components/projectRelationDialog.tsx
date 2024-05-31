@@ -5,7 +5,9 @@ import {
     DialogActions, 
     DialogContent, 
     DialogContentText, 
-    DialogTitle
+    DialogTitle,
+    Grid,
+    Typography
  } from '@mui/material'
 
  import { Project } from '../types/project'
@@ -18,19 +20,37 @@ export type RolesSectionProps = {
 
 export const ProjectRelationDialog = ({ project, openNewRelationDialog, setOpenNewRelationDialog }: RolesSectionProps ) => {
     
+    const handleSave = () => {
+        console.log('TODO: Save Project Relation')
+        alert('TODO: Save Project Relation')
+    }
+    
+    const handleClose = () => {
+        setOpenNewRelationDialog(false)
+    }
+    
     return (
-        <>
-            <Dialog open={openNewRelationDialog}>
-                <DialogTitle>Neue Beziehung</DialogTitle>
-                <DialogContent>
-                <DialogContentText>
-                    TODO
-                </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenNewRelationDialog(false)}>Abbrechen</Button>
-                </DialogActions>
-            </Dialog>
-        </>
+        <Dialog open={openNewRelationDialog} onClose={handleClose} fullWidth={true} maxWidth={'md'}>
+            <DialogTitle>Neue Beziehung</DialogTitle>
+            <DialogContent dividers>
+            <DialogContentText>
+                <Grid container direction="row" spacing={2} sx={{justifyContent: "space-between"}}>
+                    <Grid item>
+                        <Typography>{project.title}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography>Beziehung</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography>Projekt 2</Typography>
+                    </Grid>
+                </Grid>
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => handleSave()}>Speichern</Button>
+                <Button onClick={() => handleClose()}>Abbrechen</Button>
+            </DialogActions>
+        </Dialog>
     )
 }
