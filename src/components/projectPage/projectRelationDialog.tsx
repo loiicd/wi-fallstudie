@@ -26,7 +26,7 @@ export type RolesSectionProps = {
 export const ProjectRelationDialog = ({ project, openNewRelationDialog, setOpenNewRelationDialog }: RolesSectionProps ) => {
     const [selectableProjects, setSelectableProjects] = useState<Project[]>([])
     const { activeUser } = useContext(UserContext)
-    const [newRelation, setNewRelation] = useState<ProjectProjectRelation>({id: uuidv4(), project_1: project, project_2: project, relation_name_1_to_2:'test1', relation_name_2_to_1:'test2', created_from:activeUser})
+    const [newRelation, setNewRelation] = useState<ProjectProjectRelation>({id: undefined, project_1: project, project_2: project, relation_name_1_to_2:'test1', relation_name_2_to_1:'test2', created_from:activeUser})
 
     useEffect(() => {
         console.log('TODO: Load selectable Projects')

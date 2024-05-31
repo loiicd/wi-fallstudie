@@ -21,11 +21,9 @@ async function handlePost(request: VercelRequest, response: VercelResponse) {
         return response.status(400).send("UPDATE IS TODO")
     } else {
         const relation_id = uuidv4()
-        const project_1_id = relation.project_1?.id as string
-        const project_2_id = relation.project_2?.id as string
-        const created_from = relation.created_from?.id as string
-        console.log("VALUES:")
-        console.log(relation_id, project_1_id, project_2_id, relation.relation_name_1_to_2, relation.relation_name_2_to_1, created_from)
+        const project_1_id = relation.project_1?.id
+        const project_2_id = relation.project_2?.id
+        const created_from = relation.created_from?.id
         try {
             await sql`
             INSERT INTO project_project_relation (
