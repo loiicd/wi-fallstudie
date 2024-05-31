@@ -19,7 +19,7 @@ import EvaluateProjectDialog from '../components/evaluateProjectDialog'
 import CommentSection from '../components/projectPage/commentSection'
 import Stack from '@mui/material/Stack'
 import Skeleton from '@mui/material/Skeleton'
-import { ProjectRelationDialog } from '../components/projectRelationDialog'
+import { ProjectRelationDialog } from '../components/projectPage/projectRelationDialog'
 import RelationsSection from '../components/projectPage/relationsSection'
 
 const ProjectPage = () => {
