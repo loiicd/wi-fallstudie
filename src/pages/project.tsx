@@ -85,12 +85,20 @@ const ProjectPage = () => {
 
             <Card>
               <CardContent>
-                <Typography variant='h6'>Stakeholder</Typography>
-                <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.stakeholder ? project?.data.stakeholder : '-'}</Typography>
-                <Typography variant='h6'>Abhängigkeiten</Typography>
-                <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.dependencies ? project?.data.dependencies : '-'}</Typography>
-                <Typography variant='h6'>Erwarteter Effekt</Typography>
-                <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.expected_effects ? project?.data.expected_effects : '-' }</Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Typography variant='h6'>Stakeholder</Typography>
+                    <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.stakeholder ? project?.data.stakeholder : '-'}</Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant='h6'>Abhängigkeiten</Typography>
+                    <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.dependencies ? project?.data.dependencies : '-'}</Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant='h6'>Erwarteter Effekt</Typography>
+                    <Typography>{project.state !== 'success' ? <Skeleton /> : project?.data.expected_effects ? project?.data.expected_effects : '-' }</Typography>
+                  </Grid>
+                </Grid>
               </CardContent>
             </Card>
 

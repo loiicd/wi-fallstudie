@@ -50,11 +50,11 @@ const LinkSection: FunctionComponent<LinkSectionProps> = ({ project }) => {
               <Card sx={{width: '100%'}}>
                 <CardActionArea onClick={() => window.location.href = link.url}>
                   <CardContent>
-                  <Grid container sx={{alignItems: 'center'}} spacing={1}>
+                  <Grid container sx={{ display:'flex', alignItems: 'center', justifyContent: 'flex-start'}} spacing={2}>
                     <Grid item>
                       {getIcon(link.icon)}
                     </Grid>
-                    <Grid>
+                    <Grid item sx={{marginRight: 1}}>
                       <Typography component="legend">{link.title}</Typography>
                     </Grid>
                   </Grid>
