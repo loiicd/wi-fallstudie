@@ -130,8 +130,9 @@ const ProjectsTable = () => {
         project.sub_project_lead?.lastname.includes(searchTerm)
       )
       const updatedProjects = filteredProjects.map((project) => ({ ...project, avgRate: project.rates.reduce((sum, rate) => sum + rate.rate, 0) / project.rates.length }))
-      const test = updatedProjects.filter(project => project.status !== 'Entwurf' || project.created_from === activeUser?.id)
-      setSearchedProjects(test)
+      {/*const test = updatedProjects.filter(project => project.status !== 'Entwurf' || project.created_from === activeUser?.id)
+      setSearchedProjects(test)*/}
+      setSearchedProjects(updatedProjects)
       }
     }, [searchTerm, projects, activeUser])
 

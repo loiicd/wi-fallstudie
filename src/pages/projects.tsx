@@ -17,8 +17,8 @@ const ProjectsPage = () => {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={(event, value) => setActiveTab(value)}>
             <Tab label="All" value="all" />
-            <Tab label="Eingereicht" value="eingereicht" />
-            <Tab label="Priorisierung" value="prio" />
+            <Tab label="Eingereicht" value="eingereicht" disabled />
+            <Tab label="Priorisierung" value="prio" disabled/>
           </TabList>
         </Box>
         <TabPanel value="all">
