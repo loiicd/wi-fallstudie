@@ -16,7 +16,7 @@ const handler = async (request: VercelRequest, response: VercelResponse) => {
 const handleGet = async (request: VercelRequest, response: VercelResponse) => {
   const id = request.query.id as string
   try {
-    const result = await sql`SELECT * FROM project WHERE id = ${id} OR created_from = ${id}`
+    const result = await sql`SELECT * FROM project WHERE id = ${id} OR created_from = ${id} or project_lead_id = ${id} or sub_project_lead_id = ${id} ORDER BY created_at DESC`
 
     for (const data of result.rows) {
       const team = await sql`
