@@ -19,11 +19,11 @@ const GeneralSection: FunctionComponent<GeneralSectionProps> = ({ project, loadi
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <Typography variant='h6'>Abteilung</Typography>
-            <Typography>{loading ? <Skeleton /> : project!.department}</Typography>
+            <Typography>{loading ? <Skeleton /> : project!.department ? project!.department : "-"}</Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant='h6'>Standort</Typography>
-            <Typography>{loading ? <Skeleton /> : project!.location}</Typography>
+            <Typography>{loading ? <Skeleton /> : project!.location ? project!.location : "-"}</Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant='h6'>Startdatum</Typography>

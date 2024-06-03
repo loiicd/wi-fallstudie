@@ -103,17 +103,13 @@ const ProjectPage = () => {
               loading={project.state !== 'success'}
             />
 
-            
-            {/**TODO: handle loading skeleton inside cmp */}
-            {project.state === 'success' ? 
-              <CommentSection 
-                projectId={project.data.id} 
-                comments={project.data.comments} 
-                handleReloadProject={handleReloadProject}
-              />
-              : null
-            }
-            </Stack>
+            <CommentSection 
+              projectId={project.state === 'success' ? project.data.id: ""} 
+              comments={project.state === 'success' ? project.data.comments: []} 
+              handleReloadProject={handleReloadProject}
+              loading={project.state !== 'success'}
+            />
+          </Stack>
         </Grid>
         {project.state === 'success' ? 
           <Grid item lg={3}>
