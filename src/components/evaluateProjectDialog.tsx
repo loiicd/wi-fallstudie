@@ -30,7 +30,7 @@ const EvaluateProjectDialog: FunctionComponent<EvaluateProjectDialogProps> = ({ 
       setProjectStatus('In Prüfung')
       updateProject({ ...project, status: project.status })
     }
-  })
+  }, [project])
 
   return (
     <Dialog
