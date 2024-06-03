@@ -74,7 +74,7 @@ const CommentSection: FunctionComponent<CommentSectionProps> = ({ projectId, com
         <>
           <Grid container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
             <Grid item>
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>
+              {/*<Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>*/}
             </Grid>
             <Grid item>
               <Button startIcon={<AddIcon />} onClick={() => setOpenNewCommentInput(!openNewCommentInput)}>Neuer Kommentar</Button>

@@ -25,6 +25,7 @@ import BudgetSection from '../components/projectPage/budgetSection'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import PrioProjectDialog from '../components/prioProjectDialog'
+import LinkSection from '../components/projectPage/linkSection'
 
 const ProjectPage = () => {
   const navigate = useNavigate()
@@ -115,10 +116,14 @@ const ProjectPage = () => {
           <Grid item lg={3}>
             <RolesSection project={project.data} />
             <RateSection project={project.data} />
+            <LinkSection project={project.data} />
           </Grid>
           :     
           <Grid item lg={3}>
             <Stack gap={2}>
+              <Card>
+                <Skeleton variant='rounded' height={200} />
+              </Card>
               <Card>
                 <Skeleton variant='rounded' height={200} />
               </Card>
