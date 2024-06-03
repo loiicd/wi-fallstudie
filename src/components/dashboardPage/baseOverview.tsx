@@ -83,7 +83,7 @@ const BaseOverView: FunctionComponent = () => {
           icon={<InfoOutlinedIcon fontSize="inherit" />} 
           severity="info"  
           action={
-            <Button color="inherit" size="small" startIcon={<AddIcon fontSize="inherit" />}>
+            <Button onClick={() => setOpenAddProjectDialog(true)} color="inherit" size="small" startIcon={<AddIcon fontSize="inherit" />}>
               Projekt
             </Button>
           }
