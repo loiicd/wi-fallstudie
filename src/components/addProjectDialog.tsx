@@ -94,6 +94,12 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
       onClose={handleClose}
       fullWidth={true}
       maxWidth={'md'}
+      PaperProps={{
+        style: {
+          height: '800px',
+          overflow: 'auto',
+        },
+      }}
     >
       {projectFormData.id ? <DialogTitle>Bearbeiten: {projectFormData.title}</DialogTitle> : <DialogTitle>Neues Projekt</DialogTitle>}
       <DialogContent dividers>
