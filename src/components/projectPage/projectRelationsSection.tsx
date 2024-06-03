@@ -47,8 +47,7 @@ const RolesSection: React.FC<RolesSectionProps> = ({ project, openNewRelationDia
         <>
             <Accordion 
               expanded={expanded}
-              onChange={() => setExpanded(!expanded)}
-              disabled={loading}
+              onChange={() => loading ? null : setExpanded(!expanded)}
             >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon color='action' />}
