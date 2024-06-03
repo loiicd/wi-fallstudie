@@ -23,19 +23,19 @@ const DescriptionSection: FunctionComponent<DescriptionSectionProps> = ({ projec
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant='h6'>Kurzbeschreibung</Typography>
-            <Typography>{loading ? <Skeleton /> : project!.short_description? project!.short_description : "-"}</Typography>
+            <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project!.short_description? project!.short_description : "-"}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant='h6'>Ziel</Typography>
-            <Typography>{loading ? <Skeleton /> : project!.target_description ? project!.target_description : "-"}</Typography>
+            <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project!.target_description ? project!.target_description : "-"}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant='h6'>Vision</Typography>
-            <Typography>{loading ? <Skeleton /> : project!.vision_description ? project!.vision_description : "-"}</Typography>
+            <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project!.vision_description ? project!.vision_description : "-"}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant='h6'>Problemstellung</Typography>
-            <Typography>{loading ? <Skeleton /> : project!.problem_description ? project!.problem_description : "-"}</Typography>
+            <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project!.problem_description ? project!.problem_description : "-"}</Typography>
           </Grid>
         </Grid>
       </AccordionDetails>
