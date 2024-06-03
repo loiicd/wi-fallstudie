@@ -18,12 +18,15 @@ import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import AddProjectDialog from '../addProjectDialog'
+import { useNavigate } from 'react-router-dom'
 
 interface CardExampleProps {
   project: Project
 }
 
 const CardExample: FunctionComponent<CardExampleProps> = ({ project }) => {
+  const navigate = useNavigate()
+
   return (
     <Card>
       <Stack direction='row' >
@@ -53,8 +56,8 @@ const CardExample: FunctionComponent<CardExampleProps> = ({ project }) => {
             <Divider sx={{ marginY: 1 }} />
           </CardContent>
           <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
+            <Button disabled size="small">Share</Button>
+            <Button onClick={() => navigate(`/project/${project.id}`)} size="small">Learn More</Button>
           </CardActions>
         </Box>
       </Stack>
@@ -73,7 +76,7 @@ const BaseOverView: FunctionComponent = () => {
         .then(projects => setProjects({ state: 'success', data: projects }))
         .catch(error => setProjects({ state: 'error', message: error }))
     }
-  }, [activeUser])
+  }, [activeUser, openAddProjectDialog])
 
   return (
     <RoleProvider roles={['base']} type='include'>
