@@ -41,13 +41,13 @@ const CardExample: FunctionComponent<CardExampleProps> = ({ project }) => {
                 <Typography variant="body2" color="text.secondary">Startdatum</Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="body2" color="text.secondary">{project?.start_date ? new Date(project.start_date).toDateString(): "-"}</Typography>
+                <Typography variant="body2" color="text.secondary">{project?.start_date ? new Date(project.start_date).toLocaleDateString(): "-"}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body2" color="text.secondary">Enddatum</Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="body2" color="text.secondary">{project?.end_date ? new Date(project.end_date).toDateString() : "-"}</Typography>
+                <Typography variant="body2" color="text.secondary">{project?.end_date ? new Date(project.end_date).toLocaleDateString() : "-"}</Typography>
               </Grid>
             </Grid>
             <Divider sx={{ marginY: 1 }} />
