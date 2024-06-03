@@ -22,13 +22,14 @@ import { useNavigate } from "react-router";
 
 
 interface RolesSectionProps {
-  project: Project;
+  project: Project | undefined;
   openNewRelationDialog: boolean;
   setOpenNewRelationDialog: (value: boolean) => void;
   handleReloadProject: () => void
+  loading: boolean
 }
 
-const RolesSection: React.FC<RolesSectionProps> = ({ project, openNewRelationDialog, setOpenNewRelationDialog, handleReloadProject }) => {
+const RolesSection: React.FC<RolesSectionProps> = ({ project, openNewRelationDialog, setOpenNewRelationDialog, handleReloadProject, loading }) => {
   const navigate = useNavigate()
   const [expanded, setExpanded] = useState<boolean>(false)
 
@@ -47,53 +48,52 @@ const RolesSection: React.FC<RolesSectionProps> = ({ project, openNewRelationDia
             <Accordion 
               expanded={expanded}
               onChange={() => setExpanded(!expanded)}
+              disabled={loading}
             >
-                <Box sx={{ display: "flex" }}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon color='action' />}
-                    sx={{ flexGrow: 1 }}
-                  >
-                    <Typography>Verwandte Projekte ({project.related_projects ? project.related_projects.length : '0'})</Typography>
-                  </AccordionSummary>
-                  <Box sx={{height: 'fit-content', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    {/*<Button sx={{ position: 'absolute', right: 0 }} startIcon={<AddIcon color='action' />}  onClick={() => handleAddButtonPressed()} /> */}
-                  </Box>
-                </Box>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon color='action' />}
+                  sx={{ flexGrow: 1 }}
+                >
+                  <Typography>Verwandte Projekte ({loading ? "-" : project?.related_projects ? project.related_projects.length : '0'})</Typography>
+                </AccordionSummary>
                 <AccordionDetails>
-                  <Grid container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
-                    <Grid item>
-                      <Button startIcon={<AddIcon />} onClick={() => openNewRelationDialog ? setOpenNewRelationDialog(false) : setOpenNewRelationDialog(true)}>Neue Beziehung</Button>
-                    </Grid>
-                    <Grid item>
-                    </Grid>
-                  </Grid>
-
-                  <Grid container spacing={2}>
-                    {project.related_projects?.map((related: ProjectRelation) => (
-                      <Grid item xs={12}>
-                        <Card>
-                          <CardActionArea onClick={() => navigate(`/project/${related.project.id}`)}>
-                            <CardContent>
-                              <Grid direction={'row'} container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                                <Grid item xs={3}>
-                                  <Typography color="text.secondary">{related.role.charAt(0).toUpperCase() + related.role.slice(1)}:</Typography>
-                                </Grid> 
-                                <Grid item xs={6}>
-                                  <Typography sx={{fontWeight: 'bold'}}>{related.project.title}</Typography>
-                                </Grid> 
-                                <Grid item xs={2}>
-                                  <StatusChip value={related.project.status} />
-                                </Grid>
-                                <Grid item xs={1}>
-                                  <Button title='Löschen' size="small" variant="text" startIcon={<DeleteOutlineOutlined />} onClick={() => handleDeleteProjectRelation(related.id)} />
-                                </Grid>
-                              </Grid>
-                            </CardContent>
-                          </CardActionArea>
-                        </Card>
+                  {loading ? null :
+                  <>
+                    <Grid container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
+                      <Grid item>
+                        <Button startIcon={<AddIcon />} onClick={() => openNewRelationDialog ? setOpenNewRelationDialog(false) : setOpenNewRelationDialog(true)}>Neue Beziehung</Button>
                       </Grid>
-                    ))}
-                  </Grid>
+                      <Grid item>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                      {project?.related_projects?.map((related: ProjectRelation) => (
+                        <Grid item xs={12}>
+                          <Card>
+                            <CardActionArea onClick={() => navigate(`/project/${related.project.id}`)}>
+                              <CardContent>
+                                <Grid direction={'row'} container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                                  <Grid item xs={3}>
+                                    <Typography color="text.secondary">{related.role.charAt(0).toUpperCase() + related.role.slice(1)}:</Typography>
+                                  </Grid> 
+                                  <Grid item xs={6}>
+                                    <Typography sx={{fontWeight: 'bold'}}>{related.project.title}</Typography>
+                                  </Grid> 
+                                  <Grid item xs={2}>
+                                    <StatusChip value={related.project.status} />
+                                  </Grid>
+                                  <Grid item xs={1}>
+                                    <Button title='Löschen' size="small" variant="text" startIcon={<DeleteOutlineOutlined />} onClick={() => handleDeleteProjectRelation(related.id)} />
+                                  </Grid>
+                                </Grid>
+                              </CardContent>
+                            </CardActionArea>
+                          </Card>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </>
+                  }
                 </AccordionDetails>
               </Accordion>
         </>

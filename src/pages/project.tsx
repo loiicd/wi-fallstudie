@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
 import { getProjectsById } from '../services/projects'
-import { Project, ProjectRelation } from '../types/project'
+import { Project } from '../types/project'
 import { ApiResponse } from '../types/apiResponse'
 import StandardLayout from '../layout/StandardLayout'
 import Grid from '@mui/material/Grid'
@@ -95,16 +95,16 @@ const ProjectPage = () => {
 
             <DescriptionSection project={project.state === 'success' ? project.data : undefined} loading={project.state === 'loading'} />
 
-            {project.state === 'success' ?
-              <RelationsSection 
-                project={project.data}
-                openNewRelationDialog={openNewRelationDialog}
-                setOpenNewRelationDialog={() => setOpenNewRelationDialog(true)}
-                handleReloadProject={handleReloadProject}
-              />
-              :
-              null}
+            <RelationsSection 
+              project={project.state === 'success' ? project.data : undefined}
+              openNewRelationDialog={openNewRelationDialog}
+              setOpenNewRelationDialog={() => setOpenNewRelationDialog(true)}
+              handleReloadProject={handleReloadProject}
+              loading={project.state !== 'success'}
+            />
 
+            
+            {/**TODO: handle loading skeleton inside cmp */}
             {project.state === 'success' ? 
               <CommentSection 
                 projectId={project.data.id} 
