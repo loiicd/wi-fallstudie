@@ -42,7 +42,7 @@ const ControllerOverview: FunctionComponent = () => {
 
   return (
     <RoleProvider roles={['controller']} type='include'>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{marginTop: 1}}>
         <Grid item xs={6}>
           <Card>
             <Box sx={{ m: 2 }}>

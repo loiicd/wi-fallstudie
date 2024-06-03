@@ -30,7 +30,7 @@ const BusinessViewOverview = () => {
 
   return (
     <RoleProvider roles={['geschäftsleitung']} type='include'>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{marginTop: 1}}>
         <Grid item xs={12}>
           <Card>
             <ProjectChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} />

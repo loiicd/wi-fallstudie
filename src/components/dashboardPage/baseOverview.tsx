@@ -28,7 +28,7 @@ const CardExample: FunctionComponent<CardExampleProps> = ({ project }) => {
   const navigate = useNavigate()
 
   return (
-    <Card>
+    <Card sx={{ width: '100%', height: '100%', minHeight: "160px"}}>
       <Stack direction='row' >
         <Box sx={{ backgroundColor: '#F3927E', minWidth: 20 }}></Box>
         <Box>
@@ -41,18 +41,15 @@ const CardExample: FunctionComponent<CardExampleProps> = ({ project }) => {
                 <Typography variant="body2" color="text.secondary">Startdatum</Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="body2" color="text.secondary">13.05.24</Typography>
+                <Typography variant="body2" color="text.secondary">{project?.start_date ? new Date(project.start_date).toDateString(): "-"}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body2" color="text.secondary">Enddatum</Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="body2" color="text.secondary">13.05.24</Typography>
+                <Typography variant="body2" color="text.secondary">{project?.end_date ? new Date(project.end_date).toDateString() : "-"}</Typography>
               </Grid>
             </Grid>
-            <Typography variant="body2" color="text.secondary">
-              {project.start_date}
-            </Typography>
             <Divider sx={{ marginY: 1 }} />
           </CardContent>
           <CardActions>
@@ -81,54 +78,42 @@ const BaseOverView: FunctionComponent = () => {
   return (
     <RoleProvider roles={['base', 'projektleitung']} type='include'>
       <Typography variant='h6'>Meine Projektanträge</Typography>
-      {projects.state === 'success' && projects.data.length === 0 ?
-        <Alert 
-          icon={<InfoOutlinedIcon fontSize="inherit" />} 
-          severity="info"  
-          action={
-            <Button onClick={() => setOpenAddProjectDialog(true)} color="inherit" size="small" startIcon={<AddIcon fontSize="inherit" />}>
-              Projekt
-            </Button>
-          }
-          sx={{ mt: 2, width: '50%' }}
-        >
-          Du hast derzeit keine Projektanträge
-        </Alert>
-        : 
-        <Grid container spacing={2} columns={4}>
-          {projects.state === 'success' ? projects.data.map((project) => (
+      {projects.state === 'success' ?
+        <Grid container spacing={2} columns={4} sx={{marginTop: 1}}>
+          {projects.data.map((project) => (
             <Grid item xs={1}>
               <CardExample project={project} />
             </Grid>
-            )): 
-            <>
-              <Grid item xs={1}>
-                <Skeleton variant="rectangular" height={175} />
-              </Grid>
-              <Grid item xs={1}>
-                <Skeleton variant="rectangular" height={175} />
-              </Grid>
-              <Grid item xs={1}>
-                <Skeleton variant="rectangular" height={175} />
-              </Grid>
-              <Grid item xs={1}>
-                <Skeleton variant="rectangular" height={175} />
-              </Grid>
-            </>
+            ))
           }
-          {projects.state === 'success' ? 
-            <Grid item xs={1}>
-              <Button 
-                onClick={() => setOpenAddProjectDialog(true)}
-                startIcon={<AddIcon />} 
-                sx={{ width: '100%', height: '100%', border: 'dashed', borderWidth: 2 }}
-              >
-                Projektantrag
-              </Button>
-            </Grid> : null 
-          }
+          <Grid item xs={1}>
+            <Button 
+              onClick={() => setOpenAddProjectDialog(true)}
+              startIcon={<AddIcon />} 
+              sx={{ width: '100%', height: '100%', minHeight: "160px", border: 'dashed', borderWidth: 2 }}
+            >
+              Projektantrag
+            </Button>
+          </Grid> 
         </Grid>
-      }
+      :
+        <>
+        <Grid container spacing={2} columns={4}>
+          <Grid item xs={1}>
+            <Skeleton variant="rectangular" height={175} />
+          </Grid>
+          <Grid item xs={1}>
+            <Skeleton variant="rectangular" height={175} />
+          </Grid>
+          <Grid item xs={1}>
+            <Skeleton variant="rectangular" height={175} />
+          </Grid>
+          <Grid item xs={1}>
+            <Skeleton variant="rectangular" height={175} />
+          </Grid>
+          </Grid>
+        </>
+        }
       {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} /> : null}
     </RoleProvider>
   )
