@@ -5,12 +5,13 @@ import { FunctionComponent } from 'react'
 
 interface EmptyRowProps {
   isEmpty: boolean
+  columns?: number
 }
 
-const EmptyRow: FunctionComponent<EmptyRowProps> = ({ isEmpty }) => {
+const EmptyRow: FunctionComponent<EmptyRowProps> = ({ isEmpty, columns =3 }) => {
   return isEmpty ? (
     <TableRow >
-      <TableCell colSpan={3} sx={{ textAlign: 'center' }}>
+      <TableCell colSpan={columns} sx={{ textAlign: 'center' }}>
         <Typography variant='body2' color='grey'>Keine Daten vorhanden</Typography>
       </TableCell>
     </TableRow>

@@ -2,78 +2,88 @@
 import { useState, FunctionComponent, useEffect } from 'react';
 import { Project } from '../../types/project';
 import ProjectResourceGeneric from '../../types/projectResourceGeneric';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Icon, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import EmptyRow from '../table/emptyRow';
 import LoadingRow from '../table/loadingRow';
 import Button from '@mui/material/Button';
-import {getProjectRessourcesByType, saveRessource} from '../../services/projectRessource';
+import {deleteRessource, getProjectRessourcesByType, saveRessource} from '../../services/projectRessource'
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import ProjectRessourceDialog from "./projectRessourceDialog";
 
 
 interface ProjectRessourceTableProps {
   type: string
   project: Project
+  column_labels: string[]
+  dialog_heading: string
 
 }
 
-export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps> = ({ type, project}) => {
+export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps> = ({ type, project, column_labels, dialog_heading}) => {
   const [projectRessources, setProjectRessources] = useState<ProjectResourceGeneric[]>(project.ressources || [])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [openNewProjectRessourceDialog, setOpenNewProjectRessourceDialog] = useState<boolean>(false)
+  const [deleting, setDeleting] = useState<boolean>(false)
+  const handleReload = () => {}
 
-  const handleNewRessource = () => {
-    setLoading(true)
-    console.log("new ressource")
-    saveRessource({
-      project_id: '13fe94e8-dff6-4a48-83c1-87e440e5d6a4',
-      title: "technik2",
-      value: "Test2",
-      type: 'test Wert',
-      date: new Date().toISOString()
-    })
-    setLoading(false)
-
-  }
-  
   useEffect(() => {
-    setLoading(true)
-    console.log("get project ressources")
     getProjectRessourcesByType(project.id, type).then((ressources) => {
       setProjectRessources(ressources)
       setLoading(false)
     })
-  }, [])
-  
+  }, [ openNewProjectRessourceDialog , handleReload ])
 
 
-
+  const handleDeleteRessource = (ressource_id: string) => {
+    setDeleting(true)
+    deleteRessource(ressource_id).then(() => {
+      handleReload()
+    }).finally(() => {
+      setDeleting(false)
+    })
+  }
 
   return (
       <>
-        <Button onClick={() => handleNewRessource()}>
-          <Typography variant="h6">Neue Ressource</Typography>
-        </Button>
         <TableContainer>
-              <Table>
+              <Table size="small" aria-label="a dense table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Zeit</TableCell>
-                    <TableCell>Beschreibung</TableCell>
-                    <TableCell>Summe</TableCell>
+                    {column_labels.includes("Monat") ? <TableCell>{column_labels[0]}</TableCell> : null}
+                    <TableCell>{column_labels[column_labels.length - 2]}</TableCell>
+                    <TableCell>{column_labels[column_labels.length - 1]}</TableCell>
+                    <TableCell align="right">
+                      <IconButton color="primary" onClick={() => setOpenNewProjectRessourceDialog(true)}><AddIcon /></IconButton>
+                      </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {!loading? projectRessources.slice(0, 5).map((resource) => (
-                    <TableRow key={resource.id}>
-                      {type !== 'complexity_ressource' ? <TableCell>{resource.date}</TableCell> : null}
-                      <TableCell>{new Date(resource.title).toLocaleDateString()}</TableCell>
+                  {!loading? projectRessources.map((resource) => (
+                    <TableRow hover key={resource.id} >
+                      {column_labels.includes("Monat") ? <TableCell>{new Date(resource.date as string).toLocaleDateString('de-DE', { year: 'numeric', month: 'short' })}</TableCell> : null}
+                      <TableCell>{resource.title}</TableCell>
                       <TableCell>{resource.value}</TableCell>
+                      <TableCell align="right">
+                        <IconButton disabled={deleting} onClick={() => handleDeleteRessource(resource.id as string)}><DeleteOutlineOutlinedIcon /></IconButton>
+                      </TableCell>
                     </TableRow>
                   )) : null}
-                  <LoadingRow cellCount={3} loading={loading} />
-                  <EmptyRow isEmpty={projectRessources.length === 0} />
+                  <LoadingRow cellCount={4} loading={loading} />
+                  <EmptyRow isEmpty={projectRessources.length === 0} columns={4} />
                 </TableBody>
               </Table>
             </TableContainer>
-
+            {openNewProjectRessourceDialog ? 
+              <ProjectRessourceDialog 
+                project={project} 
+                openNewProjectRessourceDialog={openNewProjectRessourceDialog} 
+                setOpenNewProjectRessourceDialog={setOpenNewProjectRessourceDialog} 
+                handleReload={handleReload}
+                type={type}
+                labels={column_labels}
+                dialog_heading={dialog_heading}/>
+              : null}
       </>
     )
 }

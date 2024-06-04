@@ -9,8 +9,19 @@ async function handler(request: VercelRequest, response: VercelResponse) {
             return await handlePost(request, response)
         case 'GET': 
             return await handleGet(request, response)
-        //case 'DELETE':
-        //    return await handleDelete(request, response)
+        case 'DELETE':
+            return await handleDelete(request, response)
+    }
+}
+
+async function handleDelete(request: VercelRequest, response: VercelResponse) {
+    const ressource_id = request.body.id as string
+    try {
+        await sql`DELETE FROM project_ressource_rel WHERE id = ${ressource_id}`
+        return response.status(200).send('Deleted')
+    } catch (error) {
+        console.error(error)
+        return response.status(500).send('Internal Server Error')
     }
 }
 
@@ -20,7 +31,7 @@ async function handleGet(request: VercelRequest, response: VercelResponse) {
     console.log(project_id, type)
     try {
         const result = await sql`SELECT * FROM project_ressource_rel WHERE project_id = ${project_id} AND type = ${type}`
-        return response.status(200).json(result.rows)
+        return response.status(200).json(result.rows.sort((a, b) => a.date - b.date))
     } catch (error) {
         console.error(error)
         return response.status(500).send('Internal Server Error')
@@ -30,7 +41,6 @@ async function handleGet(request: VercelRequest, response: VercelResponse) {
 
 async function handlePost(request: VercelRequest, response: VercelResponse) {
     const ressource = request.body as ProjectRessourceGeneric
-    console.log("to be inserted", ressource)
     if (!ressource.id) {
       const ressource_id = uuidv4()
       try {

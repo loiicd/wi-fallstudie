@@ -109,9 +109,11 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
             <TabList onChange={handleChangeTab} aria-label="lab API tabs example">
               <Tab label="Allgemein" value='1' />
               <Tab label="Rollen" value='2' />
-              <Tab label="Budget" value='3' />
-              <Tab label="Beschreibungen" value='4' />
-              <Tab label="Weiteres" value='5' />
+              <Tab label="Ressourcen" value='3' />
+              <Tab label="Budget" value='4' />
+              <Tab label="Kompläxität" value='5' />
+              <Tab label="Beschreibungen" value='6' />
+              <Tab label="Weiteres" value='7' />
             </TabList>
           </Box>
           <TabPanel value='1'>
@@ -324,50 +326,31 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               }
             </Grid>
           </TabPanel>
-          { /** <TabPanel value='3'>
-            <Grid container spacing={4} sx={{ paddingY: 2 }}>
-              <Grid item xs={3}>
-                <TextField 
-                  label='FTE Intern' 
-                  size='small' 
-                  value={projectFormData.fte_intern}
-                  sx={{ width: '100%'}} 
-                  type='number'
-                  onChange={handleChange('fte_intern')} 
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <TextField 
-                  label='FTE Extern' 
-                  size='small' 
-                  value={projectFormData.fte_extern}
-                  sx={{ width: '100%'}} 
-                  type='number'
-                  onChange={handleChange('fte_extern')} 
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField 
-                  label='Investitionen' 
-                  size='small' 
-                  value={projectFormData.investment}
-                  sx={{ width: '100%'}} 
-                  type='number'
-                  InputProps={{
-                    endAdornment: <InputAdornment position='end'>€</InputAdornment>,
-                  }}
-                  onChange={handleChange('investment')} 
-                />
-              </Grid>
-            </Grid>
-                </TabPanel> **/}
           <TabPanel value='3'>
           <ProjectRessourceTable 
             type='ressource_ressource' 
             project={projectFormData as Project}
+            column_labels={['Monat', 'Bedarf', 'FTE']}
+            dialog_heading={'Neue Personal Ressource'}
           />
           </TabPanel>
           <TabPanel value='4'>
+          <ProjectRessourceTable 
+            type='budget_ressource' 
+            project={projectFormData as Project}
+            column_labels={['Monat', 'Beschreibung', 'EUR']}
+            dialog_heading={'Neue Budget Ressource'}
+          />
+          </TabPanel>
+          <TabPanel value='5'>
+          <ProjectRessourceTable 
+            type='complexity_ressource' 
+            project={projectFormData as Project}
+            column_labels={['Beschreibung', 'Komplexitätsgrad']}
+            dialog_heading={'Neuer Komplexitätsfaktor'}
+          />
+          </TabPanel>
+          <TabPanel value='6'>
             <Grid container spacing={4} sx={{ paddingY: 2 }}>
               <Grid item xs={12}>
                 <TextField 
@@ -415,7 +398,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               </Grid>
             </Grid>
           </TabPanel>
-          <TabPanel value='5'>
+          <TabPanel value='7'>
             <Stack spacing={2}>
               <TextField 
                 label='Stakeholder' 

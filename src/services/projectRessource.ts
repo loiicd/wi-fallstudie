@@ -2,11 +2,11 @@ import axios from 'axios'
 import ProjectRessourceGeneric from "../types/projectResourceGeneric"
 
 export const saveRessource = async (ressource: ProjectRessourceGeneric): Promise<void> => {
-  console.log("ressource", ressource)
   await axios.post('/api/projectRessources', ressource)
 }
 
 export const deleteRessource = async (ressource_id: string): Promise<void> => {
+  console.log(ressource_id)
   await axios.delete(`/api/projectRessources`, { data: { id: ressource_id } })
 }
 
