@@ -28,6 +28,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import dayjs from 'dayjs'
 import InputAdornment from '@mui/material/InputAdornment'
 import Stack from '@mui/material/Stack'
+import { ProjectRessourceTable } from './projectRessources/ressourceTable'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -323,7 +324,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               }
             </Grid>
           </TabPanel>
-          <TabPanel value='3'>
+          { /** <TabPanel value='3'>
             <Grid container spacing={4} sx={{ paddingY: 2 }}>
               <Grid item xs={3}>
                 <TextField 
@@ -359,6 +360,12 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                 />
               </Grid>
             </Grid>
+                </TabPanel> **/}
+          <TabPanel value='3'>
+          <ProjectRessourceTable 
+            type='ressource_ressource' 
+            project={projectFormData as Project}
+          />
           </TabPanel>
           <TabPanel value='4'>
             <Grid container spacing={4} sx={{ paddingY: 2 }}>

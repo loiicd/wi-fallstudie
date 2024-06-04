@@ -1,5 +1,5 @@
 import { User } from './user'
-
+import ProjectRessourceGeneric from './projectResourceGeneric'
 export const projectStatus = ['Entwurf', 'Eingereicht', 'In Prüfung', 'Angenommen', 'Abgelehnt'] as const
 export type ProjectStatus = typeof projectStatus[number]
 
@@ -25,6 +25,7 @@ export type ProjectRelation = {
   created_at: string
   created_from: User
 }
+
 
 export type Project = {
   id: string
@@ -57,6 +58,9 @@ export type Project = {
   comments?: ProjectComment[]
   created_from_user?: User
   related_projects?: ProjectRelation[]
+  ressources?: ProjectRessourceGeneric[]
+  budget?: ProjectRessourceGeneric[]
+  complexity?: ProjectRessourceGeneric[]
 }
 
 export type ProjectFormData = {
@@ -84,4 +88,7 @@ export type ProjectFormData = {
   vision_description?: string
   problem_description?: string
   team: (Team | string)[]
+  ressources?: ProjectRessourceGeneric[]
+  budget?: ProjectRessourceGeneric[]
+  complexity?: ProjectRessourceGeneric[]
 }

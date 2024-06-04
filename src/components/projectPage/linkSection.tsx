@@ -43,7 +43,7 @@ const LinkSection: FunctionComponent<LinkSectionProps> = ({ project }) => {
   return (
     <Card sx={{ marginTop: 2}}>
       <List subheader={<ListSubheader>Links</ListSubheader>}>
-        {project.id === "c3e1f17e-8184-4e5a-a84b-e0e8a6e45fe3" ? 
+        {project.id === "94868d73-4eb1-4f4b-b469-3fe511c3c9de" ? 
           <>
             {links.map((link) => (
               <ListItem>
