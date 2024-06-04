@@ -2,11 +2,10 @@
 import { useState, FunctionComponent, useEffect } from 'react';
 import { Project } from '../../types/project';
 import ProjectResourceGeneric from '../../types/projectResourceGeneric';
-import { Icon, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import EmptyRow from '../table/emptyRow';
 import LoadingRow from '../table/loadingRow';
-import Button from '@mui/material/Button';
-import {deleteRessource, getProjectRessourcesByType, saveRessource} from '../../services/projectRessource'
+import {deleteRessource, getProjectRessourcesByType } from '../../services/projectRessource'
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import ProjectRessourceDialog from "./projectRessourceDialog";

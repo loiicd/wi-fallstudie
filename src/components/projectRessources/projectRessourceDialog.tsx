@@ -1,22 +1,17 @@
 import React, { useContext } from "react";
 import {
-    Autocomplete,
     Button,
-    CircularProgress,
     Dialog, 
     DialogActions, 
     DialogContent, 
     DialogContentText, 
     DialogTitle,
     Grid,
-    InputAdornment,
     TextField,
     Typography
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Project } from '../../types/project'
-import { saveRelation } from "../../services/projectRelation";
-import { UserContext } from "../../context/userContext";
 import { ApiResponse } from "../../types/apiResponse";
 import { getProjects } from "../../services/projects";
 import { LoadingButton } from "@mui/lab";
@@ -24,8 +19,6 @@ import ProjectRessourceGeneric from "../../types/projectResourceGeneric";
 import { saveRessource } from "../../services/projectRessource";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import dayjs, { Dayjs } from "dayjs";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { deDE } from '@mui/x-date-pickers/locales';
 
 type ProjectRessourceDialogProps = {
     project: Project
