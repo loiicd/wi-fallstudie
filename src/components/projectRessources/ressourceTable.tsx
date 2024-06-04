@@ -1,5 +1,5 @@
 
-import { useState, FunctionComponent, useEffect } from 'react';
+import { useState, FunctionComponent, useEffect, useCallback } from 'react';
 import { Project } from '../../types/project';
 import ProjectResourceGeneric from '../../types/projectResourceGeneric';
 import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
@@ -24,24 +24,27 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
   const [loading, setLoading] = useState<boolean>(true)
   const [openNewProjectRessourceDialog, setOpenNewProjectRessourceDialog] = useState<boolean>(false)
   const [deleting, setDeleting] = useState<boolean>(false)
-  const handleReload = () => {}
 
-  useEffect(() => {
+  const handleReload = useCallback(() => {
+    setLoading(true);
     getProjectRessourcesByType(project.id, type).then((ressources) => {
-      setProjectRessources(ressources)
-      setLoading(false)
-    })
-  }, [ openNewProjectRessourceDialog , handleReload ])
-
-
+      setProjectRessources(ressources);
+      setLoading(false);
+    });
+  }, []);
+  
+  useEffect(() => {
+    handleReload();
+  }, [handleReload]);
+  
   const handleDeleteRessource = (ressource_id: string) => {
-    setDeleting(true)
+    setDeleting(true);
     deleteRessource(ressource_id).then(() => {
-      handleReload()
+      handleReload();
     }).finally(() => {
-      setDeleting(false)
-    })
-  }
+      setDeleting(false);
+    });
+  };
 
   const total = projectRessources.reduce((sum, resource) => sum + parseInt(resource.value), 0);
 
@@ -66,12 +69,12 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                       <TableCell>{resource.title}</TableCell>
                       <TableCell align="right">{resource.value}</TableCell>
                       <TableCell align="right">
-                        <IconButton disabled={deleting} size='small' onClick={() => handleDeleteRessource(resource.id as string)}><DeleteOutlineOutlinedIcon /></IconButton>
+                        <IconButton disabled={deleting} size='small' onClick={() => handleDeleteRessource(resource.id as string)}><DeleteOutlineOutlinedIcon fontSize="small"/></IconButton>
                       </TableCell>
                     </TableRow>
                   )) : null}
 
-                  {column_labels.includes("FTE") || column_labels.includes("EUR") ? 
+                  {!loading && (column_labels.includes("FTE") || column_labels.includes("EUR")) ? 
                   <TableRow>
                     <TableCell />
                       <TableCell >Summe</TableCell>
