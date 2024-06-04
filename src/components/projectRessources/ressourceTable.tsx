@@ -69,22 +69,22 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                       <TableCell>{resource.title}</TableCell>
                       <TableCell align="right">{resource.value}</TableCell>
                       <TableCell align="right">
-                        <IconButton disabled={deleting} size='small' onClick={() => handleDeleteRessource(resource.id as string)}><DeleteOutlineOutlinedIcon fontSize="small"/></IconButton>
+                        <IconButton disabled={deleting} size='small' onClick={() => handleDeleteRessource(resource.id as string)}><DeleteOutlineOutlinedIcon style={{ fontSize: 16 }}/></IconButton>
                       </TableCell>
                     </TableRow>
                   )) : null}
 
-                  {!loading && (column_labels.includes("FTE") || column_labels.includes("EUR")) ? 
+                  {!loading && projectRessources.length !== 0 && (column_labels.includes("FTE") || column_labels.includes("EUR")) ? 
                   <TableRow>
                     <TableCell />
-                      <TableCell >Summe</TableCell>
-                      <TableCell align="right">{total}</TableCell>
+                      <TableCell style={{fontWeight: 'bold'}}>Summe</TableCell>
+                      <TableCell style={{fontWeight: 'bold'}} align="right">{total}</TableCell>
                     <TableCell />
                   </TableRow>
                   : null}
                   
                   <LoadingRow cellCount={4} loading={loading} />
-                  <EmptyRow isEmpty={projectRessources.length === 0} columns={4} />
+                  {!loading ? <EmptyRow isEmpty={projectRessources.length === 0} columns={4} /> : null}
 
                 </TableBody>
               </Table>
