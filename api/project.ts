@@ -43,6 +43,9 @@ const handleGet = async (request: VercelRequest, response: VercelResponse) => {
         item.user = (await sql`SELECT * FROM "user" WHERE id = ${item.user_id}`).rows[0]
       ))
 
+      const ressources = (await sql`SELECT * FROM project_ressource_rel WHERE project_id = ${data.id}`).rows
+      data.ressources = ressources.filter((ressource: any) => ressource.type === 'ressource_ressource').sort((a: any, b: any) => a.date - b.date)
+
       const related_projects_1 = (await 
         sql`
           SELECT id, project_1_id as project_id, relation_name_2_to_1 as role, created_at, created_from as created_from_id
@@ -124,6 +127,7 @@ const handleDelete = async (request: VercelRequest, response: VercelResponse) =>
     await sql`DELETE FROM project_user_rel WHERE project_id = ${id}`
     await sql`DELETE FROM comment WHERE project_id = ${id}`
     await sql`DELETE FROM project WHERE id = ${id}`
+    await sql`DELETE FROM project_ressource_rel WHERE project_id = ${id}`
     return response.status(200).send('Deleted')
   } catch (error) {
     console.error(error)
