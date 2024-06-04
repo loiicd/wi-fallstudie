@@ -43,6 +43,8 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
     })
   }
 
+  const total = projectRessources.reduce((sum, resource) => sum + parseInt(resource.value), 0);
+
   return (
       <>
         <TableContainer>
@@ -64,12 +66,23 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                       <TableCell>{resource.title}</TableCell>
                       <TableCell align="right">{resource.value}</TableCell>
                       <TableCell align="right">
-                        <IconButton disabled={deleting} onClick={() => handleDeleteRessource(resource.id as string)}><DeleteOutlineOutlinedIcon /></IconButton>
+                        <IconButton disabled={deleting} size='small' onClick={() => handleDeleteRessource(resource.id as string)}><DeleteOutlineOutlinedIcon /></IconButton>
                       </TableCell>
                     </TableRow>
                   )) : null}
+
+                  {column_labels.includes("FTE") || column_labels.includes("EUR") ? 
+                  <TableRow>
+                    <TableCell />
+                      <TableCell >Summe</TableCell>
+                      <TableCell align="right">{total}</TableCell>
+                    <TableCell />
+                  </TableRow>
+                  : null}
+                  
                   <LoadingRow cellCount={4} loading={loading} />
                   <EmptyRow isEmpty={projectRessources.length === 0} columns={4} />
+
                 </TableBody>
               </Table>
             </TableContainer>
