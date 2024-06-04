@@ -22,3 +22,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vercel
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
