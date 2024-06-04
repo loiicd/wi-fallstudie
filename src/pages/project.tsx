@@ -42,8 +42,11 @@ const ProjectPage = () => {
     if (id) {
       getProjectsById(id)
         .then(project => {
-          console.log(project[0]);
-          setProject({ state: 'success', data: project[0]})
+          if (project.length === 0) {
+            navigate('/notfound')
+          } else {
+            setProject({ state: 'success', data: project[0]})
+          }
         })
     } else {
       navigate('/notfound')
