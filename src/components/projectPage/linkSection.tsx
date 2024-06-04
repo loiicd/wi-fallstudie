@@ -12,6 +12,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import EditIcon from '@mui/icons-material/Edit';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import BugReportIcon from '@mui/icons-material/BugReport';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 
 interface LinkSectionProps {
@@ -22,40 +23,22 @@ interface LinkSectionProps {
 
 const LinkSection: FunctionComponent<LinkSectionProps> = ({ project }) => {
 
-  const links = [
-    {id: "confluence", title: "Confluence", url: "https://lunchtracker187.atlassian.net/l/cp/BmzE1EG1", icon: "wiki"},
-    {id: "jira", title: "Jira", url: "https://www.atlassian.com/de/software/jira", icon: "bug"},
-  ]
-
-  const getIcon = (iconName: string) => {
-    switch(iconName) {
-      case 'wiki':
-        return <AutoStoriesIcon />;
-      case 'bug':
-        return <BugReportIcon />;
-      case 'Edit':
-        return <EditIcon />;
-      default:
-        return <LinkIcon />;
-    }
-  }
-
   return (
     <Card sx={{ marginTop: 2}}>
       <List subheader={<ListSubheader>Links</ListSubheader>}>
-        {project.id === "94868d73-4eb1-4f4b-b469-3fe511c3c9de" ? 
+        {project.links && project.links.length > 0 ?
           <>
-            {links.map((link) => (
+            {project.links.map((link) => (
               <ListItem>
               <Card sx={{width: '100%'}}>
                 <CardActionArea onClick={() => window.location.href = link.url}>
                   <CardContent>
                   <Grid container sx={{ display:'flex', alignItems: 'center', justifyContent: 'flex-start'}} spacing={2}>
                     <Grid item>
-                      {getIcon(link.icon)}
+                      < OpenInNewIcon />
                     </Grid>
                     <Grid item sx={{marginRight: 1}}>
-                      <Typography component="legend">{link.title}</Typography>
+                      <Typography component="legend">{link.type.charAt(0).toUpperCase() + link.type.slice(1)}</Typography>
                     </Grid>
                   </Grid>
                   </CardContent>
@@ -66,7 +49,7 @@ const LinkSection: FunctionComponent<LinkSectionProps> = ({ project }) => {
           </>
         : 
           <ListItem>
-            <Alert icon={<InfoOutlinedIcon fontSize="inherit" />} severity="info">Keine Links verfügbar</Alert>
+            <Alert  sx={{display: 'flex', width: '100%'}} icon={<InfoOutlinedIcon fontSize="inherit" />} severity="info">Keine Links verfügbar</Alert>
           </ListItem>
         }
       </List>

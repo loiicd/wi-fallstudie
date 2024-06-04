@@ -17,7 +17,7 @@ import CardActions from '@mui/material/CardActions'
 import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
-import AddProjectDialog from '../addProjectDialog'
+import AddProjectDialog from '../addProjectsDialog/addProjectDialog'
 import { useNavigate } from 'react-router-dom'
 
 interface CardExampleProps {

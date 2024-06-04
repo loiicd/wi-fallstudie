@@ -20,6 +20,7 @@ import ProjectRessourceGeneric from "../../types/projectResourceGeneric";
 import { saveRessource } from "../../services/projectRessource";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import dayjs, { Dayjs } from "dayjs";
+import { error } from "console";
 
 type ProjectRessourceDialogProps = {
     project: Project
@@ -122,10 +123,16 @@ const ProjectRessourceDialog = ({ project, openNewProjectRessourceDialog, setOpe
                                 <Typography variant={'caption'}>{labels[labels.length - 1]}</Typography>
                             </Grid>
                             <Grid item>
-                              <TextField value={projectRessource.value} variant="outlined" fullWidth 
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                  setProjectRessource({...projectRessource, value: event.target.value})
-                                }}/>
+                                <TextField 
+                                    value={projectRessource.value} 
+                                    variant="outlined" fullWidth 
+                                    error={parseInt(projectRessource.value) < 0}
+                                    helperText={parseInt(projectRessource.value) ? 'Der Wert darf nicht kleiner als 0 sein' : ''}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                        setProjectRessource({...projectRessource, value: event.target.value})
+                                    }}
+                                    
+                                />
                             </Grid>
                         </Grid>
 
