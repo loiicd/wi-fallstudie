@@ -99,6 +99,7 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
 const handleDelete = async (request: VercelRequest, response: VercelResponse) => {
   const id = request.body.id as string
   try {
+    await sql`DELTE FROM project_project_relation WHERE project_1_id = ${id} OR project_2_id = ${id}`
     await sql`DELETE FROM project_rate WHERE project_id = ${id}`
     await sql`DELETE FROM project_user_rel WHERE project_id = ${id}`
     await sql`DELETE FROM comment WHERE project_id = ${id}`
