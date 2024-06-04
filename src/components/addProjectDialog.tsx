@@ -6,6 +6,8 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { UserContext } from '../context/userContext'
 import { getUsers } from '../services/user'
 import { User } from '../types/user'
+import { locations } from '../types/location'
+import { departments } from '../types/department'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -28,6 +30,9 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import dayjs from 'dayjs'
 import InputAdornment from '@mui/material/InputAdornment'
 import Stack from '@mui/material/Stack'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import { useSnackbar } from 'notistack'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -37,6 +42,7 @@ interface AddProjectDialogProps {
 
 const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, handleClose, project}) => {
   const { activeUser } = useContext(UserContext)
+  const { enqueueSnackbar } = useSnackbar()
   const [tab, setTab] = useState<string>('1')
   const [projectFormData, setProjectFormData] = useState<Project | ProjectFormData>(project ? project : { title: '', status: 'Entwurf', team: [], created_from: '1'})
   const [users, setUsers] = useState<User[]>([])
@@ -53,12 +59,18 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
     setIsSavingProject(true)
     if (projectFormData.id) {
       updateProject(projectFormData as Project)
-        .then(() => handleClose())
+        .then(() => {
+          handleClose()
+          enqueueSnackbar('Änderungen gespeichert', { variant: 'success'})
+        })
         .catch(error => alert(error))
         .finally(() => setIsSavingProject(false))
     } else if (projectFormData.title !== '') {
       postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
-        .then(() => handleClose())
+        .then(() => {
+          handleClose()
+          enqueueSnackbar('Projekt erstellt', { variant: 'success'})
+        })
         .catch(error => alert(error))
         .finally(() => setIsSavingProject(false))
     } else {
@@ -85,6 +97,20 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
     setProjectFormData({
       ...projectFormData,
       status: event.target.value as ProjectStatus,
+    })
+  }
+
+  const handleLocationChange = (event: SelectChangeEvent<string>) => {
+    setProjectFormData({
+      ...projectFormData,
+      location: event.target.value,
+    })
+  }
+
+  const handleDepartmentChange = (event: SelectChangeEvent<string>) => {
+    setProjectFormData({
+      ...projectFormData,
+      department: event.target.value,
     })
   }
 
@@ -140,22 +166,39 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                 </Select>
               </Grid>
               <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
-                <TextField 
-                  label='Abteilung' 
-                  size='small' 
-                  value={projectFormData.department}
-                  sx={{ width: '100%'}} 
-                  onChange={handleChange('department')} 
-                />
+                <FormControl fullWidth size='small'>
+                  <InputLabel>Abteilung</InputLabel>
+                  <Select
+                    value={projectFormData.department}
+                    label="Abteilung"
+                    size='small' 
+                    sx={{ width: '100%'}} 
+                    onChange={handleDepartmentChange}
+                  >
+                    <MenuItem value={undefined}>-</MenuItem> 
+                    {departments.map(department => (
+                      <MenuItem value={department.name}>{department.name}</MenuItem>  
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={6}>
-                <TextField 
-                  label='Standort' 
-                  size='small' 
-                  value={projectFormData.location}
-                  sx={{ width: '100%'}} 
-                  onChange={handleChange('location')} 
-                />
+                <FormControl fullWidth size='small'>
+                  <InputLabel id='selectLocationLabel'>Standort</InputLabel>
+                  <Select
+                    labelId='selectLocationLabel'
+                    value={projectFormData.location}
+                    label="Standort"
+                    size='small' 
+                    sx={{ width: '100%'}} 
+                    onChange={handleLocationChange}
+                  >
+                    <MenuItem value={undefined}>-</MenuItem> 
+                    {locations.map(location => (
+                      <MenuItem value={location.name}>{location.name}</MenuItem>  
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={6}>
                 <TextField 
