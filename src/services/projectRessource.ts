@@ -2,7 +2,7 @@ import axios from 'axios'
 import ProjectRessourceGeneric from "../types/projectResourceGeneric"
 
 export const saveRessource = async (ressource: ProjectRessourceGeneric): Promise<void> => {
-  console.log("relation", ressource)
+  console.log("ressource", ressource)
   await axios.post('/api/projectRelations', ressource)
 }
 

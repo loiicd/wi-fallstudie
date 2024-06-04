@@ -23,10 +23,10 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
     setLoading(true)
     console.log("new ressource")
     saveRessource({
-      project_id: project.id,
-      title: "Test",
-      value: "Test",
-      type: type,
+      project_id: '13fe94e8-dff6-4a48-83c1-87e440e5d6a4',
+      title: "technik2",
+      value: "Test2",
+      type: 'test Wert',
       date: new Date().toISOString()
     })
     setLoading(false)
@@ -37,9 +37,7 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
     setLoading(true)
     console.log("get project ressources")
     getProjectRessourcesByType(project.id, type).then((ressources) => {
-      console.log("got project ressources")
       setProjectRessources(ressources)
-      console.log("set project ressources")
       setLoading(false)
     })
   }, [])

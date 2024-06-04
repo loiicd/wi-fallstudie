@@ -30,7 +30,7 @@ async function handleGet(request: VercelRequest, response: VercelResponse) {
 
 async function handlePost(request: VercelRequest, response: VercelResponse) {
     const ressource = request.body as ProjectRessourceGeneric
-    console.log(ressource)
+    console.log("to be inserted", ressource)
     if (!ressource.id) {
       const ressource_id = uuidv4()
       try {
