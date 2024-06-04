@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import {
+    Autocomplete,
     Button,
     Dialog, 
     DialogActions, 
@@ -54,6 +55,11 @@ const ProjectRessourceDialog = ({ project, openNewProjectRessourceDialog, setOpe
         setOpenNewProjectRessourceDialog(false)
         handleReload()
     }
+
+    const titleOptions = [
+        {id: 1, title: 'Intern'},
+        {id: 2, title: 'Extern'},
+    ]
     
     return (
         <Dialog open={openNewProjectRessourceDialog} onClose={handleClose} fullWidth={true} maxWidth={'md'}>
@@ -86,10 +92,27 @@ const ProjectRessourceDialog = ({ project, openNewProjectRessourceDialog, setOpe
                                 <Typography variant={'caption'}>{labels[labels.length - 2]}</Typography>
                             </Grid>
                             <Grid item xs={12}>
-                              <TextField value={projectRessource.title} variant="outlined" fullWidth
-                              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                setProjectRessource({...projectRessource, title: event.target.value})
-                              }}/>
+                                <>
+                                {labels[labels.length - 1] === 'FTE' ? 
+                                    <Autocomplete 
+                                    disableClearable
+                                    value={titleOptions.find(option => option.title === projectRessource.title)}
+                                    options={titleOptions}
+                                    getOptionKey={option => option.id}
+                                    getOptionLabel={(option) => option.title}
+                                    renderInput={(params) => <TextField 
+                                        required 
+                                        {...params}
+                                        error={projectRessource.title === ""} />}
+                                    onChange={(_, option) => setProjectRessource({...projectRessource, title: option.title})}
+                                    />
+                                : 
+                                <TextField value={projectRessource.title} variant="outlined" fullWidth
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                        setProjectRessource({...projectRessource, title: event.target.value})
+                                    }}/>
+                                }
+                                </>
                             </Grid>
                         </Grid>
                     </Grid>

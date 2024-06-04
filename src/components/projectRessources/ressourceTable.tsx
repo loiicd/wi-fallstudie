@@ -51,7 +51,7 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                   <TableRow>
                     {column_labels.includes("Monat") ? <TableCell>{column_labels[0]}</TableCell> : null}
                     <TableCell>{column_labels[column_labels.length - 2]}</TableCell>
-                    <TableCell>{column_labels[column_labels.length - 1]}</TableCell>
+                    <TableCell align="right">{column_labels[column_labels.length - 1]}</TableCell>
                     <TableCell align="right">
                       <IconButton color="primary" onClick={() => setOpenNewProjectRessourceDialog(true)}><AddIcon /></IconButton>
                       </TableCell>
@@ -62,7 +62,7 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                     <TableRow hover key={resource.id} >
                       {column_labels.includes("Monat") ? <TableCell>{new Date(resource.date as string).toLocaleDateString('de-DE', { year: 'numeric', month: 'short' })}</TableCell> : null}
                       <TableCell>{resource.title}</TableCell>
-                      <TableCell>{resource.value}</TableCell>
+                      <TableCell align="right">{resource.value}</TableCell>
                       <TableCell align="right">
                         <IconButton disabled={deleting} onClick={() => handleDeleteRessource(resource.id as string)}><DeleteOutlineOutlinedIcon /></IconButton>
                       </TableCell>

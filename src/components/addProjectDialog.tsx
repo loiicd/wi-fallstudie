@@ -135,7 +135,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
             <TabList onChange={handleChangeTab} aria-label="lab API tabs example">
               <Tab label="Allgemein" value='1' />
               <Tab label="Rollen" value='2' />
-              <Tab label="Ressourcen" value='3' />
+              <Tab label="Pers. Ressourcen" value='3' />
               <Tab label="Budget" value='4' />
               <Tab label="Kompläxität" value='5' />
               <Tab label="Beschreibungen" value='6' />
