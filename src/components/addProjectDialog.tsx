@@ -32,6 +32,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Stack from '@mui/material/Stack'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
+import { useSnackbar } from 'notistack'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -41,6 +42,7 @@ interface AddProjectDialogProps {
 
 const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, handleClose, project}) => {
   const { activeUser } = useContext(UserContext)
+  const { enqueueSnackbar } = useSnackbar()
   const [tab, setTab] = useState<string>('1')
   const [projectFormData, setProjectFormData] = useState<Project | ProjectFormData>(project ? project : { title: '', status: 'Entwurf', team: [], created_from: '1'})
   const [users, setUsers] = useState<User[]>([])
@@ -57,12 +59,18 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
     setIsSavingProject(true)
     if (projectFormData.id) {
       updateProject(projectFormData as Project)
-        .then(() => handleClose())
+        .then(() => {
+          handleClose()
+          enqueueSnackbar('Änderungen gespeichert', { variant: 'success'})
+        })
         .catch(error => alert(error))
         .finally(() => setIsSavingProject(false))
     } else if (projectFormData.title !== '') {
       postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
-        .then(() => handleClose())
+        .then(() => {
+          handleClose()
+          enqueueSnackbar('Projekt erstellt', { variant: 'success'})
+        })
         .catch(error => alert(error))
         .finally(() => setIsSavingProject(false))
     } else {
