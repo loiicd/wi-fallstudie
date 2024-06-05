@@ -67,14 +67,14 @@ const CommentSection: FunctionComponent<CommentSectionProps> = ({ projectId, com
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
       >
-        Kommentare ({comments? comments.length : '-'})
+        <Typography sx={{ fontSize: '1rem' }} color="text.secondary" gutterBottom>Kommentare ({loading ? "-" : comments? comments.length : '0'})</Typography>
       </AccordionSummary>
       <AccordionDetails>
         {loading ? null : 
         <>
           <Grid container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
             <Grid item>
-              {/*<Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Kommentare</Typography>*/}
+              {/*<Typography sx={{ fontSize: '1rem' }} color="text.secondary" gutterBottom>Kommentare</Typography>*/}
             </Grid>
             <Grid item>
               <Button startIcon={<AddIcon />} onClick={() => setOpenNewCommentInput(!openNewCommentInput)}>Neuer Kommentar</Button>
@@ -114,7 +114,7 @@ const CommentSection: FunctionComponent<CommentSectionProps> = ({ projectId, com
                     <Grid direction={'row'} container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 1}}>
                       <Grid item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}>
                         <Avatar sx={{ width: 30, height: 30, marginRight: 1}}>{comment.user.firstname[0]}{comment.user.lastname[0]}</Avatar>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary">{comment.user.firstname} {comment.user.lastname}, {new Date(comment.created_at).toLocaleDateString()}</Typography>
+                        <Typography sx={{ fontSize: '1rem' }} color="text.secondary">{comment.user.firstname} {comment.user.lastname}, {new Date(comment.created_at).toLocaleDateString()}</Typography>
                       </Grid>
                       <Grid item>
                         {comment.user.id === activeUser?.id || activeUser?.type === 'administrator' ?
