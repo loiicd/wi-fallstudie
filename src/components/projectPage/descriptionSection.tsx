@@ -17,13 +17,17 @@ const DescriptionSection: FunctionComponent<DescriptionSectionProps> = ({ projec
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        Beschreibungen
+        <Typography sx={{ fontSize: '1rem' }} color="text.secondary" gutterBottom>Beschreibungen</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant='h6'>Kurzbeschreibung</Typography>
             <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project!.short_description? project!.short_description : "-"}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant='h6'>Problemstellung</Typography>
+            <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project!.problem_description ? project!.problem_description : "-"}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant='h6'>Ziel</Typography>
@@ -34,8 +38,16 @@ const DescriptionSection: FunctionComponent<DescriptionSectionProps> = ({ projec
             <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project!.vision_description ? project!.vision_description : "-"}</Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant='h6'>Problemstellung</Typography>
-            <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project!.problem_description ? project!.problem_description : "-"}</Typography>
+            <Typography variant='h6'>Stakeholder</Typography>
+            <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project?.stakeholder ? project?.stakeholder : '-'}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant='h6'>Abhängigkeiten</Typography>
+            <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project?.dependencies ? project?.dependencies : '-'}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant='h6'>Erwarteter Effekt</Typography>
+            <Typography display="block" style={{ whiteSpace: 'pre-line' }}>{loading ? <Skeleton /> : project?.expected_effects ? project?.expected_effects : '-' }</Typography>
           </Grid>
         </Grid>
       </AccordionDetails>
