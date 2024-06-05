@@ -53,7 +53,7 @@ const RolesSection: React.FC<RolesSectionProps> = ({ project, openNewRelationDia
                   expandIcon={<ExpandMoreIcon color='action' />}
                   sx={{ flexGrow: 1 }}
                 >
-                  <Typography>Verwandte Projekte ({loading ? "-" : project?.related_projects ? project.related_projects.length : '0'})</Typography>
+                  <Typography sx={{ fontSize: '1rem' }} color="text.secondary" gutterBottom>Verwandte Projekte ({loading ? "-" : project?.related_projects ? project.related_projects.length : '0'})</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   {loading ? null :

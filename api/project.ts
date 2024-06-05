@@ -51,6 +51,8 @@ const handleGet = async (request: VercelRequest, response: VercelResponse) => {
 
       const ressources = (await sql`SELECT * FROM project_ressource_rel WHERE project_id = ${data.id}`).rows
       data.ressources = ressources.filter((ressource: any) => ressource.type === 'ressource_ressource').sort((a: any, b: any) => a.date - b.date)
+      data.budget = ressources.filter((ressource: any) => ressource.type === 'budget_ressource').sort((a: any, b: any) => a.date - b.date)
+      data.complexity = ressources.filter((ressource: any) => ressource.type === 'complexity_ressource').sort((a: any, b: any) => a.date - b.date)
 
       const related_projects_1 = (await 
         sql`
