@@ -15,11 +15,12 @@ interface ProjectRessourceTableProps {
   type: string
   project: Project
   column_labels: string[]
-  dialog_heading: string
+  dialog_heading?: string, 
+  editable?: boolean
 
 }
 
-export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps> = ({ type, project, column_labels, dialog_heading}) => {
+export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps> = ({ type, project, column_labels, dialog_heading, editable = true}) => {
   const [projectRessources, setProjectRessources] = useState<ProjectResourceGeneric[]>(project.ressources || [])
   const [loading, setLoading] = useState<boolean>(true)
   const [openNewProjectRessourceDialog, setOpenNewProjectRessourceDialog] = useState<boolean>(false)
@@ -57,9 +58,11 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                     {column_labels.includes("Monat") ? <TableCell>{column_labels[0]}</TableCell> : null}
                     <TableCell>{column_labels[column_labels.length - 2]}</TableCell>
                     <TableCell align="right">{column_labels[column_labels.length - 1]}</TableCell>
-                    <TableCell align="right">
-                      <IconButton color="primary" onClick={() => setOpenNewProjectRessourceDialog(true)}><AddIcon /></IconButton>
+                    {editable &&
+                      <TableCell align="right">
+                        <IconButton color="primary" onClick={() => setOpenNewProjectRessourceDialog(true)}><AddIcon /></IconButton>
                       </TableCell>
+                    }
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -68,9 +71,11 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                       {column_labels.includes("Monat") ? <TableCell>{new Date(resource.date as string).toLocaleDateString('de-DE', { year: 'numeric', month: 'short' })}</TableCell> : null}
                       <TableCell>{resource.title}</TableCell>
                       <TableCell align="right">{resource.value}</TableCell>
-                      <TableCell align="right">
-                        <IconButton disabled={deleting} size='small' onClick={() => handleDeleteRessource(resource.id as string)}><DeleteOutlineOutlinedIcon style={{ fontSize: 16 }}/></IconButton>
-                      </TableCell>
+                      {editable &&
+                        <TableCell align="right">
+                          <IconButton disabled={deleting} size='small' onClick={() => handleDeleteRessource(resource.id as string)}><DeleteOutlineOutlinedIcon style={{ fontSize: 16 }}/></IconButton>
+                        </TableCell>
+                      }
                     </TableRow>
                   )) : null}
 
@@ -83,13 +88,13 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                   </TableRow>
                   : null}
                   
-                  <LoadingRow cellCount={4} loading={loading} />
-                  {!loading ? <EmptyRow isEmpty={projectRessources.length === 0} columns={4} /> : null}
+                  <LoadingRow cellCount={editable ? column_labels.length+1 : column_labels.length} loading={loading} />
+                  {!loading ? <EmptyRow isEmpty={projectRessources.length === 0} columns={editable ? column_labels.length+1 : column_labels.length} /> : null}
 
                 </TableBody>
               </Table>
             </TableContainer>
-            {openNewProjectRessourceDialog ? 
+            {openNewProjectRessourceDialog && editable? 
               <ProjectRessourceDialog 
                 project={project} 
                 openNewProjectRessourceDialog={openNewProjectRessourceDialog} 
@@ -97,7 +102,7 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                 handleReload={handleReload}
                 type={type}
                 labels={column_labels}
-                dialog_heading={dialog_heading}/>
+                dialog_heading={dialog_heading || column_labels[0]}/>
               : null}
       </>
     )
