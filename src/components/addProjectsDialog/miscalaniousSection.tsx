@@ -49,7 +49,6 @@ const MiscalaniousSection: FunctionComponent<MiscalaniousSectionProps> = ({ proj
           value={projectFormData.links?.find(link => link.type === 'confluence')?.url || ''}
           sx={{ width: '100%'}}
           onChange={handleLinksChange('confluence')}
-          
         />
 
         <TextField 
@@ -58,7 +57,13 @@ const MiscalaniousSection: FunctionComponent<MiscalaniousSectionProps> = ({ proj
           value={projectFormData.links?.find(link => link.type === 'jira')?.url || ''}
           sx={{ width: '100%'}}
           onChange={handleLinksChange('jira')}
-          
+        />
+        <TextField 
+          label='Weiterer Link...' 
+          size='small' 
+          value={projectFormData.links?.find(link => link.type === 'other')?.url || ''}
+          sx={{ width: '100%'}}
+          onChange={handleLinksChange('other')}
         />
       </Stack>
     </>
