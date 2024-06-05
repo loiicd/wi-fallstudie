@@ -127,7 +127,6 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
       }
       return { ...prevData, links: newLinks };
     });
-    console.log("projectFormData", projectFormData);
   };
 
   return (

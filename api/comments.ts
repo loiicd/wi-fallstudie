@@ -15,7 +15,6 @@ async function handler(request: VercelRequest, response: VercelResponse) {
 
 async function handlePost(request: VercelRequest, response: VercelResponse) {
     const comment = request.body
-    console.log(comment)
     const comment_id = uuidv4()
     try {
         await sql`
