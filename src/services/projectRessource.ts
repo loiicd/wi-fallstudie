@@ -6,7 +6,6 @@ export const saveRessource = async (ressource: ProjectRessourceGeneric): Promise
 }
 
 export const deleteRessource = async (ressource_id: string): Promise<void> => {
-  console.log(ressource_id)
   await axios.delete(`/api/projectRessources`, { data: { id: ressource_id } })
 }
 

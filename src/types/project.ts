@@ -26,6 +26,12 @@ export type ProjectRelation = {
   created_from: User
 }
 
+export type ExternalProjectLink = {
+  id?: string
+  url: string
+  type: string
+}
+
 
 export type Project = {
   id: string
@@ -61,6 +67,7 @@ export type Project = {
   ressources?: ProjectRessourceGeneric[]
   budget?: ProjectRessourceGeneric[]
   complexity?: ProjectRessourceGeneric[]
+  links?: ExternalProjectLink[]
 }
 
 export type ProjectFormData = {
@@ -91,4 +98,5 @@ export type ProjectFormData = {
   ressources?: ProjectRessourceGeneric[]
   budget?: ProjectRessourceGeneric[]
   complexity?: ProjectRessourceGeneric[]
+  links?: ExternalProjectLink[]
 }

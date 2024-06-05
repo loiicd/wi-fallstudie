@@ -28,7 +28,6 @@ async function handleDelete(request: VercelRequest, response: VercelResponse) {
 async function handleGet(request: VercelRequest, response: VercelResponse) {
     const project_id = request.query.project_id as string
     const type = request.query.type as string
-    console.log(project_id, type)
     try {
         const result = await sql`SELECT * FROM project_ressource_rel WHERE project_id = ${project_id} AND type = ${type}`
         return response.status(200).json(result.rows.sort((a, b) => a.date - b.date))

@@ -38,7 +38,13 @@ const handleGet = async (request: VercelRequest, response: VercelResponse) => {
         item.user = (await sql`SELECT * FROM "user" WHERE id = ${item.user_id}`).rows[0]
       ))
 
-      data.comments = (await sql`SELECT * FROM comment WHERE project_id = ${data.id} ORDER BY created_at DESC`).rows.sort((a: any, b: any) => a.created_at - b.created_at)
+      const comments_records = (await sql`SELECT * FROM comment WHERE project_id = ${data.id} ORDER BY created_at DESC`).rows.sort((a: any, b: any) => a.created_at - b.created_at)
+      
+      data.links = comments_records
+        .filter((comment: any) => comment.type.startsWith('link'))
+        .map((comment: any) => ({ id: comment.id, url: comment.content, type: comment.type.replace('link_', '')}))
+
+      data.comments = comments_records.filter((comment: any) => comment.type === 'comment')
       await Promise.all(data.comments.map(async (item: any) =>
         item.user = (await sql`SELECT * FROM "user" WHERE id = ${item.user_id}`).rows[0]
       ))
@@ -78,6 +84,7 @@ const handleGet = async (request: VercelRequest, response: VercelResponse) => {
 }
 
 const handlePost = async (request: VercelRequest, response: VercelResponse) => {
+  console.log(request.body)
   if (request.body.id) {
     const project = request.body
     try {
@@ -86,15 +93,27 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
       const currentTeamMembers = await sql`SELECT user_id FROM project_user_rel WHERE project_id = ${project.id}`
       const currentTeamMemberSet = new Set(currentTeamMembers.rows.map((member: QueryResultRow) => member.user_id))
       const newTeamMemberSet = new Set(project.team.map((member: { id: string }) => member.id))
-
       const membersToAdd = [...newTeamMemberSet].filter((member: any) => !currentTeamMemberSet.has(member))
       const membersToRemove = [...currentTeamMemberSet].filter(member => !newTeamMemberSet.has(member))
-
       for (const memberId of membersToAdd) {
         if (typeof memberId === 'string') {await sql`INSERT INTO project_user_rel (project_id, user_id, role) VALUES (${project.id}, ${memberId}, ${null})`}
       }
       for (const memberId of membersToRemove) {
         await sql`DELETE FROM project_user_rel WHERE project_id = ${project.id} AND user_id = ${memberId}`
+      }
+
+      const currentLinks = await sql`SELECT id FROM comment WHERE project_id = ${project.id} AND type LIKE 'link_%'`
+      const currentLinkSet = new Set(currentLinks.rows.map((link: QueryResultRow) => link.id))
+      const newLinkSet = new Set()
+      if (project.links.length >= 0) {
+        const linksToAdd = project.links.filter((link: { url: string, type: string }) => link.url !== '' && !currentLinkSet.has(link.url))
+        for (const link of linksToAdd) {
+          await sql`INSERT INTO comment (id, project_id, user_id, content, type, created_at) VALUES (${uuidv4()}, ${project.id}, ${project.created_from}, ${link.url}, ${'link_' + link.type}, now())`
+        }
+      }
+      const linksToRemove = [...currentLinkSet].filter(link => !newLinkSet.has(link))
+      for (const linkId of linksToRemove) {
+        await sql`DELETE FROM comment WHERE project_id = ${project.id} AND id = ${linkId}`
       }
       return response.status(200).send('Updated')
     } catch (error) {
@@ -108,8 +127,10 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
     try {
       await sql`INSERT INTO project (id, status, title, created_from, created_at, start_date, end_date, project_lead_id, sub_project_lead_id, department, location, fte_intern, fte_extern, investment, stakeholder, customer, dependencies, expected_effects, prio, short_description, target_description, vision_description, problem_description) VALUES (${project_id}, ${projectFormData.status}, ${projectFormData.title}, ${projectFormData.created_from}, now()::timestamp, ${projectFormData.start_date}, ${projectFormData.end_date}, ${projectFormData.project_lead_id}, ${projectFormData.sub_project_lead_id}, ${projectFormData.department}, ${projectFormData.location}, ${projectFormData.fte_intern}, ${projectFormData.fte_extern}, ${projectFormData.investment}, ${projectFormData.stakeholder}, ${projectFormData.customer}, ${projectFormData.dependencies}, ${projectFormData.expected_effects}, ${projectFormData.prio}, ${projectFormData.short_description}, ${projectFormData.target_description}, ${projectFormData.vision_description}, ${projectFormData.problem_description})`
       await Promise.all(projectFormData.team.map(async (userId: string) => {
-        console.log('Executed')
         await sql`INSERT INTO "project_user_rel" (project_id, user_id, role) VALUES (${project_id}, ${userId}, ${null})`
+      }))
+      await Promise.all(projectFormData.links?.map(async (link: any) => {
+        await sql`INSERT INTO comment (id, project_id, user_id, content, type, created_at) VALUES (${uuidv4()}, ${project_id}, ${projectFormData.created_from}, ${link.url}, ${'link_' + link.type}, now())`
       }))
       return response.status(201).send('Created')
     } catch (error) {

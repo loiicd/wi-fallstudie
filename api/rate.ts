@@ -10,7 +10,6 @@ const handler = async (request: VercelRequest, response: VercelResponse) => {
 
 const handlePost = async (request: VercelRequest, response: VercelResponse) => {
   const rate = request.body
-  console.log(rate)
   try {
     const rateExists = (await sql`SELECT * FROM project_rate WHERE project_id = ${rate.project_id} AND user_id = ${rate.user_id}`).rows[0]
     if (rateExists) {

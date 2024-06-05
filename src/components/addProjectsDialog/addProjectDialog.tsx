@@ -1,13 +1,13 @@
 
 import { useState, SyntheticEvent, useEffect, ChangeEvent, FunctionComponent, useContext } from 'react'
-import { Project, ProjectFormData, ProjectStatus, Team } from '../types/project'
-import { postProject, updateProject } from '../services/projects'
+import { Project, ProjectFormData, ProjectStatus, Team } from '../../types/project'
+import { postProject, updateProject } from '../../services/projects'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
-import { UserContext } from '../context/userContext'
-import { getUsers } from '../services/user'
-import { User } from '../types/user'
-import { locations } from '../types/location'
-import { departments } from '../types/department'
+import { UserContext } from '../../context/userContext'
+import { getUsers } from '../../services/user'
+import { User } from '../../types/user'
+import { locations } from '../../types/location'
+import { departments } from '../../types/department'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -30,10 +30,11 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import dayjs from 'dayjs'
 import InputAdornment from '@mui/material/InputAdornment'
 import Stack from '@mui/material/Stack'
-import { ProjectRessourceTable } from './projectRessources/ressourceTable'
+import { ProjectRessourceTable } from './ressourceTable'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { useSnackbar } from 'notistack'
+import MiscalaniousSection from './miscalaniousSection'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -45,7 +46,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const { activeUser } = useContext(UserContext)
   const { enqueueSnackbar } = useSnackbar()
   const [tab, setTab] = useState<string>('1')
-  const [projectFormData, setProjectFormData] = useState<Project | ProjectFormData>(project ? project : { title: '', status: 'Entwurf', team: [], created_from: '1'})
+  const [projectFormData, setProjectFormData] = useState<Project | ProjectFormData>(project ? project : { title: '', status: 'Entwurf', team: [], created_from: '1', links: []})
   const [users, setUsers] = useState<User[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
   const [projectTeam, setProjectTeam] = useState<string[]>([])
@@ -114,6 +115,19 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
       department: event.target.value,
     })
   }
+  
+  const handleLinksChange = (type: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setProjectFormData((prevData) => {
+      const newLinks = prevData.links ? [...prevData.links] : [];
+      const linkIndex = newLinks.findIndex((link) => link.type === type);
+      if (linkIndex !== -1) {
+        newLinks[linkIndex] = { ...newLinks[linkIndex], url: event.target.value };
+      } else {
+        newLinks.push({ type: type, url: event.target.value });
+      }
+      return { ...prevData, links: newLinks };
+    });
+  };
 
   return (
     <Dialog
@@ -442,35 +456,11 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
             </Grid>
           </TabPanel>
           <TabPanel value='7'>
-            <Stack spacing={2}>
-              <TextField 
-                label='Stakeholder' 
-                size='small' 
-                value={projectFormData.stakeholder}
-                sx={{ width: '100%'}} 
-                multiline 
-                rows={4} 
-                onChange={handleChange('stakeholder')} 
-              />
-              <TextField 
-                label='Abhängigkeiten' 
-                size='small' 
-                value={projectFormData.dependencies}
-                sx={{ width: '100%'}} 
-                multiline 
-                rows={4} 
-                onChange={handleChange('dependencies')} 
-              />
-              <TextField 
-                label='Erwartete Effekte' 
-                size='small' 
-                value={projectFormData.expected_effects}
-                sx={{ width: '100%'}} 
-                multiline 
-                rows={4} 
-                onChange={handleChange('expected_effects')} 
-              />
-            </Stack>
+            <MiscalaniousSection
+              projectFormData={projectFormData}
+              handleChange={handleChange}
+              handleLinksChange={handleLinksChange}
+            />
           </TabPanel>
         </TabContext>
       </DialogContent>
