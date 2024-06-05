@@ -1,4 +1,4 @@
-import { FunctionComponent, SyntheticEvent, useState } from 'react'
+import { FunctionComponent, SyntheticEvent, useEffect, useState } from 'react'
 import { Project } from '../../types/project'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -26,28 +26,28 @@ const BudgetSection: FunctionComponent<BudgetSectionProps> = ({ project }) => {
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={handleChangeTab}>
-              <Tab label={'Personal Ressourcen (' + (project?.ressources?.length || '0') + ')' } value="1" />
-              <Tab label={"Budget (" + (project?.budget?.length || '0') + ')'} value="2" />
-              <Tab label={"Kompläxitätsfaktoren (" + (project?.complexity?.length || '0') + ')'} value="3" />
+              <Tab label={'Personal Ressourcen (' + ((project?.ressources?.length || 0)) + ')' } value="1" />
+              <Tab label={"Budget (" + ((project?.budget?.length || 0)) + ')'} value="2" />
+              <Tab label={"Kompläxitätsfaktoren (" + ((project?.complexity?.length || 0)) + ')'} value="3" />
             </TabList>
           </Box>
           <TabPanel value="1">
             {project ? 
-              <ProjectRessourceTable type="personal" project={project} column_labels={["Monat", "Name", "Stunden"]} editable={false} /> 
+              <ProjectRessourceTable type="personal_ressource" project={project} column_labels={["Monat", "Name", "Stunden"]} editable={false} /> 
               : 
-                null
+              null
               }
           </TabPanel>
           <TabPanel value="2">
             {project ? 
-              <ProjectRessourceTable type="budget" project={project} column_labels={["Monat", "Kategorie", "Betrag"]} editable={false} /> 
+              <ProjectRessourceTable type="budget_ressource" project={project} column_labels={["Monat", "Kategorie", "Betrag"]} editable={false} /> 
               : 
                 null
               }
           </TabPanel>
           <TabPanel value="3">
             {project ? 
-              <ProjectRessourceTable type="complexity" project={project} column_labels={["Kategorie", "Komplexität"]} editable={false} /> 
+              <ProjectRessourceTable type="complexity_ressource" project={project} column_labels={["Kategorie", "Komplexität"]} editable={false} /> 
               : 
                 null
               }
