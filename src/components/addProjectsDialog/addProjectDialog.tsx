@@ -1,7 +1,7 @@
 
 import { useState, SyntheticEvent, useEffect, ChangeEvent, FunctionComponent, useContext } from 'react'
 import { Project, ProjectFormData, ProjectStatus, Team } from '../../types/project'
-import { postProject, updateProject } from '../../services/projects'
+import { postProject, updateProject, deleteProject } from '../../services/projects'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { UserContext } from '../../context/userContext'
 import { getUsers } from '../../services/user'
@@ -34,7 +34,8 @@ import { ProjectRessourceTable } from './ressourceTable'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { useSnackbar } from 'notistack'
-import MiscalaniousSection from './miscalaniousSection'
+import MiscalaniousSection from './miscalaniousTabContent'
+import GeneralTabContent from './generalTabContent'
 
 interface AddProjectDialogProps {
   open: boolean
@@ -52,9 +53,52 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const [projectTeam, setProjectTeam] = useState<string[]>([])
   const [isSavingProject, setIsSavingProject] = useState<boolean>(false)
   const [titleInputError, setTitleInputError] = useState<boolean>(false)
+  const [deleteWhenNotSaved, setDeleteWhenNotSaved] = useState<boolean>(false)
 
   const handleChangeTab = (event: SyntheticEvent, newTab: string) => {
+    handleSaveWithDialogOpen()
     setTab(newTab)
+  }
+
+  const handleSaveWithDialogOpen = () => {
+    if (projectFormData.id) {
+      updateProject(projectFormData as Project)
+        .catch(error => alert(error))
+        .finally(() => {
+          setIsSavingProject(false)
+          setTitleInputError(false) 
+        })
+    } else if (projectFormData.title !== '') {
+      postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
+        .then((id) => {
+          setProjectFormData({ ...projectFormData, id: id })
+        })
+        .catch(error => alert(error))
+        .finally(() => {
+          setIsSavingProject(false)
+          setTitleInputError(false) 
+          setDeleteWhenNotSaved(true)
+        })
+    } else {
+      setTitleInputError(true)
+      enqueueSnackbar('Fehlender Projekt Titel', { variant: 'error', autoHideDuration: 3000})
+    }
+  }
+
+  const handleClose_withDeleteCheck = () => {
+    if (deleteWhenNotSaved && projectFormData.id) {
+      setIsSavingProject(true)
+      deleteProject(projectFormData.id)
+        .then(() => {
+          handleClose()
+          setIsSavingProject(false)
+        })
+        .catch(error => alert(error))
+    }
+    else {
+      handleClose()
+      setIsSavingProject(false)
+    }
   }
 
   const handleSave = () => {
@@ -62,19 +106,25 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
     if (projectFormData.id) {
       updateProject(projectFormData as Project)
         .then(() => {
-          handleClose()
+          handleClose_withDeleteCheck()
           enqueueSnackbar('Änderungen gespeichert', { variant: 'success'})
         })
         .catch(error => alert(error))
-        .finally(() => setIsSavingProject(false))
+        .finally(() => {
+          setIsSavingProject(false)
+          setTitleInputError(false) 
+        })
     } else if (projectFormData.title !== '') {
       postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
         .then(() => {
-          handleClose()
+          handleClose_withDeleteCheck()
           enqueueSnackbar('Projekt erstellt', { variant: 'success'})
         })
         .catch(error => alert(error))
-        .finally(() => setIsSavingProject(false))
+        .finally(() => {
+          setIsSavingProject(false)
+          setTitleInputError(false) 
+        })
     } else {
       setTitleInputError(true)
     }
@@ -132,7 +182,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={handleClose_withDeleteCheck}
       fullWidth={true}
       maxWidth={'md'}
       PaperProps={{
@@ -156,101 +206,16 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               <Tab label="Weiteres" value='7' />
             </TabList>
           </Box>
-          <TabPanel value='1'>
-            <Grid container spacing={4} sx={{ paddingY: 2 }}>
-              <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
-                <TextField 
-                  error={titleInputError}
-                  label='Titel' 
-                  size='small' 
-                  required 
-                  value={projectFormData.title}
-                  sx={{ width: '100%'}} 
-                  onChange={handleChange('title')} 
-                />
-                {titleInputError && <p style={{ color: 'red', fontSize: '0.75rem', margin: '0.5rem 0' }}>Bitte geben Sie einen Titel ein</p>}
-              </Grid>
-              <Grid item xs={6}>
-                <Select 
-                  label='Feld 2' 
-                  size='small' 
-                  value={projectFormData.status}
-                  sx={{ width: '100%'}} 
-                  onChange={(event: SelectChangeEvent<string>) => handleStatusChange(event)}
-                >
-                  <MenuItem value='Entwurf'>Entwurf</MenuItem>
-                  <MenuItem value='Eingereicht'>Eingereicht</MenuItem>
-                </Select>
-              </Grid>
-              <Grid item xs={6} sx={{ justifyContent: 'stretch' }}>
-                <FormControl fullWidth size='small'>
-                  <InputLabel>Abteilung</InputLabel>
-                  <Select
-                    value={projectFormData.department}
-                    label="Abteilung"
-                    size='small' 
-                    sx={{ width: '100%'}} 
-                    onChange={handleDepartmentChange}
-                  >
-                    <MenuItem value={undefined}>-</MenuItem> 
-                    {departments.map(department => (
-                      <MenuItem value={department.name}>{department.name}</MenuItem>  
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl fullWidth size='small'>
-                  <InputLabel id='selectLocationLabel'>Standort</InputLabel>
-                  <Select
-                    labelId='selectLocationLabel'
-                    value={projectFormData.location}
-                    label="Standort"
-                    size='small' 
-                    sx={{ width: '100%'}} 
-                    onChange={handleLocationChange}
-                  >
-                    <MenuItem value={undefined}>-</MenuItem> 
-                    {locations.map(location => (
-                      <MenuItem value={location.name}>{location.name}</MenuItem>  
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <TextField 
-                  label='Kunde' 
-                  size='small' 
-                  value={projectFormData.customer}
-                  sx={{ width: '100%'}} 
-                  onChange={handleChange('customer')} 
-                />
-              </Grid>
-              <Grid item xs={6}></Grid>
-              <Grid item xs={6}>
-                <DateTimePicker 
-                  label='Startdatum' 
-                  views={['day', 'month', 'year']} 
-                  value={dayjs(projectFormData.start_date)}
-                  slotProps={{ textField: { size: 'small' } }} 
-                  sx={{ width: '100%'}} 
-                  minDate={projectFormData.id ? dayjs(Date.now()).subtract(100, 'year') : dayjs(Date.now())}
-                  onChange={(newValue) => setProjectFormData({ ...projectFormData, start_date: newValue?.format() })}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <DateTimePicker 
-                  label='Enddatum' 
-                  views={['day', 'month', 'year']}
-                  value={dayjs(projectFormData.end_date)}
-                  slotProps={{ textField: { size: 'small' } }} 
-                  sx={{ width: '100%'}} 
-                  minDate={projectFormData.id ? dayjs(Date.now()).subtract(100, 'year') : dayjs(Date.now())}
-                  onChange={(newValue) => setProjectFormData({ ...projectFormData, end_date: newValue?.format() })}
-                />
-              </Grid>
-            </Grid>
-          </TabPanel>
+          <GeneralTabContent
+            tabPanelValue='1'
+            projectFormData={projectFormData}
+            titleInputError={titleInputError}
+            handleChange={handleChange}
+            handleDepartmentChange={handleDepartmentChange}
+            handleLocationChange={handleLocationChange}
+            handleStatusChange={handleStatusChange}
+            setProjectFormData={setProjectFormData}
+          />
           <TabPanel value='2'>
             <Grid container spacing={4} sx={{ paddingY: 2 }}>
               <Grid item xs={6}>
@@ -465,7 +430,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
         </TabContext>
       </DialogContent>
       <DialogActions>
-        <Button variant='outlined' startIcon={< CloseIcon />} onClick={handleClose}>Abbrechen</Button>
+        <Button variant='outlined' startIcon={< CloseIcon />} onClick={handleClose_withDeleteCheck}>Abbrechen</Button>
         <LoadingButton variant='contained' startIcon={<SaveOutlinedIcon />} onClick={handleSave} autoFocus loading={isSavingProject}>Speichern</LoadingButton>
       </DialogActions>
     </Dialog>

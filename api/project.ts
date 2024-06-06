@@ -134,7 +134,7 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
       await Promise.all(projectFormData.links?.map(async (link: any) => {
         await sql`INSERT INTO comment (id, project_id, user_id, content, type, created_at) VALUES (${uuidv4()}, ${project_id}, ${projectFormData.created_from}, ${link.url}, ${'link_' + link.type}, now())`
       }))
-      return response.status(201).send('Created')
+      return response.status(201).send({message: 'Created', project_id: project_id})
     } catch (error) {
       console.error(error)
       return response.status(500).send('Internal Server Error')
@@ -149,8 +149,8 @@ const handleDelete = async (request: VercelRequest, response: VercelResponse) =>
     await sql`DELETE FROM project_rate WHERE project_id = ${id}`
     await sql`DELETE FROM project_user_rel WHERE project_id = ${id}`
     await sql`DELETE FROM comment WHERE project_id = ${id}`
-    await sql`DELETE FROM project WHERE id = ${id}`
     await sql`DELETE FROM project_ressource_rel WHERE project_id = ${id}`
+    await sql`DELETE FROM project WHERE id = ${id}`
     return response.status(200).send('Deleted')
   } catch (error) {
     console.error(error)

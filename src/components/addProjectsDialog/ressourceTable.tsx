@@ -17,7 +17,6 @@ interface ProjectRessourceTableProps {
   column_labels: string[]
   dialog_heading?: string, 
   editable?: boolean
-
 }
 
 export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps> = ({ type, project, column_labels, dialog_heading, editable = true}) => {
@@ -51,7 +50,7 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
 
   return (
       <>
-        {project.id === undefined && <Typography variant="body2" color="textSecondary">TODO. (Projekt einmal speichern, um Ressourcen hinzufügen zu können.)</Typography>}
+        {project.id === undefined && <Typography variant="body2" color="textSecondary">Projekttitel spezifizieren, um Ressourcen hinzufügen zu können.</Typography>}
         <TableContainer>
               <Table size="small" aria-label="a dense table">
                 <TableHead>
@@ -91,7 +90,6 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                   
                   <LoadingRow cellCount={editable ? column_labels.length+1 : column_labels.length} loading={loading} />
                   {!loading ? <EmptyRow isEmpty={projectRessources.length === 0} columns={editable ? column_labels.length+1 : column_labels.length} /> : null}
-
                 </TableBody>
               </Table>
             </TableContainer>
