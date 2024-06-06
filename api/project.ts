@@ -149,8 +149,8 @@ const handleDelete = async (request: VercelRequest, response: VercelResponse) =>
     await sql`DELETE FROM project_rate WHERE project_id = ${id}`
     await sql`DELETE FROM project_user_rel WHERE project_id = ${id}`
     await sql`DELETE FROM comment WHERE project_id = ${id}`
-    await sql`DELETE FROM project WHERE id = ${id}`
     await sql`DELETE FROM project_ressource_rel WHERE project_id = ${id}`
+    await sql`DELETE FROM project WHERE id = ${id}`
     return response.status(200).send('Deleted')
   } catch (error) {
     console.error(error)
