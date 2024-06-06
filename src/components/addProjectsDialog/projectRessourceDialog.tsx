@@ -20,7 +20,6 @@ import ProjectRessourceGeneric from "../../types/projectResourceGeneric";
 import { saveRessource } from "../../services/projectRessource";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import dayjs, { Dayjs } from "dayjs";
-import { error } from "console";
 
 type ProjectRessourceDialogProps = {
     project: Project

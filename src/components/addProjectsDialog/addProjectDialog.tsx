@@ -1,7 +1,7 @@
 
 import { useState, SyntheticEvent, useEffect, ChangeEvent, FunctionComponent, useContext } from 'react'
 import { Project, ProjectFormData, ProjectStatus, Team } from '../../types/project'
-import { postProject, updateProject } from '../../services/projects'
+import { postProject, updateProject, deleteProject } from '../../services/projects'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { UserContext } from '../../context/userContext'
 import { getUsers } from '../../services/user'
@@ -52,9 +52,55 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const [projectTeam, setProjectTeam] = useState<string[]>([])
   const [isSavingProject, setIsSavingProject] = useState<boolean>(false)
   const [titleInputError, setTitleInputError] = useState<boolean>(false)
+  const [deleteWhenNotSaved, setDeleteWhenNotSaved] = useState<boolean>(false)
 
   const handleChangeTab = (event: SyntheticEvent, newTab: string) => {
+    handleSaveWithDialogOpen()
     setTab(newTab)
+  }
+
+  const handleSaveWithDialogOpen = () => {
+    if (projectFormData.id) {
+      updateProject(projectFormData as Project)
+        .catch(error => alert(error))
+        .finally(() => {
+          setIsSavingProject(false)
+          setTitleInputError(false) 
+          console.log('updated with dialog open')
+        })
+    } else if (projectFormData.title !== '') {
+      postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
+        .then((id) => {
+          setProjectFormData({ ...projectFormData, id: id })
+        })
+        .catch(error => alert(error))
+        .finally(() => {
+          setIsSavingProject(false)
+          setTitleInputError(false) 
+          console.log('saved with dialog open')
+          setDeleteWhenNotSaved(true)
+
+        })
+    } else {
+      setTitleInputError(true)
+      enqueueSnackbar('Fehlender Projekt Titel', { variant: 'error', autoHideDuration: 3000})
+    }
+  }
+
+  const handleClose_withDeleteCheck = () => {
+    if (deleteWhenNotSaved && projectFormData.id) {
+      setIsSavingProject(true)
+      deleteProject(projectFormData.id)
+        .then(() => {
+          handleClose()
+          setIsSavingProject(false)
+        })
+        .catch(error => alert(error))
+    }
+    else {
+      handleClose()
+      setIsSavingProject(false)
+    }
   }
 
   const handleSave = () => {
@@ -62,19 +108,25 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
     if (projectFormData.id) {
       updateProject(projectFormData as Project)
         .then(() => {
-          handleClose()
+          handleClose_withDeleteCheck()
           enqueueSnackbar('Änderungen gespeichert', { variant: 'success'})
         })
         .catch(error => alert(error))
-        .finally(() => setIsSavingProject(false))
+        .finally(() => {
+          setIsSavingProject(false)
+          setTitleInputError(false) 
+        })
     } else if (projectFormData.title !== '') {
       postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
         .then(() => {
-          handleClose()
+          handleClose_withDeleteCheck()
           enqueueSnackbar('Projekt erstellt', { variant: 'success'})
         })
         .catch(error => alert(error))
-        .finally(() => setIsSavingProject(false))
+        .finally(() => {
+          setIsSavingProject(false)
+          setTitleInputError(false) 
+        })
     } else {
       setTitleInputError(true)
     }
@@ -132,7 +184,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={handleClose_withDeleteCheck}
       fullWidth={true}
       maxWidth={'md'}
       PaperProps={{
@@ -465,7 +517,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
         </TabContext>
       </DialogContent>
       <DialogActions>
-        <Button variant='outlined' startIcon={< CloseIcon />} onClick={handleClose}>Abbrechen</Button>
+        <Button variant='outlined' startIcon={< CloseIcon />} onClick={handleClose_withDeleteCheck}>Abbrechen</Button>
         <LoadingButton variant='contained' startIcon={<SaveOutlinedIcon />} onClick={handleSave} autoFocus loading={isSavingProject}>Speichern</LoadingButton>
       </DialogActions>
     </Dialog>
