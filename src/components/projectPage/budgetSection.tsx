@@ -33,21 +33,21 @@ const BudgetSection: FunctionComponent<BudgetSectionProps> = ({ project }) => {
           </Box>
           <TabPanel value="1">
             {project ? 
-              <ProjectRessourceTable type="personal_ressource" project={project} column_labels={["Monat", "Name", "Stunden"]} editable={false} /> 
+              <ProjectRessourceTable type="ressource_ressource" project={project} column_labels={["Monat", "Bedarf", "FTE"]} editable={false} /> 
               : 
               null
               }
           </TabPanel>
           <TabPanel value="2">
             {project ? 
-              <ProjectRessourceTable type="budget_ressource" project={project} column_labels={["Monat", "Kategorie", "Betrag"]} editable={false} /> 
+              <ProjectRessourceTable type="budget_ressource" project={project} column_labels={["Monat", "Beschreibung", "EUR"]} editable={false} /> 
               : 
                 null
               }
           </TabPanel>
           <TabPanel value="3">
             {project ? 
-              <ProjectRessourceTable type="complexity_ressource" project={project} column_labels={["Kategorie", "Komplexität"]} editable={false} /> 
+              <ProjectRessourceTable type="complexity_ressource" project={project} column_labels={["Kategorie", "Komplexitätsgrad"]} editable={false} /> 
               : 
                 null
               }
