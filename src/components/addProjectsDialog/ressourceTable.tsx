@@ -2,7 +2,7 @@
 import { useState, FunctionComponent, useEffect, useCallback } from 'react';
 import { Project } from '../../types/project';
 import ProjectResourceGeneric from '../../types/projectResourceGeneric';
-import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import EmptyRow from '../table/emptyRow';
 import LoadingRow from '../table/loadingRow';
 import {deleteRessource, getProjectRessourcesByType } from '../../services/projectRessource'
@@ -51,6 +51,7 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
 
   return (
       <>
+        {project.id === undefined && <Typography variant="body2" color="textSecondary">TODO. (Projekt einmal speichern, um Ressourcen hinzufügen zu können.)</Typography>}
         <TableContainer>
               <Table size="small" aria-label="a dense table">
                 <TableHead>
@@ -60,7 +61,7 @@ export const ProjectRessourceTable: FunctionComponent<ProjectRessourceTableProps
                     <TableCell align="right">{column_labels[column_labels.length - 1]}</TableCell>
                     {editable &&
                       <TableCell align="right">
-                        <IconButton color="primary" onClick={() => setOpenNewProjectRessourceDialog(true)}><AddIcon /></IconButton>
+                        <IconButton color="primary" disabled={project.id === undefined} onClick={() => setOpenNewProjectRessourceDialog(true)}><AddIcon /></IconButton>
                       </TableCell>
                     }
                   </TableRow>
