@@ -134,7 +134,7 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
       await Promise.all(projectFormData.links?.map(async (link: any) => {
         await sql`INSERT INTO comment (id, project_id, user_id, content, type, created_at) VALUES (${uuidv4()}, ${project_id}, ${projectFormData.created_from}, ${link.url}, ${'link_' + link.type}, now())`
       }))
-      return response.status(201).send('Created')
+      return response.status(201).send({message: 'Created', project_id: project_id})
     } catch (error) {
       console.error(error)
       return response.status(500).send('Internal Server Error')
