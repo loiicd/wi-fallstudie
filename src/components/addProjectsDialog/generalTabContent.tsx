@@ -1,4 +1,5 @@
-import { TabPanel, DateTimePicker } from "@mui/lab";
+import { TabPanel } from "@mui/lab";
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { Grid, TextField, Select, SelectChangeEvent, MenuItem, FormControl, InputLabel } from "@mui/material";
 import dayjs from "dayjs";
 import { departments } from "../../types/department";

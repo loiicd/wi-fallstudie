@@ -58,6 +58,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const handleChangeTab = (event: SyntheticEvent, newTab: string) => {
     handleSaveWithDialogOpen()
     setTab(newTab)
+    console.log('tab switch', projectFormData)
   }
 
   const handleSaveWithDialogOpen = () => {

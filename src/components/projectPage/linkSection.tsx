@@ -38,7 +38,7 @@ const LinkSection: FunctionComponent<LinkSectionProps> = ({ project }) => {
                       < OpenInNewIcon />
                     </Grid>
                     <Grid item sx={{marginRight: 1}}>
-                      {link.type === 'confluence' || link.type === 'jira '? 
+                      {link.type === 'confluence' || link.type === 'jira'? 
                         <Typography component="legend">{link.type.charAt(0).toUpperCase() + link.type.slice(1)}</Typography> 
                       : 
                         <Typography component="legend">{link.url.slice(0,10) + '..'}</Typography>
