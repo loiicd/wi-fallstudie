@@ -8,7 +8,7 @@ insert_project_ressource_rel_table_query = '''
     id text NOT NULL,
     project_id text NOT NULL,
     title text NOT NULL,
-    value integer NOT NULL,
+    value text NOT NULL,
     type text NOT NULL,
     date date,
     PRIMARY KEY (id),
