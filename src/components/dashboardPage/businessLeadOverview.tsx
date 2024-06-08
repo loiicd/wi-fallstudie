@@ -7,7 +7,6 @@ import Grid from '@mui/material/Grid'
 import RoleProvider from '../RoleProvider'
 import Card from '@mui/material/Card'
 import ProjectBarChart from '../charts/projectBarChart'
-import ProjectChart from '../charts/projectChart'
 import Typography from '@mui/material/Typography'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
@@ -20,6 +19,7 @@ import EmptyRow from '../table/emptyRow'
 import AdbIcon from '@mui/icons-material/Adb'
 import MetricCard from './metricCard'
 import ProjectPieChart from '../charts/projectPieChart'
+import BudgetBarChart from '../charts/budgetBarChart'
 
 const BusinessViewOverview = () => {
   const navigate = useNavigate()
@@ -65,10 +65,7 @@ const BusinessViewOverview = () => {
       </Grid>
       <Grid container spacing={2} sx={{marginTop: 1}}>
         <Grid item xs={8}>
-          <Card>
-            <ProjectChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} />
-            <Typography variant='subtitle1' textAlign='center' sx={{ marginBottom: 2 }}>Projekteinreichungen nach Monat</Typography>
-          </Card>
+          <BudgetBarChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} />
         </Grid>
         <Grid item xs={4}>
           <ProjectPieChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} />

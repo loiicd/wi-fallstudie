@@ -1,13 +1,12 @@
 import { FunctionComponent, useState } from 'react'
+import { departments } from '../../types/department'
+import { Typography } from '@mui/material'
 import { Project } from '../../types/project'
 import { PieChart } from '@mui/x-charts/PieChart'
 import Card from '@mui/material/Card'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
-import Box from '@mui/material/Box'
-import { departments } from '../../types/department'
-import { Typography } from '@mui/material'
 
 type PieChartAttribute = 'projectsPerLocation' | 'projectsPerDepartment'
 
@@ -43,15 +42,13 @@ const ProjectPieChart: FunctionComponent<ProjectPieChartProps> = ({ projects, lo
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <PieChart
-        series={[
-          {
-            data: attribute === 'projectsPerDepartment' ? departmentPieChartData : locationPieChartData,
-            innerRadius: 30,
-            outerRadius: 100,
-            paddingAngle: 5,
-            cornerRadius: 5,
-          },
-        ]}
+        series={[{
+          data: attribute === 'projectsPerDepartment' ? departmentPieChartData : locationPieChartData,
+          innerRadius: 30,
+          outerRadius: 100,
+          paddingAngle: 5,
+          cornerRadius: 5,
+        }]}
         loading={loading}
         width={400}
         height={200}
