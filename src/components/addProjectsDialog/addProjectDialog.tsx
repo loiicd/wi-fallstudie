@@ -49,19 +49,18 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const handleChangeTab = (event: SyntheticEvent, newTab: string) => {
     handleSaveWithDialogOpen()
     setTab(newTab)
-    console.log('tab switch', projectFormData)
   }
 
   const handleSaveWithDialogOpen = () => {
     if (projectFormData.id) {
-      updateProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as unknown as Project)
+      updateProject({ ...projectFormData, created_from: activeUser!.id } as unknown as Project)
         .catch(error => alert(error))
         .finally(() => {
           setIsSavingProject(false)
           setTitleInputError(false)
         })
     } else if (projectFormData.title !== '') {
-      postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
+      postProject({ ...projectFormData, created_from: activeUser!.id } as ProjectFormData)
         .then((id) => {
           setProjectFormData({ ...projectFormData, id: id })
           setDeleteWhenNotSaved(true)
@@ -96,7 +95,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const handleSave = () => {
     setIsSavingProject(true)
     if (projectFormData.id) {
-      updateProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as unknown as Project)
+      updateProject({ ...projectFormData, created_from: activeUser!.id } as unknown as Project)
         .then(() => {
           handleClose()
           enqueueSnackbar('Änderungen gespeichert', { variant: 'success'})
