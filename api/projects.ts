@@ -36,6 +36,11 @@ const handleGet = async (response: VercelResponse) => {
 
       data.created_from_user = (await sql`SELECT * FROM "user" WHERE id = ${data.created_from}`).rows[0]
 
+      const ressources = (await sql`SELECT * FROM project_ressource_rel WHERE project_id = ${data.id}`).rows
+      data.ressources = ressources.filter((ressource: any) => ressource.type === 'ressource_ressource').sort((a: any, b: any) => a.date - b.date)
+      data.budget = ressources.filter((ressource: any) => ressource.type === 'budget_ressource').sort((a: any, b: any) => a.date - b.date)
+      data.complexity = ressources.filter((ressource: any) => ressource.type === 'complexity_ressource').sort((a: any, b: any) => a.date - b.date)
+
     }
     return response.status(200).send(JSON.stringify(result.rows))
   } catch (error) {
