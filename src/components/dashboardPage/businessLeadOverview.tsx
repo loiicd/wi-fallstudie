@@ -6,8 +6,6 @@ import { Project } from '../../types/project'
 import Grid from '@mui/material/Grid'
 import RoleProvider from '../RoleProvider'
 import Card from '@mui/material/Card'
-import ProjectBarChart from '../charts/projectBarChart'
-import Typography from '@mui/material/Typography'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
@@ -20,6 +18,7 @@ import AdbIcon from '@mui/icons-material/Adb'
 import MetricCard from './metricCard'
 import ProjectPieChart from '../charts/projectPieChart'
 import BudgetBarChart from '../charts/budgetBarChart'
+import AssignmentIcon from '@mui/icons-material/Assignment'
 
 const BusinessViewOverview = () => {
   const navigate = useNavigate()
@@ -36,30 +35,30 @@ const BusinessViewOverview = () => {
       <Grid container spacing={2}>
         <Grid item xs={3}>
           <MetricCard 
-            label='Aktive Projektanträge' 
-            value='12'
-            icon={<AdbIcon sx={{backgroundColor: 'red', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+            label='Projektanträge' 
+            value={projects.state === 'success' ? projects.data.length.toString() : '0'}
+            icon={<AssignmentIcon sx={{ color: 'white', backgroundColor: '#02B2B0', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>
         <Grid item xs={3}>
           <MetricCard 
             label='Budget' 
             value='12000'
-            icon={<AdbIcon sx={{backgroundColor: 'red', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+            icon={<AdbIcon sx={{ color: 'white', backgroundColor: '#2E96FF', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>
         <Grid item xs={3}>
           <MetricCard 
             label='Kosten' 
             value='20000'
-            icon={<AdbIcon sx={{backgroundColor: 'red', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+            icon={<AdbIcon sx={{ color: 'white', backgroundColor: '#B800D8', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>
         <Grid item xs={3}>
           <MetricCard 
             label='Keine Ahnung was' 
             value='Daten'
-            icon={<AdbIcon sx={{backgroundColor: 'red', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+            icon={<AdbIcon sx={{ color: 'white', backgroundColor: '#60009B', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>
       </Grid>
@@ -69,18 +68,6 @@ const BusinessViewOverview = () => {
         </Grid>
         <Grid item xs={4}>
           <ProjectPieChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} />
-        </Grid>
-        <Grid item xs={6}>
-          <Card>
-            <ProjectBarChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} type='department' />
-            <Typography variant='subtitle1' textAlign='center' sx={{ marginBottom: 2 }}>Projekte pro Abteilungen</Typography>
-          </Card>
-        </Grid>
-        <Grid item xs={6}>
-          <Card>
-            <ProjectBarChart projects={projects.state === 'success' ? projects.data : []} loading={projects.state === 'loading'} type='location' />
-            <Typography variant='subtitle1' textAlign='center' sx={{ marginBottom: 2 }}>Projekte pro Standorte</Typography>
-          </Card>
         </Grid>
         <Grid item xs={12}>
           <Card>
