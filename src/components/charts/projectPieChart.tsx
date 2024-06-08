@@ -6,6 +6,8 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Box from '@mui/material/Box'
+import { departments } from '../../types/department'
+import { Typography } from '@mui/material'
 
 type PieChartAttribute = 'projectsPerLocation' | 'projectsPerDepartment'
 
@@ -23,8 +25,14 @@ const ProjectPieChart: FunctionComponent<ProjectPieChartProps> = ({ projects, lo
     return acc
   }, {} as { [key: string]: number })
 
+  const departmentAbbreviations = departments.reduce((acc, department) => {
+    acc[department.name] = department.abbrevation
+    return acc
+  }, {} as { [key: string]: string })
+
   const departmentCount = projects.reduce((acc, project) => {
-    const department = project.department || 'Unknown'
+    const fullDepartmentName = project.department || 'Unknown'
+    const department = departmentAbbreviations[fullDepartmentName] || fullDepartmentName
     acc[department] = (acc[department] || 0) + 1
     return acc
   }, {} as { [key: string]: number })
@@ -48,8 +56,9 @@ const ProjectPieChart: FunctionComponent<ProjectPieChartProps> = ({ projects, lo
         width={400}
         height={200}
       />
-      <Box marginBottom={2}>
-        <FormControl variant='standard' size='small' fullWidth>
+      <Typography sx={{ marginBottom: 2 }}>
+        Projektanträge pro 
+        <FormControl variant='standard' size='small' sx={{ marginLeft: 1, display: 'inline-block' }}>
           <Select
             value={attribute}
             size='small' 
@@ -59,7 +68,7 @@ const ProjectPieChart: FunctionComponent<ProjectPieChartProps> = ({ projects, lo
             <MenuItem value={'projectsPerDepartment'}>Abteilung</MenuItem>
           </Select>
         </FormControl>
-      </Box>
+      </Typography>
     </Card>
   )
 }
