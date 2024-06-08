@@ -86,7 +86,6 @@ const handleGet = async (request: VercelRequest, response: VercelResponse) => {
 }
 
 const handlePost = async (request: VercelRequest, response: VercelResponse) => {
-  console.log(request.body)
   if (request.body.id) {
     const project = request.body
     try {
@@ -110,7 +109,7 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
       if (project.links.length >= 0) {
         const linksToAdd = project.links.filter((link: { url: string, type: string }) => link.url !== '' && !currentLinkSet.has(link.url))
         for (const link of linksToAdd) {
-          await sql`INSERT INTO comment (id, project_id, user_id, content, type, created_at) VALUES (${uuidv4()}, ${project.id}, ${project.created_from}, ${link.url}, ${'link_' + link.type}, now())`
+          await sql`INSERT INTO comment (id, project_id, user_id, content, type, created_at) VALUES (${uuidv4()}, ${project.id}, ${project.created_from.id ?? project.created_from}, ${link.url}, ${'link_' + link.type}, now())`
         }
       }
       const linksToRemove = [...currentLinkSet].filter(link => !newLinkSet.has(link))

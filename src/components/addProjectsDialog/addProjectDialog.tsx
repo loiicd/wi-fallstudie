@@ -63,22 +63,22 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
 
   const handleSaveWithDialogOpen = () => {
     if (projectFormData.id) {
-      updateProject(projectFormData as Project)
+      updateProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as unknown as Project)
         .catch(error => alert(error))
         .finally(() => {
           setIsSavingProject(false)
-          setTitleInputError(false) 
+          setTitleInputError(false)
         })
     } else if (projectFormData.title !== '') {
       postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
         .then((id) => {
           setProjectFormData({ ...projectFormData, id: id })
+          setDeleteWhenNotSaved(true)
         })
         .catch(error => alert(error))
         .finally(() => {
           setIsSavingProject(false)
           setTitleInputError(false) 
-          setDeleteWhenNotSaved(true)
         })
     } else {
       setTitleInputError(true)
@@ -105,9 +105,9 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   const handleSave = () => {
     setIsSavingProject(true)
     if (projectFormData.id) {
-      updateProject(projectFormData as Project)
+      updateProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as unknown as Project)
         .then(() => {
-          handleClose_withDeleteCheck()
+          handleClose()
           enqueueSnackbar('Änderungen gespeichert', { variant: 'success'})
         })
         .catch(error => alert(error))
@@ -118,7 +118,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
     } else if (projectFormData.title !== '') {
       postProject({ ...projectFormData, team: projectTeam, created_from: activeUser!.id } as ProjectFormData)
         .then(() => {
-          handleClose_withDeleteCheck()
+          handleClose()
           enqueueSnackbar('Projekt erstellt', { variant: 'success'})
         })
         .catch(error => alert(error))
