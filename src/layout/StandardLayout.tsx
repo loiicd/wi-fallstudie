@@ -49,7 +49,7 @@ const StandardLayout: FunctionComponent<StandardLayoutProps> = ({ children, hero
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
           {heroTitle ? <PageHero title={heroTitle} actions={heroActions} loading={heroLoading} /> : null}
           {children}
         </Container>
