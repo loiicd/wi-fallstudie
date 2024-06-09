@@ -7,6 +7,7 @@ type Prio = {
 }
 
 async function handler(request: VercelRequest, response: VercelResponse) {
+  console.log('Happen')
   switch (request.method) {
     case 'POST':
       return await handlePost(request, response)
@@ -15,6 +16,7 @@ async function handler(request: VercelRequest, response: VercelResponse) {
 
 const handlePost = async (request: VercelRequest, response: VercelResponse) => {
   const data = request.body as Prio
+  console.log(data)
   try {
     await sql`UPDATE project SET prio = ${data.prio} WHERE id = ${data.project_id}`
     return response.status(200).send('Updated')

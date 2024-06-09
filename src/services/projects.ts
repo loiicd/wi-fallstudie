@@ -25,5 +25,5 @@ export const deleteProject = async (projectId: string): Promise<void> => {
 }
 
 export const updatePrio = async (projectId: string, prio: number): Promise<void> => {
-  await axios.post('/api/projectPriority', { data: { project_id: projectId, prio: prio } })
+  await axios.post('/api/projectPriority', { project_id: projectId, prio: prio })
 }
