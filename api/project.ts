@@ -14,6 +14,7 @@ const handler = async (request: VercelRequest, response: VercelResponse) => {
 }
 
 const handleGet = async (request: VercelRequest, response: VercelResponse) => {
+  
   const id = request.query.id as string
   try {
     const result = await sql`SELECT * FROM project WHERE id = ${id} OR created_from = ${id} or project_lead_id = ${id} or sub_project_lead_id = ${id} ORDER BY created_at DESC`
@@ -89,10 +90,11 @@ const handleGet = async (request: VercelRequest, response: VercelResponse) => {
 }
 
 const handlePost = async (request: VercelRequest, response: VercelResponse) => {
+  console.log(request.body)
   if (request.body.id) {
     const project = request.body
     try {
-      await sql`UPDATE project SET status = ${project.status}, title = ${project.title}, prio = ${project.prio}, start_date = ${project.start_date}, end_date = ${project.end_date}, project_lead_id = ${project.project_lead_id}, sub_project_lead_id = ${project.sub_project_lead_id}, auftraggeber_id = ${project.auftraggeber_id} fte_intern = ${project.fte_intern}, fte_extern = ${project.fte_extern}, investment = ${project.investment}, stakeholder = ${project.stakeholder}, customer = ${project.customer}, dependencies = ${project.dependencies}, expected_effects = ${project.expected_effects}, short_description = ${project.short_description}, target_description = ${project.target_description}, vision_description = ${project.vision_description}, problem_description = ${project.problem_description}, department= ${project.department}, location= ${project.location} WHERE id = ${project.id}`
+      await sql`UPDATE project SET status = ${project.status}, title = ${project.title}, prio = ${project.prio}, start_date = ${project.start_date}, end_date = ${project.end_date}, project_lead_id = ${project.project_lead_id}, sub_project_lead_id = ${project.sub_project_lead_id}, auftraggeber_id = ${project.auftraggeber_id}, fte_intern = ${project.fte_intern}, fte_extern = ${project.fte_extern}, investment = ${project.investment}, stakeholder = ${project.stakeholder}, customer = ${project.customer}, dependencies = ${project.dependencies}, expected_effects = ${project.expected_effects}, short_description = ${project.short_description}, target_description = ${project.target_description}, vision_description = ${project.vision_description}, problem_description = ${project.problem_description}, department= ${project.department}, location= ${project.location} WHERE id = ${project.id}`
 
       const currentTeamMembers = await sql`SELECT user_id FROM project_user_rel WHERE project_id = ${project.id}`
       const currentTeamMemberSet = new Set(currentTeamMembers.rows.map((member: QueryResultRow) => member.user_id))
