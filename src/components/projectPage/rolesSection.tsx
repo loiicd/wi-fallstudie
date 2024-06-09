@@ -21,6 +21,9 @@ const RolesSection: FunctionComponent<RolesSectionProps> = ({ project }) => {
   const sub_project_lead_initials = project.sub_project_lead ? project.sub_project_lead.firstname[0] + project.sub_project_lead.lastname[0] : '?'
   const sub_project_lead_name = project.sub_project_lead ? `${project.sub_project_lead?.firstname} ${project.sub_project_lead?.lastname}` : 'Nicht definiert'
 
+  const auftraggeber_initials = project.auftraggeber ?  project.auftraggeber.firstname[0] + project.auftraggeber.lastname[0] : '?'
+  const auftraggeber_name = project.auftraggeber ? `${project.auftraggeber?.firstname} ${project.auftraggeber?.lastname}` : 'Nicht definiert'
+
   return (
     <Card>
       <List subheader={<ListSubheader>Projektleiter</ListSubheader>}>
@@ -52,6 +55,14 @@ const RolesSection: FunctionComponent<RolesSectionProps> = ({ project }) => {
               <Avatar>?</Avatar>
             }
           </AvatarGroup>
+        </ListItem>
+
+        <ListSubheader component="div">Auftraggeber</ListSubheader>
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar>{auftraggeber_initials}</Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={auftraggeber_name} secondary={project.auftraggeber?.email} />
         </ListItem>
       </List>
     </Card>

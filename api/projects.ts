@@ -28,6 +28,9 @@ const handleGet = async (response: VercelResponse) => {
       if (data.sub_project_lead_id) {
         data.sub_project_lead = (await sql`SELECT * FROM "user" WHERE id = ${data.sub_project_lead_id}`).rows[0]
       }
+      if (data.auftraggeber_id) {
+        data.auftraggeber = (await sql`SELECT * FROM "user" WHERE id = ${data.auftraggeber_id}`).rows[0]
+      }
       data.rates = (await sql`SELECT * FROM project_rate WHERE project_id = ${data.id}`).rows
 
       await Promise.all(data.rates.map(async (item: any) =>

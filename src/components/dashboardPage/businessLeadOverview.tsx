@@ -19,6 +19,48 @@ import MetricCard from './metricCard'
 import ProjectPieChart from '../charts/projectPieChart'
 import BudgetBarChart from '../charts/budgetBarChart'
 import AssignmentIcon from '@mui/icons-material/Assignment'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+
+const calculateBudgetSum = (projects: Project[]): number => {
+  return projects.reduce((totalSum, project) => {
+    const projectBudgetSum = project.budget?.reduce((sum, budgetItem) => {
+      const valueNumber = parseFloat(budgetItem.value)
+      return sum + (isNaN(valueNumber) ? 0 : valueNumber)
+    }, 0) || 0
+    return totalSum + projectBudgetSum
+  }, 0)
+}
+
+const calculateAverageBudgetPerProject = (projects: Project[]): number => {
+  const totalBudgetSum = projects.reduce((totalSum, project) => {
+    const projectBudgetSum = project.budget?.reduce((sum, budgetItem) => {
+      const valueNumber = parseFloat(budgetItem.value)
+      return sum + (isNaN(valueNumber) ? 0 : valueNumber)
+    }, 0) || 0
+    return totalSum + projectBudgetSum
+  }, 0)
+  const numberOfProjects = projects.length
+  return numberOfProjects > 0 ? totalBudgetSum / numberOfProjects : 0
+}
+
+const calculateAverageProjectDurationInMonths = (projects: Project[]): number => {
+  const totalProjectDurationInMonths = projects.reduce((totalDuration, project) => {
+    const startDate = project.start_date ? new Date(project.start_date) : null
+    const endDate = project.end_date ? new Date(project.end_date) : new Date()
+    if (startDate && endDate) {
+      const startYear = startDate.getFullYear()
+      const startMonth = startDate.getMonth()
+      const endYear = endDate.getFullYear()
+      const endMonth = endDate.getMonth()
+      const durationInMonths = (endYear - startYear) * 12 + (endMonth - startMonth)
+      return totalDuration + durationInMonths
+    } else {
+      return totalDuration
+    }
+  }, 0)
+  const numberOfProjects = projects.length
+  return Math.round(numberOfProjects > 0 ? totalProjectDurationInMonths / numberOfProjects : 0)
+}
 
 const BusinessViewOverview = () => {
   const navigate = useNavigate()
@@ -36,28 +78,28 @@ const BusinessViewOverview = () => {
         <Grid item xs={3}>
           <MetricCard 
             label='Projektanträge' 
-            value={projects.state === 'success' ? projects.data.length.toString() : '0'}
+            value={projects.state === 'success' ? `${projects.data.length.toString()} Stk.` : '0'}
             icon={<AssignmentIcon sx={{ color: 'white', backgroundColor: '#02B2B0', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>
         <Grid item xs={3}>
           <MetricCard 
-            label='Budget' 
-            value='12000'
-            icon={<AdbIcon sx={{ color: 'white', backgroundColor: '#2E96FF', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+            label='Budget Gesamt' 
+            value={projects.state === 'success' ? `${calculateBudgetSum(projects.data).toString()} €` : ''}
+            icon={<AttachMoneyIcon sx={{ color: 'white', backgroundColor: '#2E96FF', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>
         <Grid item xs={3}>
           <MetricCard 
-            label='Kosten' 
-            value='20000'
+            label='Durschnittsbudget pro Projekt' 
+            value={projects.state === 'success' ? `${calculateAverageBudgetPerProject(projects.data).toString()} €` : ''}
             icon={<AdbIcon sx={{ color: 'white', backgroundColor: '#B800D8', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>
         <Grid item xs={3}>
           <MetricCard 
-            label='Keine Ahnung was' 
-            value='Daten'
+            label='Durchschnittliche Projektlaufzeit' 
+            value={projects.state === 'success' ? `${calculateAverageProjectDurationInMonths(projects.data).toString()} Monate` : ''}
             icon={<AdbIcon sx={{ color: 'white', backgroundColor: '#60009B', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>

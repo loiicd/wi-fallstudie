@@ -32,6 +32,9 @@ const handleGet = async (request: VercelRequest, response: VercelResponse) => {
       if (data.sub_project_lead_id) {
         data.sub_project_lead = (await sql`SELECT * FROM "user" WHERE id = ${data.sub_project_lead_id}`).rows[0]
       }
+      if (data.auftraggeber_id) {
+        data.auftraggeber = (await sql`SELECT * FROM "user" WHERE id = ${data.auftraggeber_id}`).rows[0]
+      }
 
       data.rates = (await sql`SELECT * FROM project_rate WHERE project_id = ${data.id}`).rows
       await Promise.all(data.rates.map(async (item: any) =>
@@ -89,7 +92,7 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
   if (request.body.id) {
     const project = request.body
     try {
-      await sql`UPDATE project SET status = ${project.status}, title = ${project.title}, prio = ${project.prio}, start_date = ${project.start_date}, end_date = ${project.end_date}, project_lead_id = ${project.project_lead_id}, sub_project_lead_id = ${project.sub_project_lead_id}, fte_intern = ${project.fte_intern}, fte_extern = ${project.fte_extern}, investment = ${project.investment}, stakeholder = ${project.stakeholder}, customer = ${project.customer}, dependencies = ${project.dependencies}, expected_effects = ${project.expected_effects}, short_description = ${project.short_description}, target_description = ${project.target_description}, vision_description = ${project.vision_description}, problem_description = ${project.problem_description}, department= ${project.department}, location= ${project.location} WHERE id = ${project.id}`
+      await sql`UPDATE project SET status = ${project.status}, title = ${project.title}, prio = ${project.prio}, start_date = ${project.start_date}, end_date = ${project.end_date}, project_lead_id = ${project.project_lead_id}, sub_project_lead_id = ${project.sub_project_lead_id}, auftraggeber_id = ${project.auftraggeber_id} fte_intern = ${project.fte_intern}, fte_extern = ${project.fte_extern}, investment = ${project.investment}, stakeholder = ${project.stakeholder}, customer = ${project.customer}, dependencies = ${project.dependencies}, expected_effects = ${project.expected_effects}, short_description = ${project.short_description}, target_description = ${project.target_description}, vision_description = ${project.vision_description}, problem_description = ${project.problem_description}, department= ${project.department}, location= ${project.location} WHERE id = ${project.id}`
 
       const currentTeamMembers = await sql`SELECT user_id FROM project_user_rel WHERE project_id = ${project.id}`
       const currentTeamMemberSet = new Set(currentTeamMembers.rows.map((member: QueryResultRow) => member.user_id))
@@ -126,7 +129,7 @@ const handlePost = async (request: VercelRequest, response: VercelResponse) => {
     const projectFormData = request.body
     const project_id = uuidv4()
     try {
-      await sql`INSERT INTO project (id, status, title, created_from, created_at, start_date, end_date, project_lead_id, sub_project_lead_id, department, location, fte_intern, fte_extern, investment, stakeholder, customer, dependencies, expected_effects, prio, short_description, target_description, vision_description, problem_description) VALUES (${project_id}, ${projectFormData.status}, ${projectFormData.title}, ${projectFormData.created_from}, now()::timestamp, ${projectFormData.start_date}, ${projectFormData.end_date}, ${projectFormData.project_lead_id}, ${projectFormData.sub_project_lead_id}, ${projectFormData.department}, ${projectFormData.location}, ${projectFormData.fte_intern}, ${projectFormData.fte_extern}, ${projectFormData.investment}, ${projectFormData.stakeholder}, ${projectFormData.customer}, ${projectFormData.dependencies}, ${projectFormData.expected_effects}, ${projectFormData.prio}, ${projectFormData.short_description}, ${projectFormData.target_description}, ${projectFormData.vision_description}, ${projectFormData.problem_description})`
+      await sql`INSERT INTO project (id, status, title, created_from, created_at, start_date, end_date, project_lead_id, sub_project_lead_id, auftraggeber_id, department, location, fte_intern, fte_extern, investment, stakeholder, customer, dependencies, expected_effects, prio, short_description, target_description, vision_description, problem_description) VALUES (${project_id}, ${projectFormData.status}, ${projectFormData.title}, ${projectFormData.created_from}, now()::timestamp, ${projectFormData.start_date}, ${projectFormData.end_date}, ${projectFormData.project_lead_id}, ${projectFormData.sub_project_lead_id}, ${projectFormData.auftraggeber_id}, ${projectFormData.department}, ${projectFormData.location}, ${projectFormData.fte_intern}, ${projectFormData.fte_extern}, ${projectFormData.investment}, ${projectFormData.stakeholder}, ${projectFormData.customer}, ${projectFormData.dependencies}, ${projectFormData.expected_effects}, ${projectFormData.prio}, ${projectFormData.short_description}, ${projectFormData.target_description}, ${projectFormData.vision_description}, ${projectFormData.problem_description})`
       await Promise.all(projectFormData.team.map(async (userId: string) => {
         await sql`INSERT INTO "project_user_rel" (project_id, user_id, role) VALUES (${project_id}, ${userId}, ${null})`
       }))

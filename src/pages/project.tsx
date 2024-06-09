@@ -22,8 +22,6 @@ import Skeleton from '@mui/material/Skeleton'
 import { ProjectRelationDialog } from '../components/projectPage/projectRelationDialog'
 import RelationsSection from '../components/projectPage/projectRelationsSection'
 import BudgetSection from '../components/projectPage/budgetSection'
-import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
 import PrioProjectDialog from '../components/prioProjectDialog'
 import LinkSection from '../components/projectPage/linkSection'
 
