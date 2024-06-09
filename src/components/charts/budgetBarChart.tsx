@@ -59,8 +59,9 @@ const BudgetBarChart: FunctionComponent<BudgetBarChartProps> = ({ projects, load
       <BarChart
         loading={loading}
         series={datasets.map(dataset => ({ label: dataset.label, data: dataset.data }))}
-        xAxis={[{ data: labels }]}
+        xAxis={[{ data: labels, scaleType: 'band' }]}
         height={400}
+
       />
       <Typography sx={{ marginBottom: 2 }}>
         Budget pro 
