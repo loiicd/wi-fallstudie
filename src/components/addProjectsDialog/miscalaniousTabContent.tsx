@@ -49,6 +49,11 @@ const MiscalaniousSection: FunctionComponent<MiscalaniousSectionProps> = ({ proj
           value={projectFormData.links?.find(link => link.type === 'confluence')?.url || ''}
           sx={{ width: '100%'}}
           onChange={handleLinksChange('confluence')}
+          error={
+            !projectFormData.links?.find(link => link.type === 'confluence')?.url?.startsWith('https://') &&
+            projectFormData.links?.find(link => link.type === 'confluence')?.url !== '' &&
+            projectFormData.links?.find(link => link.type === 'confluence')?.url !== undefined
+          }
         />
 
         <TextField 
@@ -57,13 +62,24 @@ const MiscalaniousSection: FunctionComponent<MiscalaniousSectionProps> = ({ proj
           value={projectFormData.links?.find(link => link.type === 'jira')?.url || ''}
           sx={{ width: '100%'}}
           onChange={handleLinksChange('jira')}
+          error={
+            !projectFormData.links?.find(link => link.type === 'jira')?.url?.startsWith('https://') &&
+            projectFormData.links?.find(link => link.type === 'jira')?.url !== '' &&
+            projectFormData.links?.find(link => link.type === 'jira')?.url !== undefined
+          }
+
         />
         <TextField 
           label='Weiterer Link...' 
           size='small' 
-          value={projectFormData.links?.find(link => link.type === 'other')?.url || ''}
+          value={projectFormData.links?.find(link => link.type === 'other')?.url || 'https://'}
           sx={{ width: '100%'}}
           onChange={handleLinksChange('other')}
+          error={
+            !projectFormData.links?.find(link => link.type === 'other')?.url?.startsWith('https://') &&
+            projectFormData.links?.find(link => link.type === 'other')?.url !== '' &&
+            projectFormData.links?.find(link => link.type === 'other')?.url !== undefined
+          }
         />
       </Stack>
     </>

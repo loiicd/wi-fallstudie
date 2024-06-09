@@ -158,16 +158,19 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
   }
   
   const handleLinksChange = (type: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setProjectFormData((prevData) => {
-      const newLinks = prevData.links ? [...prevData.links] : [];
-      const linkIndex = newLinks.findIndex((link) => link.type === type);
-      if (linkIndex !== -1) {
-        newLinks[linkIndex] = { ...newLinks[linkIndex], url: event.target.value };
-      } else {
-        newLinks.push({ type: type, url: event.target.value });
-      }
-      return { ...prevData, links: newLinks };
-    });
+    if (event.target.value !== ('https://')) {
+      setProjectFormData((prevData) => {
+        const newLinks = prevData.links ? [...prevData.links] : [];
+        const linkIndex = newLinks.findIndex((link) => link.type === type);
+        if (linkIndex !== -1) {
+          newLinks[linkIndex] = { ...newLinks[linkIndex], url: event.target.value };
+        } else {
+          newLinks.push({ type: type, url: event.target.value });
+        }
+        return { ...prevData, links: newLinks };
+      });
+    }
+
   };
 
   return (
