@@ -7,7 +7,7 @@ import Select from '@mui/material/Select'
 import FormControl from '@mui/material/FormControl'
 import MenuItem from '@mui/material/MenuItem'
 
-const transformProjectData = (projects: Project[]) =>  {
+const transformProjectDataLocation = (projects: Project[]) =>  {
   const budgetData: { [key: string]: { [location: string]: number } } = {}
 
   projects.forEach(project => {
@@ -32,6 +32,31 @@ const transformProjectData = (projects: Project[]) =>  {
   return budgetData
 }
 
+const transformProjectDataDepartment = (projects: Project[]) =>  {
+  const budgetData: { [key: string]: { [department: string]: number } } = {}
+
+  projects.forEach(project => {
+    if (project.budget) {
+      project.budget.forEach(budgetItem => {
+        const date = new Date(budgetItem.date || '')
+        const month = date.toLocaleString('default', { month: 'short' })
+        const yearMonth = `${month} ${date.getFullYear()}`
+
+        if (!budgetData[yearMonth]) {
+          budgetData[yearMonth] = {}
+        }
+
+        if (!budgetData[yearMonth][project.department || 'Unknown']) {
+          budgetData[yearMonth][project.department || 'Unknown'] = 0
+        }
+
+        budgetData[yearMonth][project.department || 'Unknown'] += parseFloat(budgetItem.value)
+      })
+    }
+  })
+  return budgetData
+}
+
 
 type PieChartAttribute = 'projectsPerLocation' | 'projectsPerDepartment'
 
@@ -42,23 +67,28 @@ interface BudgetBarChartProps {
 
 const BudgetBarChart: FunctionComponent<BudgetBarChartProps> = ({ projects, loading }) => {
   const [attribute, setAttribute] = useState<PieChartAttribute>('projectsPerLocation')
-  const data = transformProjectData(projects)
+  const locationData = transformProjectDataLocation(projects)
+  const departmentData = transformProjectDataDepartment(projects)
 
-  console.log(data)
+  const labels = Object.keys(locationData)
+  const locations = Array.from(new Set(Object.values(locationData).flatMap(monthData => Object.keys(monthData))))
+  const departments = Array.from(new Set(Object.values(departmentData).flatMap(monthData => Object.keys(monthData))))
 
-  const labels = Object.keys(data)
-  const locations = Array.from(new Set(Object.values(data).flatMap(monthData => Object.keys(monthData))))
-
-  const datasets = locations.map(location => ({
+  const locationDatasets = locations.map(location => ({
     label: location,
-    data: labels.map(label => data[label][location] || 0),
+    data: labels.map(label => locationData[label][location] || 0),
+  }))
+
+  const departmentDatasets = departments.map(department => ({
+    label: department,
+    data: labels.map(label => departmentData[label][department] || 0),
   }))
 
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <BarChart
         loading={loading}
-        series={datasets.map(dataset => ({ label: dataset.label, data: dataset.data }))}
+        series={(attribute === 'projectsPerLocation' ? locationDatasets : departmentDatasets).map(dataset => ({ label: dataset.label, data: dataset.data }))}
         xAxis={[{ data: labels, scaleType: 'band' }]}
         height={400}
 
