@@ -4,7 +4,7 @@ import { Grid, TextField, Select, SelectChangeEvent, MenuItem, FormControl, Inpu
 import dayjs from "dayjs";
 import { departments } from "../../types/department";
 import { locations } from "../../types/location";
-import { Project, ProjectFormData } from "../../types/project";
+import { ProjectFormData } from "../../types/project";
 
 
 interface GeneralTabContentProps {
@@ -19,7 +19,14 @@ interface GeneralTabContentProps {
 }
 
 const GeneralTabContent: React.FC<GeneralTabContentProps> = ({
-  tabPanelValue, projectFormData, titleInputError, handleChange, handleDepartmentChange, handleLocationChange, handleStatusChange, setProjectFormData
+  tabPanelValue, 
+  projectFormData, 
+  titleInputError, 
+  handleChange, 
+  handleDepartmentChange, 
+  handleLocationChange, 
+  handleStatusChange, 
+  setProjectFormData
 }) => {
 
   return (

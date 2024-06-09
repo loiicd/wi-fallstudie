@@ -337,6 +337,33 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
                   />
                 </Grid>
               }
+              <Grid item xs={6}>
+                <Autocomplete 
+                  options={users} 
+                  value={projectFormData.auftraggeber_id ? users.find(user => user.id === projectFormData.auftraggeber_id) : (projectFormData.auftraggeber && users.find(user => user === projectFormData.auftraggeber)) || null}
+                  getOptionKey={(option) => option.id}
+                  getOptionLabel={option => option.firstname + ' ' + option.lastname}
+                  loading={isLoadingUsers}
+                  onChange={(event, newUser) => newUser ? setProjectFormData({ ...projectFormData, auftraggeber_id: newUser.id }) : null}
+                  renderInput={params => 
+                    <TextField 
+                      {...params} 
+                      label="Auftraggeber" 
+                      size='small' 
+                      sx={{ width: '100%'}} 
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                          <>
+                            {isLoadingUsers ? <CircularProgress color="inherit" size={20} /> : null}
+                            {params.InputProps.endAdornment}
+                          </>
+                        ),
+                      }}
+                    />
+                  } 
+                />
+              </Grid>
             </Grid>
           </TabPanel>
           <TabPanel value='3'>
