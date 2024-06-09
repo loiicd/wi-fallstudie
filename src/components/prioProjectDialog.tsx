@@ -1,6 +1,6 @@
 import { FunctionComponent, useState } from 'react'
 import { Project } from '../types/project'
-import { updateProject } from '../services/projects'
+import { updatePrio } from '../services/projects'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
@@ -22,7 +22,7 @@ const PrioProjectDialog: FunctionComponent<PrioProjectDialogProps> = ({ open, ha
 
   const handleUpdatePrio = () => {
     setIsUpdatingPrio(true)
-    updateProject({ ...project, prio: newPrio })
+    updatePrio(project.id, newPrio )
       .then(handleClose)
       .catch((error) => alert(error))
       .finally(() => setIsUpdatingPrio(false))

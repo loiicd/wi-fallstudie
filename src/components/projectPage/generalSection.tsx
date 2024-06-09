@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import Skeleton from '@mui/material/Skeleton'
+import Rating from '@mui/material/Rating'
 
 interface GeneralSectionProps {
   project?: Project
@@ -41,6 +42,7 @@ const GeneralSection: FunctionComponent<GeneralSectionProps> = ({ project, loadi
             <Typography>{loading ? <Skeleton /> : project!.created_at ? new Date(project!.created_at).toLocaleDateString() : '-'}</Typography>
           </Grid>
         </Grid>
+        <Rating value={3.5} readOnly precision={0.1} />
       </CardContent>
     </Card>
   )

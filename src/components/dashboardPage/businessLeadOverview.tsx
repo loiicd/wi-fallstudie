@@ -14,12 +14,12 @@ import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
 import LoadingRow from '../table/loadingRow'
 import EmptyRow from '../table/emptyRow'
-import AdbIcon from '@mui/icons-material/Adb'
 import MetricCard from './metricCard'
 import ProjectPieChart from '../charts/projectPieChart'
 import BudgetBarChart from '../charts/budgetBarChart'
 import AssignmentIcon from '@mui/icons-material/Assignment'
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+import EuroIcon from '@mui/icons-material/Euro'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
 const calculateBudgetSum = (projects: Project[]): number => {
   return projects.reduce((totalSum, project) => {
@@ -86,21 +86,21 @@ const BusinessViewOverview = () => {
           <MetricCard 
             label='Budget Gesamt' 
             value={projects.state === 'success' ? `${calculateBudgetSum(projects.data).toString()} €` : ''}
-            icon={<AttachMoneyIcon sx={{ color: 'white', backgroundColor: '#2E96FF', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+            icon={<EuroIcon sx={{ color: 'white', backgroundColor: '#2E96FF', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>
         <Grid item xs={3}>
           <MetricCard 
             label='Durschnittsbudget pro Projekt' 
             value={projects.state === 'success' ? `${calculateAverageBudgetPerProject(projects.data).toString()} €` : ''}
-            icon={<AdbIcon sx={{ color: 'white', backgroundColor: '#B800D8', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+            icon={<EuroIcon sx={{ color: 'white', backgroundColor: '#B800D8', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>
         <Grid item xs={3}>
           <MetricCard 
             label='Durchschnittliche Projektlaufzeit' 
             value={projects.state === 'success' ? `${calculateAverageProjectDurationInMonths(projects.data).toString()} Monate` : ''}
-            icon={<AdbIcon sx={{ color: 'white', backgroundColor: '#60009B', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+            icon={<AccessTimeIcon sx={{ color: 'white', backgroundColor: '#60009B', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
           />
         </Grid>
       </Grid>
