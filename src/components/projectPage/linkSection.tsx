@@ -8,18 +8,12 @@ import ListSubheader from '@mui/material/ListSubheader'
 import Typography from '@mui/material/Typography'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { CardActionArea, CardContent, Grid } from '@mui/material'
-import LinkIcon from '@mui/icons-material/Link';
-import EditIcon from '@mui/icons-material/Edit';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
-import BugReportIcon from '@mui/icons-material/BugReport';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 
 interface LinkSectionProps {
   project: Project
 }
-
-
 
 const LinkSection: FunctionComponent<LinkSectionProps> = ({ project }) => {
 
@@ -35,13 +29,13 @@ const LinkSection: FunctionComponent<LinkSectionProps> = ({ project }) => {
                   <CardContent>
                   <Grid container sx={{ display:'flex', alignItems: 'center', justifyContent: 'flex-start'}} spacing={2}>
                     <Grid item>
-                      < OpenInNewIcon />
+                      <OpenInNewIcon />
                     </Grid>
                     <Grid item sx={{marginRight: 1}}>
                       {link.type === 'confluence' || link.type === 'jira'? 
                         <Typography component="legend">{link.type.charAt(0).toUpperCase() + link.type.slice(1)}</Typography> 
                       : 
-                        <Typography component="legend">{link.url.slice(0,10) + '..'}</Typography>
+                        <Typography component="legend">{link.url.length > 25 ? link.url.slice(8,25) + '..' : link.url.slice(8)}</Typography>
                       }
                     </Grid>
                   </Grid>

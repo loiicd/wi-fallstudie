@@ -28,7 +28,7 @@ const RateSection: FunctionComponent<RateSectionProps> = ({ project }) => {
         ))}
         {project.rates.length === 0 ? 
           <ListItem>
-            <Alert icon={<InfoOutlinedIcon fontSize="inherit" />} severity="info">Es gibt derzeit keine Berwertungen</Alert>
+            <Alert sx={{display: 'flex', width: '100%'}} icon={<InfoOutlinedIcon fontSize="inherit" />} severity="info">Es gibt derzeit keine Berwertungen</Alert>
           </ListItem>
           : 
           <ListItem>
