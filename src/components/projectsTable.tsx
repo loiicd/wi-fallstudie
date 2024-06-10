@@ -104,14 +104,15 @@ const ProjectsTable = () => {
     }, {
       field: 'avgRate',
       headerName: 'Bewertung',
-      width: 140,
+      flex: 1,
+      minWidth: 140,
       editable: false,
       type: 'number',
       renderCell: (params) => (<Rating value={params.value} readOnly precision={0.1} />)
     }, {
       field: 'prio',
       headerName: 'Priotität',
-      width: 140,
+      flex: 1,
       editable: false,
       type: 'number'
     }
