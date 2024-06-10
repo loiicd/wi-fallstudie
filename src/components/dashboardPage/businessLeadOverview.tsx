@@ -20,6 +20,8 @@ import BudgetBarChart from '../charts/budgetBarChart'
 import AssignmentIcon from '@mui/icons-material/Assignment'
 import EuroIcon from '@mui/icons-material/Euro'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 
 const calculateBudgetSum = (projects: Project[]): number => {
   return projects.reduce((totalSum, project) => {
@@ -113,6 +115,16 @@ const BusinessViewOverview = () => {
         </Grid>
         <Grid item xs={12}>
           <Card>
+            <Box sx={{ m: 2 }}>
+              <Typography
+                sx={{ flex: '1 1 100%' }}
+                variant="h6"
+                id="tableTitle"
+                component="div"
+                >
+                  Vorgeschlagene Projektanträge
+              </Typography>
+            </Box>
             <TableContainer>
               <Table>
                 <TableHead>
