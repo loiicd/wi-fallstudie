@@ -1,11 +1,14 @@
 import { FunctionComponent, SyntheticEvent, useState } from 'react'
+import { ProjectRessourceTable } from '../addProjectsDialog/ressourceTable'
 import { Project } from '../../types/project'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import { Box, Tab } from '@mui/material'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { ProjectRessourceTable } from '../addProjectsDialog/ressourceTable'
 import RateProvider from '../rateProvider'
+import TabContext from '@mui/lab/TabContext'
+import Box from '@mui/material/Box'
+import TabList from '@mui/lab/TabList'
+import Tab from '@mui/material/Tab'
+import TabPanel from '@mui/lab/TabPanel'
 
 interface BudgetSectionProps {
   project?: Project
