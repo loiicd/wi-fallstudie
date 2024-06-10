@@ -5,9 +5,13 @@ export type ProjectStatus = typeof projectStatus[number]
 
 export type Team = User & { role: string }
 
-type ProjectRate = {
+const projectRateSections = ['general', 'personal_ressources', 'budget', 'complexity', 'description', 'roles'] as const
+export type ProjectRateSection = typeof projectRateSections[number]
+
+export type ProjectRate = {
   user: User
   rate: number
+  section: ProjectRateSection
 }
 
 export type ProjectComment = {

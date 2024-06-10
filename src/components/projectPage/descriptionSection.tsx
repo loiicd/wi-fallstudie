@@ -7,13 +7,15 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Grid } from '@mui/material'
+import RateProvider from '../rateProvider'
 
 interface DescriptionSectionProps {
   project?: Project
   loading: boolean
+  handleReloadProject: () => void
 }
 
-const DescriptionSection: FunctionComponent<DescriptionSectionProps> = ({ project, loading }) => {
+const DescriptionSection: FunctionComponent<DescriptionSectionProps> = ({ project, loading, handleReloadProject }) => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -51,6 +53,7 @@ const DescriptionSection: FunctionComponent<DescriptionSectionProps> = ({ projec
           </Grid>
         </Grid>
       </AccordionDetails>
+      <RateProvider section='description' project={project} handleReloadProject={handleReloadProject} />
     </Accordion>
   )
 }

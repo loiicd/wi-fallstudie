@@ -1,4 +1,5 @@
 import { FunctionComponent, useContext, useState } from 'react'
+import { ProjectRateSection } from '../types/project'
 import { postProjectRate } from '../services/projectRate'
 import { UserContext } from '../context/userContext'
 import Dialog from '@mui/material/Dialog'
@@ -14,9 +15,10 @@ interface RateProjectDialogProps {
   openDialog: boolean
   handleClose: () => void
   projectId: string
+  section: ProjectRateSection
 }
 
-const RateProjectDialog: FunctionComponent<RateProjectDialogProps> = ({ openDialog, handleClose, projectId }) => {
+const RateProjectDialog: FunctionComponent<RateProjectDialogProps> = ({ openDialog, handleClose, projectId, section }) => {
   const { activeUser } = useContext(UserContext)
   const [rate, setRate] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(false)
@@ -24,7 +26,7 @@ const RateProjectDialog: FunctionComponent<RateProjectDialogProps> = ({ openDial
   const handleSubmitRate = () => {
     if (activeUser) {
       setLoading(true)
-      postProjectRate(projectId, activeUser?.id, rate)
+      postProjectRate(projectId, activeUser?.id, rate, section)
         .then(handleClose)
         .catch(error => alert(error))
         .finally(() => setLoading(false))

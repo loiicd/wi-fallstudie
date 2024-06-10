@@ -3,10 +3,10 @@ from databaseConnection import DatabaseConnection
 
 databaseConnection = DatabaseConnection()
 
-query = 'ALTER TABLE project DROP COLUMN auftraggeber_id;'
+query = 'ALTER TABLE project_rate DROP COLUMN section;'
 
 databaseConnection.executeQuery(query)
 
 databaseConnection.close()
 
-print('Migration-02-Down Succesfull executed!')
+print('Migration-03-Down Succesfull executed!')

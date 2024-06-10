@@ -104,10 +104,17 @@ const ProjectsTable = () => {
     }, {
       field: 'avgRate',
       headerName: 'Bewertung',
-      width: 140,
+      flex: 1,
+      minWidth: 140,
       editable: false,
       type: 'number',
       renderCell: (params) => (<Rating value={params.value} readOnly precision={0.1} />)
+    }, {
+      field: 'prio',
+      headerName: 'Priotität',
+      flex: 1,
+      editable: false,
+      type: 'number'
     }
   ]
 
@@ -130,8 +137,6 @@ const ProjectsTable = () => {
         project.sub_project_lead?.lastname.includes(searchTerm)
       )
       const updatedProjects = filteredProjects.map((project) => ({ ...project, avgRate: project.rates.reduce((sum, rate) => sum + rate.rate, 0) / project.rates.length }))
-      {/*const test = updatedProjects.filter(project => project.status !== 'Entwurf' || project.created_from === activeUser?.id)
-      setSearchedProjects(test)*/}
       setSearchedProjects(updatedProjects)
       }
     }, [searchTerm, projects, activeUser])

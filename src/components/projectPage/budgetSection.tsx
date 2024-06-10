@@ -1,18 +1,21 @@
-import { FunctionComponent, SyntheticEvent, useEffect, useState } from 'react'
+import { FunctionComponent, SyntheticEvent, useState } from 'react'
+import { ProjectRessourceTable } from '../addProjectsDialog/ressourceTable'
 import { Project } from '../../types/project'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import Grid from '@mui/material/Grid'
-import Typography from '@mui/material/Typography'
-import { Box, Tab } from '@mui/material'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { ProjectRessourceTable } from '../addProjectsDialog/ressourceTable'
+import RateProvider from '../rateProvider'
+import TabContext from '@mui/lab/TabContext'
+import Box from '@mui/material/Box'
+import TabList from '@mui/lab/TabList'
+import Tab from '@mui/material/Tab'
+import TabPanel from '@mui/lab/TabPanel'
 
 interface BudgetSectionProps {
   project?: Project
+  handleReloadProject: () => void
 }
 
-const BudgetSection: FunctionComponent<BudgetSectionProps> = ({ project }) => {
+const BudgetSection: FunctionComponent<BudgetSectionProps> = ({ project, handleReloadProject }) => {
   const [tab, setTab] = useState<string>('1')
 
   const handleChangeTab = (event: SyntheticEvent, newTab: string) => {
@@ -54,6 +57,9 @@ const BudgetSection: FunctionComponent<BudgetSectionProps> = ({ project }) => {
           </TabPanel>
         </TabContext>
       </CardContent>
+      {tab === '1' ? <RateProvider section='personal_ressources' project={project} handleReloadProject={handleReloadProject} /> : null}
+      {tab === '2' ? <RateProvider section='budget' project={project} handleReloadProject={handleReloadProject} /> : null}
+      {tab === '3' ? <RateProvider section='complexity' project={project} handleReloadProject={handleReloadProject} /> : null}
     </Card>
   )
 }

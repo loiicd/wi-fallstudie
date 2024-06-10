@@ -1,12 +1,13 @@
 import { FunctionComponent, useState } from 'react'
 import { Project } from '../types/project'
-import { updateProject } from '../services/projects'
+import { updatePrio } from '../services/projects'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import LoadingButton from '@mui/lab/LoadingButton'
 import Slider from '@mui/material/Slider'
 import Button from '@mui/material/Button'
+import { useSnackbar } from 'notistack'
 
 interface PrioProjectDialogProps {
   open: boolean
@@ -15,6 +16,7 @@ interface PrioProjectDialogProps {
 }
 
 const PrioProjectDialog: FunctionComponent<PrioProjectDialogProps> = ({ open, handleClose, project }) => {
+  const { enqueueSnackbar } = useSnackbar()
   const [newPrio, setNewPrio] = useState<number>(project.prio ? project.prio : 0)
   const [isUpdatingPrio, setIsUpdatingPrio] = useState<boolean>(false)
 
@@ -22,9 +24,12 @@ const PrioProjectDialog: FunctionComponent<PrioProjectDialogProps> = ({ open, ha
 
   const handleUpdatePrio = () => {
     setIsUpdatingPrio(true)
-    updateProject({ ...project, prio: newPrio })
-      .then(handleClose)
-      .catch((error) => alert(error))
+    updatePrio(project.id, newPrio )
+      .then(() => {
+        handleClose()
+        enqueueSnackbar('Prio gespeichert', { variant: 'success'})
+      })
+      .catch(error => enqueueSnackbar(error, { variant: 'error'}))
       .finally(() => setIsUpdatingPrio(false))
   }
 

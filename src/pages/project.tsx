@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
+import { ProjectRelationDialog } from '../components/projectPage/projectRelationDialog'
 import { getProjectsById } from '../services/projects'
 import { Project } from '../types/project'
 import { ApiResponse } from '../types/apiResponse'
@@ -19,7 +20,6 @@ import EvaluateProjectDialog from '../components/evaluateProjectDialog'
 import CommentSection from '../components/projectPage/commentSection'
 import Stack from '@mui/material/Stack'
 import Skeleton from '@mui/material/Skeleton'
-import { ProjectRelationDialog } from '../components/projectPage/projectRelationDialog'
 import RelationsSection from '../components/projectPage/projectRelationsSection'
 import BudgetSection from '../components/projectPage/budgetSection'
 import PrioProjectDialog from '../components/prioProjectDialog'
@@ -81,10 +81,10 @@ const ProjectPage = () => {
         <Grid item lg={9}>
           <Stack gap={2}>
 
-            <GeneralSection project={project.state === 'success' ? project.data : undefined} loading={project.state === 'loading'} />
-            <BudgetSection project={project.state === 'success' ? project.data : undefined} />
+            <GeneralSection project={project.state === 'success' ? project.data : undefined} loading={project.state === 'loading'} handleReloadProject={handleReloadProject} />
+            <BudgetSection project={project.state === 'success' ? project.data : undefined} handleReloadProject={handleReloadProject} />
 
-            <DescriptionSection project={project.state === 'success' ? project.data : undefined} loading={project.state === 'loading'} />
+            <DescriptionSection project={project.state === 'success' ? project.data : undefined} loading={project.state === 'loading'} handleReloadProject={handleReloadProject} />
 
             <RelationsSection 
               project={project.state === 'success' ? project.data : undefined}
@@ -104,7 +104,7 @@ const ProjectPage = () => {
         </Grid>
         {project.state === 'success' ? 
           <Grid item lg={3}>
-            <RolesSection project={project.data} />
+            <RolesSection project={project.data} handleReloadProject={handleReloadProject} />
             <RateSection project={project.data} />
             <LinkSection project={project.data} />
           </Grid>
@@ -128,7 +128,7 @@ const ProjectPage = () => {
         <>
           {openDeleteDialog ? <SubmitDeleteDialog openDialog={openDeleteDialog} handleClose={() => setOpenDeleteDialog(false)} projectId={project.data.id} /> : null}
           {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} project={project.data} /> : null}
-          {openRateProjectDialog ? <RateProjectDialog openDialog={openRateProjectDialog} handleClose={() => setOpenRateProjectDialog(false)} projectId={project.data.id} /> : null}
+          {openRateProjectDialog ? <RateProjectDialog openDialog={openRateProjectDialog} handleClose={() => setOpenRateProjectDialog(false)} projectId={project.data.id} section='budget'/> : null}
           {openEvaluateDialog ? <EvaluateProjectDialog open={openEvaluateDialog} handleClose={() => setOpenEvaluateDialog(false)} project={project.data} /> : null}
           {openNewRelationDialog ? <ProjectRelationDialog project={project.data} setOpenNewRelationDialog={() => setOpenNewRelationDialog(false)} openNewRelationDialog={openNewRelationDialog} handleReloadProject={handleReloadProject}  /> : null}
           {openPrioDialog ? <PrioProjectDialog open={openPrioDialog} handleClose={() => setOpenPrioDialog(false)} project={project.data} /> : null}

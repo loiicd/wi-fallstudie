@@ -1,4 +1,4 @@
-import { Project } from '../../types/project'
+import { Project, ProjectRate } from '../../types/project'
 import { FunctionComponent } from 'react'
 import Alert from '@mui/material/Alert'
 import Card from '@mui/material/Card'
@@ -10,19 +10,42 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 
+type UserRateAvg = {
+  user_id: string,
+  firstname: string,
+  lastname: string,
+  avgRate: number
+}
+
 interface RateSectionProps {
   project: Project
 }
 
 const RateSection: FunctionComponent<RateSectionProps> = ({ project }) => {
+  const avgPerUser: UserRateAvg[] = []
+
+  project.rates.forEach((rate: ProjectRate) => {
+    const userRate = avgPerUser.find(user => user.user_id === rate.user.id)
+    if (userRate) {
+      userRate.avgRate = (userRate.avgRate + rate.rate) / 2;
+    } else {
+      avgPerUser.push({
+        user_id: rate.user.id,
+        firstname: rate.user.firstname,
+        lastname: rate.user.lastname,
+        avgRate: rate.rate
+      })
+    }
+  })
+
   return (
     <Card sx={{ marginTop: 2}}>
-      <List subheader={<ListSubheader>Bewertungen</ListSubheader>}>
-        {project.rates.map((rate) => (
+      <List subheader={<ListSubheader>Zusammengefasste Bewertungen</ListSubheader>}>
+        {avgPerUser.map((rate) => (
           <ListItem>
             <Stack>
-              <Typography component="legend">{rate.user.firstname} {rate.user.lastname}</Typography>
-              <Rating value={rate.rate} readOnly />
+              <Typography component="legend">{rate.firstname} {rate.lastname}</Typography>
+              <Rating value={rate.avgRate} readOnly />
             </Stack>
           </ListItem>
         ))}

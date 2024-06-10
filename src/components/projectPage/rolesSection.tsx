@@ -9,12 +9,14 @@ import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemText from '@mui/material/ListItemText'
 import ListSubheader from '@mui/material/ListSubheader'
 import Tooltip from '@mui/material/Tooltip'
+import RateProvider from '../rateProvider'
 
 interface RolesSectionProps {
   project: Project
+  handleReloadProject: () => void
 }
 
-const RolesSection: FunctionComponent<RolesSectionProps> = ({ project }) => {
+const RolesSection: FunctionComponent<RolesSectionProps> = ({ project, handleReloadProject }) => {
   const project_lead_initials = project.project_lead ? project.project_lead.firstname[0] + project.project_lead.lastname[0] : '?'
   const project_lead_name = project.project_lead ? `${project.project_lead?.firstname} ${project.project_lead?.lastname}` : 'Nicht definiert'
 
@@ -65,6 +67,7 @@ const RolesSection: FunctionComponent<RolesSectionProps> = ({ project }) => {
           <ListItemText primary={auftraggeber_name} secondary={project.auftraggeber?.email} />
         </ListItem>
       </List>
+      <RateProvider section='roles' project={project} handleReloadProject={handleReloadProject} />
     </Card>
   )
 }
