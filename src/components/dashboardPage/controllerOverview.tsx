@@ -16,6 +16,11 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import LoadingRow from '../table/loadingRow'
 import EmptyRow from '../table/emptyRow'
+import MetricCard from './metricCard'
+import AssignmentIcon from '@mui/icons-material/Assignment'
+import MoveToInboxIcon from '@mui/icons-material/MoveToInbox'
+import VerifiedIcon from '@mui/icons-material/Verified'
+import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
 
 const ControllerOverview: FunctionComponent = () => {
   const navigate = useNavigate()
@@ -42,6 +47,36 @@ const ControllerOverview: FunctionComponent = () => {
 
   return (
     <RoleProvider roles={['controller']} type='include'>
+       <Grid container spacing={2}>
+        <Grid item xs={3}>
+          <MetricCard 
+            label='Eingereichte Projektanträge' 
+            value={projects.state === 'success' ? `${submittedProjects.length.toString()} Stk.` : '0'}
+            icon={<MoveToInboxIcon sx={{ color: 'white', backgroundColor: '#02B2B0', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <MetricCard 
+            label='In Prüfung' 
+            value={projects.state === 'success' ? `${auditProjects.length.toString()} Stk.` : '0'}
+            icon={<AssignmentIcon sx={{ color: 'white', backgroundColor: '#2E96FF', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <MetricCard 
+            label='Angenommene Projektanträge' 
+            value={projects.state === 'success' ? `${approvedProjects.length.toString()} Stk.` : '0'}
+            icon={<VerifiedIcon sx={{ color: 'white', backgroundColor: '#B800D8', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <MetricCard 
+            label='Abgelehnte Projektanträge' 
+            value={projects.state === 'success' ? `${declinedProjects.length.toString()} Stk.` : '0'}
+            icon={<DoNotDisturbOnIcon sx={{ color: 'white', backgroundColor: '#60009B', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+          />
+        </Grid>
+      </Grid>
       <Grid container spacing={2} sx={{marginTop: 1}}>
         <Grid item xs={6}>
           <Card>
