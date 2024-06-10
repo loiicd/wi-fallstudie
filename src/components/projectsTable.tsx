@@ -142,16 +142,18 @@ const ProjectsTable = () => {
   useEffect(() => {
     if (projects.state === 'success') {
       const filteredProjects = projects.data.filter(project => 
-        project.title.includes(searchTerm) || 
+        (project.title.includes(searchTerm) || 
         project.status.includes(searchTerm) || 
         project.department?.includes(searchTerm) ||
         project.location?.includes(searchTerm) ||
         project.project_lead?.firstname.includes(searchTerm) ||
         project.project_lead?.lastname.includes(searchTerm) ||
         project.sub_project_lead?.firstname.includes(searchTerm) ||
-        project.sub_project_lead?.lastname.includes(searchTerm)
+        project.sub_project_lead?.lastname.includes(searchTerm)) &&
+        (project.status !== 'Entwurf' || project.created_from_user!.id === activeUser!.id)
       )
       const updatedProjects = filteredProjects.map((project) => ({ ...project, avgRate: project.rates.reduce((sum, rate) => sum + rate.rate, 0) / project.rates.length }))
+
       setSearchedProjects(updatedProjects)
       }
     }, [searchTerm, projects, activeUser])

@@ -33,7 +33,7 @@ const calculateBudgetSum = (projects: Project[]): number => {
   }, 0)
 }
 
-const calculateAverageBudgetPerProject = (projects: Project[]): number => {
+const calculateAverageBudgetPerProject = (projects: Project[]): string => {
   const totalBudgetSum = projects.reduce((totalSum, project) => {
     const projectBudgetSum = project.budget?.reduce((sum, budgetItem) => {
       const valueNumber = parseFloat(budgetItem.value)
@@ -42,7 +42,7 @@ const calculateAverageBudgetPerProject = (projects: Project[]): number => {
     return totalSum + projectBudgetSum
   }, 0)
   const numberOfProjects = projects.length
-  return numberOfProjects > 0 ? totalBudgetSum / numberOfProjects : 0
+  return numberOfProjects > 0 ? (totalBudgetSum / numberOfProjects).toFixed(2) : '0'
 }
 
 const calculateAverageProjectDurationInMonths = (projects: Project[]): number => {
