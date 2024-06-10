@@ -17,6 +17,11 @@ import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import AddProjectDialog from '../addProjectsDialog/addProjectDialog'
+import MetricCard from './metricCard'
+import AssignmentIcon from '@mui/icons-material/Assignment'
+import PersonIcon from '@mui/icons-material/Person'
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter'
 
 interface CardExampleProps {
   project: Project
@@ -65,6 +70,11 @@ const BaseOverView: FunctionComponent = () => {
   const [projects, setProjects] = useState<ApiResponse<Project[]>>({ state: 'loading' })
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
 
+  const submittedProjects = projects.state === 'success' ? projects.data.filter(project => project.status === 'Eingereicht' && project.created_from_user!.id === activeUser!.id).length : 0
+  const leadProjects = projects.state === 'success' ? projects.data.filter(project => project.status !== 'Entwurf' && project.project_lead_id === activeUser!.id).length : 0
+  const subLeadProjects = projects.state === 'success' ? projects.data.filter(project => project.status !== 'Entwurf' && project.sub_project_lead_id === activeUser!.id).length : 0
+  const auftraggeberProjects = projects.state === 'success' ? projects.data.filter(project => project.status !== 'Entwurf' && project.auftraggeber_id === activeUser!.id).length : 0
+
   useEffect(() => {
     if (activeUser) {
       getProjectsById(activeUser.id)
@@ -75,6 +85,36 @@ const BaseOverView: FunctionComponent = () => {
 
   return (
     <RoleProvider roles={['base', 'projektleitung']} type='include'>
+      <Grid container spacing={2}>
+        <Grid item xs={3}>
+          <MetricCard 
+            label='Eingereichte Projektanträge' 
+            value={projects.state === 'success' ? `${submittedProjects.toString()} Stk.` : '?'}
+            icon={<AssignmentIcon sx={{ color: 'white', backgroundColor: '#02B2B0', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <MetricCard 
+            label='Projektleitung' 
+            value={projects.state === 'success' ? `${leadProjects.toString()} Stk.` : '?'}
+            icon={<PersonIcon sx={{ color: 'white', backgroundColor: '#2E96FF', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <MetricCard 
+            label='Stellv. Projektleitung' 
+            value={projects.state === 'success' ? `${subLeadProjects.toString()} Stk.` : '?'}
+            icon={<SupervisorAccountIcon sx={{ color: 'white', backgroundColor: '#B800D8', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <MetricCard 
+            label='Auftraggeber' 
+            value={projects.state === 'success' ? `${auftraggeberProjects.toString()} Stk.` : '?'}
+            icon={<BusinessCenterIcon sx={{ color: 'white', backgroundColor: '#60009B', borderRadius: 100, padding: 1, fontSize: 40 }} />} 
+          />
+        </Grid>
+      </Grid>
       <Typography variant='h6'>Meine Projektanträge</Typography>
       {projects.state === 'success' ?
         <Grid container spacing={2} columns={4} sx={{marginTop: 1}}>

@@ -38,7 +38,7 @@ const StatusSection: FunctionComponent<StatusSectionProps> = ({ projectStatus })
         <StepLabel>Eingereicht</StepLabel>
       </Step>
       <Step>
-        <StepLabel>In Bearbeitung</StepLabel>
+        <StepLabel>In Prüfung</StepLabel>
       </Step>
       <Step>
         <StepLabel>Geprüft</StepLabel>

@@ -90,7 +90,7 @@ export type ProjectFormData = {
   location?: string,
   sub_project_lead?: User // NOT FOR USE
   auftraggeber_id?: string
-  auftraggeber?: User
+  auftraggeber?: User  // NOT FOR USE
   fte_intern?: number
   fte_extern?: number
   investment?: number

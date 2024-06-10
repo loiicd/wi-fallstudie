@@ -1,7 +1,7 @@
 import { ApiResponse } from '../types/apiResponse'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DataGrid, GridColDef, GridFilterModel, GridToolbar } from '@mui/x-data-grid'
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/userContext'
 import { Project } from '../types/project'
 import { getProjects } from '../services/projects'
@@ -19,6 +19,7 @@ import Rating from '@mui/material/Rating'
 const ProjectsTable = () => {
   const navigate = useNavigate()
   const { activeUser } = useContext(UserContext)
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [openProjectDetailDialog, setOpenProjectDetailDialog] = useState<boolean>(false)
   const [openAddProjectDialog, setOpenAddProjectDialog] = useState<boolean>(false)
@@ -28,6 +29,22 @@ const ProjectsTable = () => {
   const [searchedProjects, setSearchedProjects] = useState<(Project & { avgRate: number })[]>([])
 
   const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] })
+
+  const updateUrlWithFilters = (filterModel: GridFilterModel) => {
+    setSearchParams({ filters: JSON.stringify(filterModel) });
+  }
+
+  const updateFiltersFromUrl = useCallback(() => {
+    const filtersString = searchParams.get('filters')
+    if (filtersString) {
+      const filters = JSON.parse(filtersString)
+      setFilterModel(filters)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    updateFiltersFromUrl()
+  }, [updateFiltersFromUrl])
 
   const columns: GridColDef<(any)[number]>[] = [
     {
@@ -51,13 +68,11 @@ const ProjectsTable = () => {
       field: 'start_date',
       headerName: 'Startdatum',
       editable: false,
-      // type: 'date',
       renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
     }, {
       field: 'end_date',
       headerName: 'EndDatum',
       editable: false,
-      // type: 'date',
       renderCell: (params) => params.value ? new Date(params.value).toLocaleDateString() : '',
     }, {
       field: 'project_lead',
@@ -127,16 +142,18 @@ const ProjectsTable = () => {
   useEffect(() => {
     if (projects.state === 'success') {
       const filteredProjects = projects.data.filter(project => 
-        project.title.includes(searchTerm) || 
+        (project.title.includes(searchTerm) || 
         project.status.includes(searchTerm) || 
         project.department?.includes(searchTerm) ||
         project.location?.includes(searchTerm) ||
         project.project_lead?.firstname.includes(searchTerm) ||
         project.project_lead?.lastname.includes(searchTerm) ||
         project.sub_project_lead?.firstname.includes(searchTerm) ||
-        project.sub_project_lead?.lastname.includes(searchTerm)
+        project.sub_project_lead?.lastname.includes(searchTerm)) &&
+        (project.status !== 'Entwurf' || project.created_from_user!.id === activeUser!.id)
       )
       const updatedProjects = filteredProjects.map((project) => ({ ...project, avgRate: project.rates.reduce((sum, rate) => sum + rate.rate, 0) / project.rates.length }))
+
       setSearchedProjects(updatedProjects)
       }
     }, [searchTerm, projects, activeUser])
@@ -166,7 +183,10 @@ const ProjectsTable = () => {
         </Stack>
         <DataGrid
           filterModel={filterModel}
-          onFilterModelChange={setFilterModel}
+          onFilterModelChange={(newFilterModel) => {
+            setFilterModel(newFilterModel)
+            updateUrlWithFilters(newFilterModel)
+          }}
           loading={projects.state === 'loading'}
           autoHeight
           rows={projects.state === 'success' ? searchedProjects : []}
