@@ -9,7 +9,6 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import SubmitDeleteDialog from '../components/submitDeleteDialog'
 import AddProjectDialog from '../components/addProjectsDialog/addProjectDialog'
-import RateProjectDialog from '../components/rateProjectDialog'
 import HeroActions from '../components/projectPage/heroActions'
 import GeneralSection from '../components/projectPage/generalSection'
 import DescriptionSection from '../components/projectPage/descriptionSection'
@@ -128,7 +127,6 @@ const ProjectPage = () => {
         <>
           {openDeleteDialog ? <SubmitDeleteDialog openDialog={openDeleteDialog} handleClose={() => setOpenDeleteDialog(false)} projectId={project.data.id} /> : null}
           {openAddProjectDialog ? <AddProjectDialog open={openAddProjectDialog} handleClose={() => setOpenAddProjectDialog(false)} project={project.data} /> : null}
-          {openRateProjectDialog ? <RateProjectDialog openDialog={openRateProjectDialog} handleClose={() => setOpenRateProjectDialog(false)} projectId={project.data.id} section='budget'/> : null}
           {openEvaluateDialog ? <EvaluateProjectDialog open={openEvaluateDialog} handleClose={() => setOpenEvaluateDialog(false)} project={project.data} /> : null}
           {openNewRelationDialog ? <ProjectRelationDialog project={project.data} setOpenNewRelationDialog={() => setOpenNewRelationDialog(false)} openNewRelationDialog={openNewRelationDialog} handleReloadProject={handleReloadProject}  /> : null}
           {openPrioDialog ? <PrioProjectDialog open={openPrioDialog} handleClose={() => setOpenPrioDialog(false)} project={project.data} /> : null}

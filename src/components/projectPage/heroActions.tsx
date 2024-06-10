@@ -7,7 +7,6 @@ import Stack from '@mui/material/Stack'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
-import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ModeIcon from '@mui/icons-material/Mode'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
@@ -23,7 +22,7 @@ interface HeroActionsProps {
   handleOpenPrioDialog: () => void
 }
 
-const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelete, handleOpenAddProjectDialog, handleOpenRateProjectDialog, handleOpenEvaluateDialog, handleOpenPrioDialog }) => {
+const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelete, handleOpenAddProjectDialog, handleOpenEvaluateDialog, handleOpenPrioDialog }) => {
   const navigate = useNavigate()
   const { activeUser } = useContext(UserContext)
   const projectPrüfenNotAllowed = activeUser?.type !== 'administrator' && activeUser?.type !== 'controller' && activeUser?.type !== 'geschäftsleitung'
@@ -46,14 +45,6 @@ const HeroActions: FunctionComponent<HeroActionsProps> = ({ project, handleDelet
             onClick={handleOpenEvaluateDialog}
           >
             <GavelIcon />
-          </Button>
-        </Tooltip>
-        <Tooltip title='Projekt bewerten'>
-          <Button 
-            disabled={project.state !== 'success'} 
-            onClick={handleOpenRateProjectDialog}
-          >
-            <ThumbsUpDownIcon />
           </Button>
         </Tooltip>
         <Tooltip title='Projekt vergleichen'>
