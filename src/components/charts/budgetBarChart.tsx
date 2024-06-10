@@ -91,7 +91,6 @@ const BudgetBarChart: FunctionComponent<BudgetBarChartProps> = ({ projects, load
         series={(attribute === 'projectsPerLocation' ? locationDatasets : departmentDatasets).map(dataset => ({ label: dataset.label, data: dataset.data }))}
         xAxis={[{ data: labels, scaleType: 'band' }]}
         height={400}
-
       />
       <Typography sx={{ marginBottom: 2 }}>
         Budget pro 
