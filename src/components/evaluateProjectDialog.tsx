@@ -6,6 +6,8 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import LoadingButton from '@mui/lab/LoadingButton'
 import LinearProgress from '@mui/material/LinearProgress'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContentText from '@mui/material/DialogContentText'
 
 interface EvaluateProjectDialogProps {
   open: boolean
@@ -39,7 +41,11 @@ const EvaluateProjectDialog: FunctionComponent<EvaluateProjectDialogProps> = ({ 
       fullWidth={true}
       maxWidth={'sm'}
     > 
-      <DialogContent dividers sx={{ position: 'relative', minHeight: 10 }}>
+      <DialogTitle>Projektbewertung</DialogTitle>
+      <DialogContent sx={{ position: 'relative', minHeight: 10 }}>
+        <DialogContentText>
+          Bitte überprüfen Sie die Projektdetails und treffen Sie eine Entscheidung. Sie können das Projekt entweder annehmen oder ablehnen.
+        </DialogContentText> 
         {isUpdatingStatus ? <LinearProgress sx={{ height: 10, borderRadius: 5 }} /> : null}
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>

@@ -195,7 +195,7 @@ const AddProjectDialog: FunctionComponent<AddProjectDialogProps> = ({ open, hand
               <Tab label="Rollen" value='2' />
               <Tab label="Pers. Ressourcen" value='3' />
               <Tab label="Budget" value='4' />
-              <Tab label="Kompläxität" value='5' />
+              <Tab label="Komplexität" value='5' />
               <Tab label="Beschreibungen" value='6' />
               <Tab label="Weiteres" value='7' />
             </TabList>
