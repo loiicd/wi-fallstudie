@@ -8,6 +8,8 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import Slider from '@mui/material/Slider'
 import Button from '@mui/material/Button'
 import { useSnackbar } from 'notistack'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContentText from '@mui/material/DialogContentText'
 
 interface PrioProjectDialogProps {
   open: boolean
@@ -39,8 +41,12 @@ const PrioProjectDialog: FunctionComponent<PrioProjectDialogProps> = ({ open, ha
       onClose={handleClose}
       fullWidth={true}
       maxWidth={'sm'}
-    > 
-      <DialogContent dividers sx={{ position: 'relative', minHeight: 10 }}>
+    >  
+      <DialogTitle>Projektpriorisierung</DialogTitle>
+      <DialogContent sx={{ position: 'relative', minHeight: 10 }}>
+        <DialogContentText>
+         Legen Sie die Priorität dieses Projekts fest. Sie können eine Priorität zwischen 1 und 10 auswählen.
+        </DialogContentText> 
         <Slider 
           value={newPrio}
           step={1}
